@@ -1,68 +1,64 @@
-import React from 'react';
-import CompanyJpg from '../assets/Company.jpeg';
+import React from "react";
+import CompanyJpg from "../assets/Company.jpeg";
 
 function Navbar() {
-    return (
-        <section className="w-full flex flex-col md:flex-row">
-            {/* Chap qism - matn */}
-            <div className="bg-[#20794e] text-white md:w-1/2 flex flex-col justify-center px-6 md:px-12 py-10">
-                <h1 className="text-4xl md:text-5xl font-extrabold leading-tight uppercase">
-                    Ремонт <br /> рельсовых <br /> крановых путей
-                </h1>
+  return (
+    <section className="w-full flex flex-col md:flex-row font-sans">
+      {/* Left section - text */}
+      <div className="bg-[#20794e] text-white md:w-1/2 flex flex-col justify-center p-8 md:p-16">
+        <h1 className="text-4xl md:text-6xl font-extrabold leading-tight tracking-wide uppercase">
+          Ремонт <br /> рельсовых <br /> крановых путей
+        </h1>
 
-                {/* Qizil chiziq */}
-                <div className="w-40 h-[3px] bg-red-500 my-5"></div>
+        {/* Red line */}
+        <div className="w-24 h-1 bg-red-500 my-6"></div>
 
-                {/* Tavsif */}
-                <p className="text-base leading-relaxed mb-4">
-                    ООО СКБ «Высота» производит ремонт рельсовых крановых путей.
-                    Квалифицированные специалисты проводят все необходимые работы по
-                    осмотру, обследованию и техническому ремонту крановых путей с
-                    применением современных запасных частей и комплектующих.
-                </p>
-                <p className="text-base leading-relaxed mb-6">
-                    Мы проводим текущий, ремонт по техническому состоянию и
-                    капитально-восстановительный ремонт.
-                </p>
+        {/* Description */}
+        <p className="text-base md:text-lg leading-relaxed mb-4 text-gray-200">
+          ООО СКБ «Высота» производит ремонт рельсовых крановых путей.
+          Квалифицированные специалисты проводят все необходимые работы по
+          осмотру, обследованию и техническому ремонту крановых путей с
+          применением современных запасных частей и комплектующих.
+        </p>
+        <p className="text-base md:text-lg leading-relaxed mb-8 text-gray-200">
+          Мы проводим текущий, ремонт по техническому состоянию и
+          капитально-восстановительный ремонт.
+        </p>
 
-                {/* Tugma */}
-                <button className="px-6 py-2 border border-red-500 text-red-500 font-semibold uppercase hover:bg-red-500 hover:text-white transition-all w-fit">
-                    Подробнее
-                </button>
+        {/* Button */}
+        <button className="self-start px-8 py-3 rounded-full border-2 border-red-500 text-red-500 font-bold uppercase transition-all duration-300 hover:bg-red-500 hover:text-white hover:shadow-lg">
+          Подробнее
+        </button>
+      </div>
+
+      {/* Right section - image */}
+      <div className="relative md:w-1/2 overflow-hidden">
+        <img
+          src={CompanyJpg}
+          alt="Rails"
+          className="w-full h-full object-cover"
+        />
+
+        {/* Bottom menu */}
+        <div className="absolute bottom-0 left-0 right-0 flex flex-wrap bg-black bg-opacity-70">
+          {[
+            "Ремонт кранов",
+            "Ремонт рельсовых крановых путей",
+            "Проекты ремонта",
+            "Приборы безопасности кранов",
+            "Экспертиза промышленной безопасности",
+          ].map((item, index) => (
+            <div
+              key={index}
+              className="text-white px-4 py-3 md:py-4 text-xs md:text-sm flex-1 text-center transition-all duration-300 ease-in-out cursor-pointer hover:bg-red-500"
+            >
+              {item}
             </div>
-
-            {/* O‘ng qism - rasm */}
-            <div className="relative md:w-1/2 overflow-hidden">
-                <img
-                    src={CompanyJpg} // Rasm yo‘ling
-                    alt="Rails"
-                    className="w-full h-full object-cover"
-                />
-
-                {/* Pastki menyu */}
-                <div className="absolute bottom-0 left-0 right-0 flex flex-wrap">
-                    {[
-                        'Ремонт кранов',
-                        'Ремонт рельсовых крановых путей',
-                        'Проекты ремонта',
-                        'Приборы безопасности кранов',
-                        'Экспертиза промышленной безопасности',
-                    ].map((item, index) => (
-                        <div
-                            key={index}
-                            className="bg-black bg-opacity-60 border-r border-white/20 last:border-none
-                         text-white px-4 py-2 text-xs md:text-sm flex-1 min-w-[150px]
-                         flex items-center justify-center text-center
-                         hover:bg-red-500 hover:bg-opacity-80 hover:text-white
-                         transition-all duration-300 ease-in-out cursor-pointer"
-                        >
-                            {item}
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </section>
-    );
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 }
 
 export default Navbar;
