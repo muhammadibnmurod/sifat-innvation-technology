@@ -1,4 +1,9 @@
 import { Phone, Mail, MapPin, Clock, Search } from "lucide-react";
+import Logo from "../assets/Logo.png";
+import LocationIcon from "../assets/location.svg";
+import MessageIcon from "../assets/message.svg";
+import PhoneIcon from "../assets/phone.svg";
+import TimeIcon from "../assets/time.svg";
 
 export default function Header() {
   return (
@@ -8,15 +13,14 @@ export default function Header() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center px-4 py-2 gap-2">
           {/* Left side info */}
           <div className="flex flex-wrap items-center gap-4">
-            <div className="flex items-center gap-2">
-              <Clock className="w-3 h-3 md:w-4 md:h-4 text-orange-400" />
-              <span>Пн - Пт: 08.00 - 16.30</span>
-            </div>
+            {/*<div className="flex items-center gap-2">*/}
+            {/*  <Clock className="w-3 h-3 md:w-4 md:h-4 text-orange-400" />*/}
+            {/*  <span>Пн - Пт: 08.00 - 16.30</span>*/}
+            {/*</div>*/}
             <div className="flex items-center gap-2">
               <MapPin className="w-3 h-3 md:w-4 md:h-4 text-orange-400" />
               <span className="hidden md:inline">
-                Республика Татарстан, г. Набережные Челны, ул. Магистральная,
-                д.16
+                Uzbekiston Respublikasi, Toshkent shahar, Mirobod tuman
               </span>
               <span className="md:hidden">г. Набережные Челны</span>
             </div>
@@ -27,19 +31,19 @@ export default function Header() {
             <div className="flex items-center gap-2">
               <Phone className="w-3 h-3 md:w-4 md:h-4 text-orange-400" />
               <a
-                href="tel:88005003935"
+                href="tel:998998660271"
                 className="font-medium text-white hover:text-orange-400 transition-colors"
               >
-                8-800-500-39-35
+                +998-99-866-02-71
               </a>
             </div>
             <div className="hidden md:flex items-center gap-2">
               <Mail className="w-3 h-3 md:w-4 md:h-4 text-orange-400" />
               <a
-                href="mailto:skb-visota@mail.ru"
+                href="mailto:	sifat.saffatt@gmail.com"
                 className="hover:text-orange-400 transition-colors"
               >
-                skb-visota@mail.ru
+                sifat.saffatt@gmail.com
               </a>
             </div>
             {/* Social Icons */}
@@ -68,46 +72,58 @@ export default function Header() {
       </div>
 
       {/* Main Header */}
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center px-4 py-6 gap-6">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center px-4 py-3 gap-6">
         {/* Logo */}
         <div className="flex items-center gap-4">
-          <img src="/logo.png" alt="СКБ Высота" className="h-14" />
+          <img
+            src={Logo}
+            alt="Sifat Innovatsion Texnologiya"
+            className="w-28 items-center pt-2-"
+          />
           <div>
-            <h1 className="text-gray-900 text-2xl md:text-3xl font-extrabold tracking-tight">
-              СКБ «ВЫСОТА»
+            <h1 className="text-gray-900 text-2xl max-w-md md:text-3xl font-extrabold tracking-tight mb-4">
+              Sifat Innovatsion Texnologiya
             </h1>
-            <p className="text-gray-600 text-sm">
-              Механизация подъемных и высотных работ
-            </p>
+            {/* <p className="text-gray-600 text-sm">
+              Texnologiya
+            </p> */}
           </div>
         </div>
 
         {/* Certification Logos */}
-        <div className="hidden lg:flex flex-col items-end">
+        <div className=" lg:flex flex-col items-end">
           <div className="flex gap-4">
-            <img
-              src="/cert1.png"
-              alt="Cert1"
-              className="h-10 grayscale hover:grayscale-0 transition-all duration-300"
-            />
-            <img
-              src="/cert2.png"
-              alt="Cert2"
-              className="h-10 grayscale hover:grayscale-0 transition-all duration-300"
-            />
-            <img
-              src="/cert3.png"
-              alt="Cert3"
-              className="h-10 grayscale hover:grayscale-0 transition-all duration-300"
-            />
-            <img
-              src="/cert4.png"
-              alt="Cert4"
-              className="h-10 grayscale hover:grayscale-0 transition-all duration-300"
-            />
+            <a href="https://yandex.uz/maps/10335/tashkent/search/Uzbekiston%20Respublikasi%2C%20Toshkent%20shahar%2C%20Mirobod%20tuman/?ll=69.245719%2C41.312043&sll=69.279737%2C41.311151&sspn=0.299034%2C0.172920&z=13" target={"_blank"} className=" hover:cursor-pointer">
+              <img
+                src={LocationIcon}
+                alt="Location"
+                className="h-5 grayscale hover:grayscale-0 transition-all duration-300"
+              />
+            </a>
+            <a href="" className=" hover:cursor-pointer">
+              <img
+                src={MessageIcon}
+                alt="Message"
+                className="h-5 grayscale hover:grayscale-0 transition-all duration-300"
+              />
+            </a>
+            <a href="" className=" hover:cursor-pointer">
+              <img
+                src={PhoneIcon}
+                alt="Phone"
+                className="h-5 grayscale hover:grayscale-0 transition-all duration-300"
+              />
+            </a>
+            <a href="" className=" hover:cursor-pointer">
+              <img
+                src={TimeIcon}
+                alt="Time"
+                className="h-5 grayscale hover:grayscale-0 transition-all duration-300"
+              />
+            </a>
           </div>
           <p className="text-gray-500 text-sm mt-2 font-medium">
-            Работаем с <span className="text-orange-500 font-bold">2009</span>{" "}
+            Работаем с <span className="text-orange-500 font-bold">2014</span>{" "}
             года
           </p>
         </div>

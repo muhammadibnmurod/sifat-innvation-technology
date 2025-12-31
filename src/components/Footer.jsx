@@ -1,94 +1,102 @@
-import React from 'react';
+import React from 'react'
+import Logo from '../assets/Logo.png'
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-200 py-12">
-      <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between text-gray-700">
-        
-        {/* Company Info Column */}
-        <div className="mb-8 md:mb-0 md:w-1/4">
-          <img src="https://via.placeholder.com/150x50" alt="СКБ «ВЫСОТА»" className="mb-4" /> {/* Rasm URL'ini o'zgartiring */}
-          <p className="text-sm leading-relaxed mb-4">
-            Конструкторское бюро, специализация подъемных и высотных работ ООО "СКБ «Высота»"
-          </p>
-          <button className="px-4 py-2 bg-red-500 hover:bg-red-600 transition-colors duration-200 text-white text-xs font-semibold rounded-md shadow-md">
-            Написать нам
-          </button>
-          <a href="#" className="block mt-4 text-xs text-gray-500 hover:text-gray-700">
-            Политика конфиденциальности
-          </a>
-        </div>
+      <footer className="bg-gradient-to-br from-gray-100 to-gray-200 border-t border-gray-300">
+        <div className="container mx-auto px-4 py-14">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 text-gray-700">
 
-        {/* Contacts Column */}
-        <div className="mb-8 md:mb-0 md:w-1/4">
-          <h4 className="font-bold mb-4">Наши контакты</h4>
-          <div className="space-y-4 text-sm">
-            <div>
-              <p className="font-semibold">Адрес:</p>
-              <p>Республика Татарстан, г. Набережные Челны, пос. Сахарова, улица Индустриальная, д.16</p>
-            </div>
-            <div>
-              <p className="font-semibold">Время работы:</p>
-              <p>Пн - Пт: 08:00 - 16:30</p>
-            </div>
-            <div>
-              <p className="font-semibold">Номер телефона:</p>
-              <p>8-800-500-36-35</p>
-            </div>
-            <div>
-              <p className="font-semibold">Email:</p>
-              <p>skb-visota@mail.ru</p>
-              <p>info@skb-visota.ru</p>
-            </div>
-            <div className="flex space-x-2 mt-4">
-              <a href="#" className="w-8 h-8 rounded-full bg-red-500 hover:bg-red-600 flex items-center justify-center text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </a>
-              <a href="#" className="w-8 h-8 rounded-full bg-red-500 hover:bg-red-600 flex items-center justify-center text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
+            <div className="flex flex-col gap-4">
+              <img
+                  src={Logo}
+                  alt="Sifat Innovatsiya Texnologiya"
+                  className="w-[140px] h-auto"
+              />
+              <p className="text-sm leading-relaxed max-w-[280px]">
+                “Sifat Innovatsiya Texnologiya” MCHJ — yuk ko‘taruvchi kranlar va balandlikda bajariladigan ishlar bo‘yicha
+                ta’mirlash hamda texnik ko‘rik xizmatlarini ko‘rsatuvchi korxona.
+              </p>
+              <button className="w-fit mt-2 px-5 py-2 bg-red-500 hover:bg-red-600 transition text-white text-xs font-semibold rounded-full shadow">
+                Bizga yozish
+              </button>
+              <a href="#" className="text-xs text-gray-500 hover:text-gray-700 mt-4">
+                Maxfiylik siyosati
               </a>
             </div>
+
+            <div className="flex flex-col gap-5">
+              <h4 className="text-sm font-bold uppercase tracking-wide">
+                Aloqa ma’lumotlari
+              </h4>
+              <div className="text-sm space-y-3">
+                <div>
+                  <p className="font-semibold">Manzil</p>
+                  <p className="text-gray-600">
+                    Toshkent shahri, Mirobod tumani
+                  </p>
+                </div>
+                <div>
+                  <p className="font-semibold">Telefon</p>
+                  <p className="text-gray-600">
+                    +998 99 866 02 71
+                  </p>
+                </div>
+                <div>
+                  <p className="font-semibold">Email</p>
+                  <p className="text-gray-600">
+                    sifat.saffatt@gmail.com
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-5">
+              <h4 className="text-sm font-bold uppercase tracking-wide">
+                Xizmatlar
+              </h4>
+              <ul className="text-sm space-y-3">
+                <li>
+                  <a href="#" className="hover:text-red-500 transition">
+                    Texnik ekspertiza
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-red-500 transition">
+                    Ta’mirlash ishlari
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-red-500 transition">
+                    O‘rnatish va sozlash
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-red-500 transition">
+                    Dasturlar yaratish
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-red-500 transition">
+                    Loyihalash ishlari
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-red-500 transition">
+                    Malakali mutaxassislar tayyorlash
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+          </div>
+
+          <div className="mt-12 border-t border-gray-300 pt-6 text-center text-xs text-gray-500">
+            © {new Date().getFullYear()} Sifat Innovatsiya Texnologiya MCHJ. Barcha huquqlar himoyalangan.
           </div>
         </div>
+      </footer>
+  )
+}
 
-        {/* Services Column */}
-        <div className="mb-8 md:mb-0 md:w-1/4">
-          <h4 className="font-bold mb-4">Услуги</h4>
-          <ul className="space-y-2 text-sm">
-            <li><a href="#" className="hover:underline">Экспертиза</a></li>
-            <li><a href="#" className="hover:underline">Ремонт</a></li>
-            <li><a href="#" className="hover:underline">Монтаж</a></li>
-            <li><a href="#" className="hover:underline">Реконструкция</a></li>
-            <li><a href="#" className="hover:underline">Модернизация</a></li>
-            <li><a href="#" className="hover:underline">Чертежи</a></li>
-          </ul>
-        </div>
-
-        {/* Latest News Column */}
-        <div className="md:w-1/4">
-          <h4 className="font-bold mb-4">Последние новости</h4>
-          <div className="space-y-4 text-sm">
-            <div>
-              <p className="text-red-500 font-semibold mb-1">Второе рождение стандарта. ГОСТ 33715-2025...</p>
-              <p className="text-xs text-gray-500">07.08.2025</p>
-            </div>
-            <div>
-              <p className="text-red-500 font-semibold mb-1">Разработка СКБ «ВЫСОТА» - новый ГОСТ...</p>
-              <p className="text-xs text-gray-500">02.08.2025</p>
-            </div>
-            <div>
-              <p className="text-red-500 font-semibold mb-1">О подготовке требований по идентификации...</p>
-              <p className="text-xs text-gray-500">04.06.2025</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </footer>
-  );
-};
-
-export default Footer;
+export default Footer
