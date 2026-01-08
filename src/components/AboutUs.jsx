@@ -83,7 +83,7 @@ const AboutUs = () => {
                 alt="Шакиров Рустем Раисович"
                 className="w-full rounded-md object-cover mb-4"
               />
-              <h4 className="text-lg font-bold text-gray-800">Шакиров Рустем Раисович</h4>
+              <h4 className="text-lg font-bold text-gray-800">Aripov Azamat Sharipovich</h4>
               <p className="text-gray-600 text-sm">
                 Начальник отдела конструкторских <br /> разработок Sifat Innovation Company
               </p>
