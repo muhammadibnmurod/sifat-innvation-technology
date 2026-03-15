@@ -78,7 +78,7 @@ export default function Header() {
           <img
             src={Logo}
             alt="Sifat Innovatsion Texnologiya"
-            className="w-28 rounded-full items-center pt-2-"
+            className="w-38 rounded-full items-center pt-2-"
           />
           <div>
             <h1 className="text-gray-900 text-2xl max-w-md md:text-3xl font-extrabold tracking-tight ">

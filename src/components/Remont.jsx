@@ -129,7 +129,7 @@ const Remont = () => {
     <div className="bg-white py-16 px-4 sm:px-6 lg:px-8 font-sans">
       <div className="max-w-7xl mx-auto text-center">
         <h1 className="text-4xl font-semibold text-gray-800">
-          Ремонт грузоподъемных кранов в Набережных Челнах
+          Ремонт грузоподъемных кранов 
         </h1>
         <p className="mt-4 text-xl text-gray-600">
           Услуги, которые мы оказываем:
