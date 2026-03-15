@@ -8,7 +8,7 @@ function Navbar() {
       {/* Left section - text */}
       <div className="bg-[#20794e] text-white md:w-1/2 flex flex-col justify-center p-8 md:p-16">
         <h1 className="text-4xl md:text-6xl font-extrabold leading-tight tracking-wide uppercase">
-          РЕМОНТ <br /> ГРУЗОПОДЬЕМНЫХ <br /> КРОВИ
+          РЕМОНТ <br /> ГРУЗОПОДЬЕМНЫХ <br /> КРАНОВ
         </h1>
 
         {/* Red line */}
