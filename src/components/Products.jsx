@@ -3,12 +3,13 @@ import product1 from "../assets/Products/product1.jpg";
 import product2 from "../assets/Products/product2.jpg";
 import product3 from "../assets/Products/product3.jpg";
 import product4 from "../assets/Products/product4.png";
-
+import product5 from "../assets/Products/product5.jpg";
 const products = [
   { id: 1, title: "Продукт 1", image: product1, tag: "Новинка" },
   { id: 2, title: "Продукт 2", image: product2, tag: "Хит продаж" },
   { id: 3, title: "Продукт 3", image: product3, tag: "Премиум" },
   { id: 4, title: "Продукт 4", image: product4, tag: "Эксклюзив" },
+  { id: 5, title: "Продукт 5", image: product5, tag: "Рекомендуем" },
 ];
 
 function Products() {
@@ -25,7 +26,7 @@ function Products() {
       </div>
 
       {/* Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[2px] max-w-6xl mx-auto">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-[2px] max-w-7xl mx-auto">
         {products.map((item, index) => (
           <div
             key={item.id}

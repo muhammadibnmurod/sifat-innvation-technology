@@ -1,5 +1,5 @@
 import { Phone, Mail, MapPin, Clock, Search } from "lucide-react";
-import Logo from "../assets/Logo.png";
+import Logo from "../assets/Logo2.png";
 import LocationIcon from "../assets/location.svg";
 import MessageIcon from "../assets/message.svg";
 import PhoneIcon from "../assets/phone.svg";
@@ -78,10 +78,10 @@ export default function Header() {
           <img
             src={Logo}
             alt="Sifat Innovatsion Texnologiya"
-            className="w-28 items-center pt-2-"
+            className="w-28 rounded-full items-center pt-2-"
           />
           <div>
-            <h1 className="text-gray-900 text-2xl max-w-md md:text-3xl font-extrabold tracking-tight mb-4">
+            <h1 className="text-gray-900 text-2xl max-w-md md:text-3xl font-extrabold tracking-tight ">
               Sifat Innovatsion Texnologiya
             </h1>
             {/* <p className="text-gray-600 text-sm">

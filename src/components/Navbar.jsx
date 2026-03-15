@@ -1,5 +1,6 @@
 import React from "react";
 import CompanyJpg from "../assets/Company.jpeg";
+import CompanyImg from "../assets/Company2.jpeg";
 
 function Navbar() {
   return (
@@ -34,7 +35,7 @@ function Navbar() {
       {/* Right section - image */}
       <div className="relative md:w-1/2 overflow-hidden">
         <img
-          src={CompanyJpg}
+          src={CompanyImg}
           alt="Rails"
           className="w-full h-full object-cover"
         />
