@@ -18,7 +18,7 @@ function App() {
         <Remont />
         <Partners />
         < AboutUs />
-        < VideoSection />
+        {/* < VideoSection /> */}
         < AskQuestionSection />
         < Products />
         < LatestNewsSection />

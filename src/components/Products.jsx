@@ -1,15 +1,25 @@
 import React from "react";
-import product1 from "../assets/Products/product1.jpg";
+import product1 from "../assets/Products/product1.png";
 import product2 from "../assets/Products/product2.jpg";
-import product3 from "../assets/Products/product3.jpg";
-import product4 from "../assets/Products/product4.png";
+import product3 from "../assets/Products/product33.jpg";
+import product4 from "../assets/Products/product44.jpg";
 import product5 from "../assets/Products/product5.jpg";
 const products = [
-  { id: 1, title: "Продукт 1", image: product1, tag: "Новинка" },
-  { id: 2, title: "Продукт 2", image: product2, tag: "Хит продаж" },
-  { id: 3, title: "Продукт 3", image: product3, tag: "Премиум" },
-  { id: 4, title: "Продукт 4", image: product4, tag: "Эксклюзив" },
-  { id: 5, title: "Продукт 5", image: product5, tag: "Рекомендуем" },
+  { id: 1, title: "Измерительный приборы", image: product1, tag: "Новинка" },
+  { id: 2, title: "Endoskop", image: product2, tag: "Хит продаж" },
+  {
+    id: 3,
+    title: "Лазерный дальномер и уровен",
+    image: product3,
+    tag: "Премиум",
+  },
+  {
+    id: 4,
+    title: "УЛЬТРАЗВУКОВОЙ ДЕФЕКТОСКОП PELENG UD2-102",
+    image: product5,
+    tag: "Эксклюзив",
+  },
+  { id: 5, title: "Термогигометр цифровой", image: product4, tag: "Рекомендуем" },
 ];
 
 function Products() {
