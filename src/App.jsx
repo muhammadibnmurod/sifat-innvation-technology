@@ -9,6 +9,7 @@ import VideoSection from "./components/VideoSection.jsx";
 import AskQuestionSection from "./components/AskQuestionSection.jsx";
 import  LatestNewsSection from "./components/LatestNewsSection.jsx";
 import Footer from "./components/Footer.jsx";
+import Products from "./components/Products.jsx";
 function App() {
   return (
     <BrowserRouter>
@@ -19,6 +20,7 @@ function App() {
         < AboutUs />
         < VideoSection />
         < AskQuestionSection />
+        < Products />
         < LatestNewsSection />
         < Footer />
       <Routes>
