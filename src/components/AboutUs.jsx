@@ -30,7 +30,7 @@ const AboutUs = () => {
           {/* Left Block */}
           <div className="w-full lg:w-1/3 p-6 bg-gray-50 border border-gray-200 rounded-lg shadow-sm">
             <p className="text-gray-700 leading-relaxed text-sm">
-              Специальное конструкторское бюро "Smart Innovation Company" осуществляет
+               "Siffat Innovation Company" осуществляет
               деятельность по проведению экспертизы промышленной безопасности
               опасных производственных объектов, на которых используются
               подъемные сооружения и объекты котлонадзора, а также деятельность
