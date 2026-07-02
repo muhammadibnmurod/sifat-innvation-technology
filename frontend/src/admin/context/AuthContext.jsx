@@ -40,13 +40,15 @@ export function AuthProvider({ children }) {
     return data.user;
   }, []);
 
-  const isAdmin = user?.role === "admin";
+  // Eski backend (role maydonisiz) bilan moslik: role kelmasa admin deb hisoblaymiz.
+  // Haqiqiy himoya baribir backend guardlarida.
+  const isAdmin = !user?.role || user.role === "admin";
 
   // Berilgan bo'limga kirish huquqi bormi? (admin hammasiga ruxsatli)
   const can = useCallback(
     (section) => {
       if (!user) return false;
-      if (user.role === "admin") return true;
+      if (!user.role || user.role === "admin") return true;
       return Array.isArray(user.permissions) && user.permissions.includes(section);
     },
     [user]
