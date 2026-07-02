@@ -117,7 +117,11 @@ export default function AskQuestionSection() {
 
         <div className="mt-14 grid grid-cols-1 gap-10 lg:grid-cols-2">
           {/* FAQ accordion */}
-          <motion.div variants={stagger} {...inView} className="flex flex-col gap-4">
+          <motion.div
+            variants={stagger}
+            {...inView}
+            className="flex flex-col gap-4"
+          >
             {FAQS.map((item, i) => (
               <AccordionItem
                 key={i}
@@ -151,9 +155,16 @@ export default function AskQuestionSection() {
                   </button>
                 </div>
               ) : (
-                <form onSubmit={onSubmit} noValidate className="flex flex-col gap-5">
+                <form
+                  onSubmit={onSubmit}
+                  noValidate
+                  className="flex flex-col gap-5"
+                >
                   <div>
-                    <label htmlFor="name" className="mb-1.5 block text-sm font-semibold text-ink">
+                    <label
+                      htmlFor="name"
+                      className="mb-1.5 block text-sm font-semibold text-ink"
+                    >
                       Ism
                     </label>
                     <input
@@ -166,12 +177,17 @@ export default function AskQuestionSection() {
                       className={`${inputBase} ${fieldRing("name")}`}
                     />
                     {errors.name && (
-                      <p className="mt-1.5 text-xs font-medium text-red-500">{errors.name}</p>
+                      <p className="mt-1.5 text-xs font-medium text-red-500">
+                        {errors.name}
+                      </p>
                     )}
                   </div>
 
                   <div>
-                    <label htmlFor="phone" className="mb-1.5 block text-sm font-semibold text-ink">
+                    <label
+                      htmlFor="phone"
+                      className="mb-1.5 block text-sm font-semibold text-ink"
+                    >
                       Telefon
                     </label>
                     <input
@@ -184,12 +200,17 @@ export default function AskQuestionSection() {
                       className={`${inputBase} ${fieldRing("phone")}`}
                     />
                     {errors.phone && (
-                      <p className="mt-1.5 text-xs font-medium text-red-500">{errors.phone}</p>
+                      <p className="mt-1.5 text-xs font-medium text-red-500">
+                        {errors.phone}
+                      </p>
                     )}
                   </div>
 
                   <div>
-                    <label htmlFor="message" className="mb-1.5 block text-sm font-semibold text-ink">
+                    <label
+                      htmlFor="message"
+                      className="mb-1.5 block text-sm font-semibold text-ink"
+                    >
                       Savolingiz
                     </label>
                     <textarea
@@ -202,11 +223,18 @@ export default function AskQuestionSection() {
                       className={`${inputBase} resize-none ${fieldRing("message")}`}
                     />
                     {errors.message && (
-                      <p className="mt-1.5 text-xs font-medium text-red-500">{errors.message}</p>
+                      <p className="mt-1.5 text-xs font-medium text-red-500">
+                        {errors.message}
+                      </p>
                     )}
                   </div>
 
-                  <Button type="submit" variant="primary" size="lg" className="w-full">
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    size="lg"
+                    className="w-full"
+                  >
                     Savolni yuborish
                     <Send className="h-4 w-4" />
                   </Button>
