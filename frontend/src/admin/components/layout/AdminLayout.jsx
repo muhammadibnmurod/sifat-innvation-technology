@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   LayoutDashboard, Wrench, Newspaper, Handshake, HelpCircle, Inbox,
   Settings, LogOut, ChevronsLeft, Menu, X, ExternalLink, ChevronDown,
-  ChevronRight, User, Users,
+  ChevronRight, User, Users, Moon, Sun,
 } from "lucide-react";
 import Logo from "../../../assets/Logo.png";
 import { useAuth } from "../../context/AuthContext.jsx";
@@ -112,7 +112,9 @@ export default function AdminLayout() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [unread, setUnread] = useState(0);
+  const [theme, setTheme] = useState(() => localStorage.getItem("admin-theme") || "light");
   const menuRef = useRef(null);
+  const isDark = theme === "dark";
 
   // Faqat ruxsat berilgan bo'limlar ko'rinadi (admin hammasini ko'radi).
   const navItems = NAV_ITEMS.filter((n) => {
@@ -141,7 +143,7 @@ export default function AdminLayout() {
       alive = false;
       clearInterval(t);
     };
-  }, [location.pathname]);
+  }, [can, location.pathname]);
 
   useEffect(() => setMobileOpen(false), [location.pathname]);
 
@@ -153,8 +155,12 @@ export default function AdminLayout() {
     return () => document.removeEventListener("mousedown", onClick);
   }, []);
 
+  useEffect(() => {
+    localStorage.setItem("admin-theme", theme);
+  }, [theme]);
+
   return (
-    <div className="min-h-screen bg-surface font-body text-ink-soft">
+    <div className={`min-h-screen bg-surface font-body text-ink-soft ${isDark ? "admin-dark" : ""}`}>
       {/* Desktop sidebar */}
       <aside
         className={`fixed inset-y-0 left-0 z-40 hidden border-r border-neutral-100 bg-white transition-[width] duration-300 lg:block ${
@@ -237,6 +243,17 @@ export default function AdminLayout() {
             </div>
 
             <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setTheme((value) => (value === "dark" ? "light" : "dark"))}
+                aria-label={isDark ? "Light mode" : "Dark mode"}
+                aria-pressed={isDark}
+                title={isDark ? "Light mode" : "Dark mode"}
+                className="flex h-10 w-10 items-center justify-center rounded-xl border border-neutral-200 bg-white text-ink-soft transition-colors hover:border-brand-300 hover:text-brand-700"
+              >
+                {isDark ? <Sun className="h-4.5 w-4.5" /> : <Moon className="h-4.5 w-4.5" />}
+              </button>
+
               <a
                 href="/"
                 target="_blank"
