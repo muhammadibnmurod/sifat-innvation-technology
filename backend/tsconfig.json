@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "target": "ES2021",
-    "moduleResolution": "node",
+    "rootDir": "./src",
+    "outDir": "./dist",
     "declaration": false,
     "removeComments": true,
     "emitDecoratorMetadata": true,
@@ -10,8 +12,6 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "sourceMap": false,
-    "outDir": "./dist",
-    "baseUrl": "./",
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": false,
