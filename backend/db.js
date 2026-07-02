@@ -1,10 +1,14 @@
 import Database from "better-sqlite3";
 import bcrypt from "bcryptjs";
 import path from "path";
+import fs from "fs";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const db = new Database(path.join(__dirname, "data.sqlite"));
+// DATA_DIR — Render'da doimiy disk ulansa, DB o'sha yerda saqlanadi.
+const dataDir = process.env.DATA_DIR || __dirname;
+fs.mkdirSync(dataDir, { recursive: true });
+const db = new Database(path.join(dataDir, "data.sqlite"));
 db.pragma("journal_mode = WAL");
 
 // ---------------------------------------------------------------- schema

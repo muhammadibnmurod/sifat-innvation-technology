@@ -27,7 +27,8 @@ app.use(cors());
 app.use(express.json({ limit: "1mb" }));
 
 // ------------------------------------------------------------ uploads
-const uploadsDir = path.join(__dirname, "uploads");
+// DATA_DIR — Render'da doimiy disk ulansa, rasmlar o'sha yerda saqlanadi.
+const uploadsDir = path.join(process.env.DATA_DIR || __dirname, "uploads");
 fs.mkdirSync(uploadsDir, { recursive: true });
 
 const storage = multer.diskStorage({

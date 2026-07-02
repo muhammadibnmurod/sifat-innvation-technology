@@ -26,8 +26,9 @@ dist-ssr
 # Claude
 .claude/
 
-# Server
+# Env & backend data
 .env
-server/data.sqlite
-server/data.sqlite-*
-server/uploads/
+backend/.env
+backend/data.sqlite
+backend/data.sqlite-*
+backend/uploads/

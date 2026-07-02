@@ -1,0 +1,34 @@
+# Render.com blueprint — backend API
+# Render dashboard'da "New → Blueprint" orqali shu repo'ni tanlasangiz,
+# quyidagi servis avtomatik yaratiladi.
+
+services:
+  - type: web
+    name: sifat-api
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ADMIN_EMAIL
+        value: admin@sifat.uz
+      - key: ADMIN_PASSWORD
+        sync: false # Render dashboard'da qo'lda kiritiladi
+    # DIQQAT: bepul tarifda disk vaqtinchalik — data.sqlite va uploads/
+    # har deploy'da qayta yaratiladi. Ma'lumotlar doimiy saqlanishi uchun
+    # pullik (Starter) tarifga o'tib, quyidagilarni yoqing:
+    #
+    # disk:
+    #   name: sifat-data
+    #   mountPath: /var/data
+    #   sizeGB: 1
+    #
+    # va envVars ro'yxatiga qo'shing:
+    #   - key: DATA_DIR
+    #     value: /var/data
