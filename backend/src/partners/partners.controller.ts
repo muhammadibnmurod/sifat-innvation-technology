@@ -4,8 +4,10 @@ import { PartnersService } from "./partners.service";
 import { CreatePartnerDto, UpdatePartnerDto } from "./partners.dto";
 import { ReorderDto } from "../common/reorder.dto";
 import { JwtAuthGuard } from "../auth/jwt-auth.guard";
+import { PermissionGuard, RequirePermission } from "../auth/permission.guard";
 
 @ApiTags("Hamkorlar (partners)")
+@RequirePermission("partners")
 @Controller("partners")
 export class PartnersController {
   constructor(private readonly service: PartnersService) {}
@@ -23,7 +25,7 @@ export class PartnersController {
   }
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionGuard)
   @ApiBearerAuth("access-token")
   @ApiOperation({ summary: "Hamkor qo'shish" })
   create(@Body() dto: CreatePartnerDto) {
@@ -31,7 +33,7 @@ export class PartnersController {
   }
 
   @Put("reorder/all")
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionGuard)
   @ApiBearerAuth("access-token")
   @ApiOperation({ summary: "Tartibni o'zgartirish" })
   reorder(@Body() dto: ReorderDto) {
@@ -39,7 +41,7 @@ export class PartnersController {
   }
 
   @Put(":id")
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionGuard)
   @ApiBearerAuth("access-token")
   @ApiOperation({ summary: "Hamkorni yangilash" })
   update(@Param("id") id: string, @Body() dto: UpdatePartnerDto) {
@@ -47,7 +49,7 @@ export class PartnersController {
   }
 
   @Delete(":id")
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionGuard)
   @ApiBearerAuth("access-token")
   @ApiOperation({ summary: "Hamkorni o'chirish" })
   remove(@Param("id") id: string) {

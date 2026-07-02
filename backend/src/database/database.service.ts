@@ -14,6 +14,7 @@ export class DatabaseService implements OnModuleInit {
 
   onModuleInit() {
     this.createSchema();
+    this.migrate();
     this.seed();
   }
 
@@ -32,6 +33,8 @@ CREATE TABLE IF NOT EXISTS users (
   email TEXT UNIQUE NOT NULL,
   password_hash TEXT NOT NULL,
   name TEXT DEFAULT 'Admin',
+  role TEXT DEFAULT 'user',
+  permissions TEXT DEFAULT '[]',
   created_at TEXT DEFAULT (datetime('now'))
 );
 
@@ -92,19 +95,28 @@ CREATE TABLE IF NOT EXISTS settings (
 `);
   }
 
+  // Eski bazalarga yangi ustunlarni qo'shish (role, permissions).
+  private migrate() {
+    const cols = (this.db.prepare("PRAGMA table_info(users)").all() as any[]).map((c) => c.name);
+    if (!cols.includes("role"))
+      this.db.exec("ALTER TABLE users ADD COLUMN role TEXT DEFAULT 'user'");
+    if (!cols.includes("permissions"))
+      this.db.exec("ALTER TABLE users ADD COLUMN permissions TEXT DEFAULT '[]'");
+  }
+
   private seed() {
     const db = this.db;
     const adminEmail = process.env.ADMIN_EMAIL || "admin@sifat.uz";
     const adminPassword = process.env.ADMIN_PASSWORD || "admin123";
 
     if (!db.prepare("SELECT id FROM users WHERE email = ?").get(adminEmail)) {
-      db.prepare("INSERT INTO users (email, password_hash, name) VALUES (?, ?, ?)").run(
-        adminEmail,
-        bcrypt.hashSync(adminPassword, 10),
-        "Administrator"
-      );
+      db.prepare(
+        "INSERT INTO users (email, password_hash, name, role, permissions) VALUES (?, ?, ?, 'admin', '[]')"
+      ).run(adminEmail, bcrypt.hashSync(adminPassword, 10), "Administrator");
       console.log(`[db] admin user seeded: ${adminEmail}`);
     }
+    // Asosiy admin doim 'admin' rolida qolsin (eski bazalar uchun ham).
+    db.prepare("UPDATE users SET role = 'admin' WHERE email = ?").run(adminEmail);
 
     if ((db.prepare("SELECT COUNT(*) c FROM services").get() as any).c === 0) {
       const ins = db.prepare(

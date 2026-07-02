@@ -2,8 +2,10 @@ import { Body, Controller, Get, Put, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { DatabaseService } from "../database/database.service";
 import { JwtAuthGuard } from "../auth/jwt-auth.guard";
+import { PermissionGuard, RequirePermission } from "../auth/permission.guard";
 
 @ApiTags("Sozlamalar (settings)")
+@RequirePermission("settings")
 @Controller("settings")
 export class SettingsController {
   constructor(private readonly dbs: DatabaseService) {}
@@ -20,7 +22,7 @@ export class SettingsController {
   }
 
   @Put()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionGuard)
   @ApiBearerAuth("access-token")
   @ApiOperation({ summary: "Sozlamalarni yangilash (yuborilgan maydonlar birlashtiriladi)" })
   @ApiBody({

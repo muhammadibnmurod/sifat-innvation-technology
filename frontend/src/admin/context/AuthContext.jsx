@@ -40,9 +40,21 @@ export function AuthProvider({ children }) {
     return data.user;
   }, []);
 
+  const isAdmin = user?.role === "admin";
+
+  // Berilgan bo'limga kirish huquqi bormi? (admin hammasiga ruxsatli)
+  const can = useCallback(
+    (section) => {
+      if (!user) return false;
+      if (user.role === "admin") return true;
+      return Array.isArray(user.permissions) && user.permissions.includes(section);
+    },
+    [user]
+  );
+
   const value = useMemo(
-    () => ({ user, checking, login, logout, isAuthenticated: !!user && !!getToken() }),
-    [user, checking, login, logout]
+    () => ({ user, checking, login, logout, isAdmin, can, isAuthenticated: !!user && !!getToken() }),
+    [user, checking, login, logout, isAdmin, can]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

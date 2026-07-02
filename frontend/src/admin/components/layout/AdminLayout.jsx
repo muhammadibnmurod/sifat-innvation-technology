@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   LayoutDashboard, Wrench, Newspaper, Handshake, HelpCircle, Inbox,
   Settings, LogOut, ChevronsLeft, Menu, X, ExternalLink, ChevronDown,
-  ChevronRight, User,
+  ChevronRight, User, Users,
 } from "lucide-react";
 import Logo from "../../../assets/Logo.png";
 import { useAuth } from "../../context/AuthContext.jsx";
@@ -13,15 +13,16 @@ import api from "../../lib/api.js";
 
 export const NAV_ITEMS = [
   { to: "/admin", label: "Boshqaruv paneli", icon: LayoutDashboard, end: true },
-  { to: "/admin/services", label: "Xizmatlar", icon: Wrench },
-  { to: "/admin/news", label: "Yangiliklar", icon: Newspaper },
-  { to: "/admin/partners", label: "Hamkorlar", icon: Handshake },
-  { to: "/admin/faq", label: "FAQ", icon: HelpCircle },
-  { to: "/admin/messages", label: "Xabarlar", icon: Inbox },
-  { to: "/admin/settings", label: "Sozlamalar", icon: Settings },
+  { to: "/admin/services", label: "Xizmatlar", icon: Wrench, perm: "services" },
+  { to: "/admin/news", label: "Yangiliklar", icon: Newspaper, perm: "news" },
+  { to: "/admin/partners", label: "Hamkorlar", icon: Handshake, perm: "partners" },
+  { to: "/admin/faq", label: "FAQ", icon: HelpCircle, perm: "faq" },
+  { to: "/admin/messages", label: "Xabarlar", icon: Inbox, perm: "messages" },
+  { to: "/admin/settings", label: "Sozlamalar", icon: Settings, perm: "settings" },
+  { to: "/admin/users", label: "Foydalanuvchilar", icon: Users, adminOnly: true },
 ];
 
-function SidebarContent({ collapsed, unread, onNavigate, onLogout }) {
+function SidebarContent({ collapsed, unread, onNavigate, onLogout, navItems }) {
   return (
     <div className="flex h-full flex-col">
       {/* Logo */}
@@ -40,7 +41,7 @@ function SidebarContent({ collapsed, unread, onNavigate, onLogout }) {
       {/* Nav */}
       <nav className="flex-1 overflow-y-auto px-3 py-2">
         <ul className="flex flex-col gap-1">
-          {NAV_ITEMS.map(({ to, label, icon: Icon, end }) => (
+          {navItems.map(({ to, label, icon: Icon, end }) => (
             <li key={to}>
               <NavLink to={to} end={end} onClick={onNavigate} title={collapsed ? label : undefined}>
                 {({ isActive }) => (
@@ -105,7 +106,7 @@ function SidebarContent({ collapsed, unread, onNavigate, onLogout }) {
 }
 
 export default function AdminLayout() {
-  const { user, logout } = useAuth();
+  const { user, logout, isAdmin, can } = useAuth();
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -113,13 +114,21 @@ export default function AdminLayout() {
   const [unread, setUnread] = useState(0);
   const menuRef = useRef(null);
 
-  const current = NAV_ITEMS.find((n) =>
+  // Faqat ruxsat berilgan bo'limlar ko'rinadi (admin hammasini ko'radi).
+  const navItems = NAV_ITEMS.filter((n) => {
+    if (n.adminOnly) return isAdmin;
+    if (n.perm) return can(n.perm);
+    return true;
+  });
+
+  const current = navItems.find((n) =>
     n.end ? location.pathname === n.to : location.pathname.startsWith(n.to)
   );
   const pageTitle = current?.label || "Boshqaruv paneli";
 
   // Unread messages badge — refresh on route change + every 60s.
   useEffect(() => {
+    if (!can("messages")) return;
     let alive = true;
     const load = () =>
       api
@@ -152,7 +161,7 @@ export default function AdminLayout() {
           collapsed ? "w-[76px]" : "w-64"
         }`}
       >
-        <SidebarContent collapsed={collapsed} unread={unread} onLogout={logout} />
+        <SidebarContent collapsed={collapsed} unread={unread} onLogout={logout} navItems={navItems} />
         <button
           type="button"
           onClick={() => setCollapsed((v) => !v)}
@@ -196,6 +205,7 @@ export default function AdminLayout() {
                 unread={unread}
                 onNavigate={() => setMobileOpen(false)}
                 onLogout={logout}
+                navItems={navItems}
               />
             </motion.aside>
           </>

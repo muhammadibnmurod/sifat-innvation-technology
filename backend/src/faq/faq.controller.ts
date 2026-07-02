@@ -4,8 +4,10 @@ import { FaqService } from "./faq.service";
 import { CreateFaqDto, UpdateFaqDto } from "./faq.dto";
 import { ReorderDto } from "../common/reorder.dto";
 import { JwtAuthGuard } from "../auth/jwt-auth.guard";
+import { PermissionGuard, RequirePermission } from "../auth/permission.guard";
 
 @ApiTags("FAQ")
+@RequirePermission("faq")
 @Controller("faq")
 export class FaqController {
   constructor(private readonly service: FaqService) {}
@@ -23,7 +25,7 @@ export class FaqController {
   }
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionGuard)
   @ApiBearerAuth("access-token")
   @ApiOperation({ summary: "Savol-javob qo'shish" })
   create(@Body() dto: CreateFaqDto) {
@@ -31,7 +33,7 @@ export class FaqController {
   }
 
   @Put("reorder/all")
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionGuard)
   @ApiBearerAuth("access-token")
   @ApiOperation({ summary: "Tartibni o'zgartirish" })
   reorder(@Body() dto: ReorderDto) {
@@ -39,7 +41,7 @@ export class FaqController {
   }
 
   @Put(":id")
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionGuard)
   @ApiBearerAuth("access-token")
   @ApiOperation({ summary: "Savol-javobni yangilash" })
   update(@Param("id") id: string, @Body() dto: UpdateFaqDto) {
@@ -47,7 +49,7 @@ export class FaqController {
   }
 
   @Delete(":id")
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionGuard)
   @ApiBearerAuth("access-token")
   @ApiOperation({ summary: "Savol-javobni o'chirish" })
   remove(@Param("id") id: string) {

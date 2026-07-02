@@ -14,6 +14,8 @@ import { MessagesService } from "./messages/messages.service";
 import { SettingsController } from "./settings/settings.controller";
 import { UploadController } from "./upload/upload.controller";
 import { MiscController } from "./misc/misc.controller";
+import { UsersController } from "./users/users.controller";
+import { UsersService } from "./users/users.service";
 
 @Module({
   imports: [DatabaseModule, AuthModule],
@@ -26,7 +28,8 @@ import { MiscController } from "./misc/misc.controller";
     SettingsController,
     UploadController,
     MiscController,
+    UsersController,
   ],
-  providers: [ServicesService, NewsService, PartnersService, FaqService, MessagesService],
+  providers: [ServicesService, NewsService, PartnersService, FaqService, MessagesService, UsersService],
 })
 export class AppModule {}

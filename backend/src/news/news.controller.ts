@@ -3,8 +3,10 @@ import { ApiBearerAuth, ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger"
 import { NewsService } from "./news.service";
 import { CreateNewsDto, UpdateNewsDto } from "./news.dto";
 import { JwtAuthGuard } from "../auth/jwt-auth.guard";
+import { PermissionGuard, RequirePermission } from "../auth/permission.guard";
 
 @ApiTags("Yangiliklar (news)")
+@RequirePermission("news")
 @Controller("news")
 export class NewsController {
   constructor(private readonly service: NewsService) {}
@@ -23,7 +25,7 @@ export class NewsController {
   }
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionGuard)
   @ApiBearerAuth("access-token")
   @ApiOperation({ summary: "Yangilik qo'shish" })
   create(@Body() dto: CreateNewsDto) {
@@ -31,7 +33,7 @@ export class NewsController {
   }
 
   @Put(":id")
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionGuard)
   @ApiBearerAuth("access-token")
   @ApiOperation({ summary: "Yangilikni yangilash" })
   update(@Param("id") id: string, @Body() dto: UpdateNewsDto) {
@@ -39,7 +41,7 @@ export class NewsController {
   }
 
   @Delete(":id")
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionGuard)
   @ApiBearerAuth("access-token")
   @ApiOperation({ summary: "Yangilikni o'chirish" })
   remove(@Param("id") id: string) {

@@ -3,8 +3,10 @@ import { ApiBearerAuth, ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger"
 import { MessagesService } from "./messages.service";
 import { CreateMessageDto, UpdateMessageStatusDto } from "./messages.dto";
 import { JwtAuthGuard } from "../auth/jwt-auth.guard";
+import { PermissionGuard, RequirePermission } from "../auth/permission.guard";
 
 @ApiTags("Xabarlar (messages)")
+@RequirePermission("messages")
 @Controller("messages")
 export class MessagesController {
   constructor(private readonly service: MessagesService) {}
@@ -16,7 +18,7 @@ export class MessagesController {
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionGuard)
   @ApiBearerAuth("access-token")
   @ApiOperation({ summary: "Xabarlar ro'yxati (admin)" })
   @ApiQuery({ name: "status", required: false, enum: ["new", "read", "answered"] })
@@ -25,7 +27,7 @@ export class MessagesController {
   }
 
   @Get("unread-count")
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionGuard)
   @ApiBearerAuth("access-token")
   @ApiOperation({ summary: "O'qilmagan xabarlar soni" })
   unreadCount() {
@@ -33,7 +35,7 @@ export class MessagesController {
   }
 
   @Get(":id")
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionGuard)
   @ApiBearerAuth("access-token")
   @ApiOperation({ summary: "Bitta xabar" })
   findOne(@Param("id") id: string) {
@@ -41,7 +43,7 @@ export class MessagesController {
   }
 
   @Put(":id")
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionGuard)
   @ApiBearerAuth("access-token")
   @ApiOperation({ summary: "Xabar statusini o'zgartirish" })
   update(@Param("id") id: string, @Body() dto: UpdateMessageStatusDto) {
@@ -49,7 +51,7 @@ export class MessagesController {
   }
 
   @Delete(":id")
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionGuard)
   @ApiBearerAuth("access-token")
   @ApiOperation({ summary: "Xabarni o'chirish" })
   remove(@Param("id") id: string) {

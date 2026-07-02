@@ -49,7 +49,9 @@ async function request(path, { method = "GET", body, formData } = {}) {
   } catch {
     /* empty body */
   }
-  if (!res.ok) throw new Error(data?.error || "So'rov bajarilmadi");
+  if (!res.ok) throw new Error(data?.error || data?.message || "So'rov bajarilmadi");
+  if (data === null)
+    throw new Error("Serverdan javob kelmadi. Backend ishlayotganini tekshiring.");
   return data;
 }
 

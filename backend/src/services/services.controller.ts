@@ -4,8 +4,10 @@ import { ServicesService } from "./services.service";
 import { CreateServiceDto, UpdateServiceDto } from "./services.dto";
 import { ReorderDto } from "../common/reorder.dto";
 import { JwtAuthGuard } from "../auth/jwt-auth.guard";
+import { PermissionGuard, RequirePermission } from "../auth/permission.guard";
 
 @ApiTags("Xizmatlar (services)")
+@RequirePermission("services")
 @Controller("services")
 export class ServicesController {
   constructor(private readonly service: ServicesService) {}
@@ -24,7 +26,7 @@ export class ServicesController {
   }
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionGuard)
   @ApiBearerAuth("access-token")
   @ApiOperation({ summary: "Yangi xizmat qo'shish" })
   create(@Body() dto: CreateServiceDto) {
@@ -32,7 +34,7 @@ export class ServicesController {
   }
 
   @Put("reorder/all")
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionGuard)
   @ApiBearerAuth("access-token")
   @ApiOperation({ summary: "Tartibni o'zgartirish" })
   reorder(@Body() dto: ReorderDto) {
@@ -40,7 +42,7 @@ export class ServicesController {
   }
 
   @Put(":id")
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionGuard)
   @ApiBearerAuth("access-token")
   @ApiOperation({ summary: "Xizmatni yangilash" })
   update(@Param("id") id: string, @Body() dto: UpdateServiceDto) {
@@ -48,7 +50,7 @@ export class ServicesController {
   }
 
   @Delete(":id")
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionGuard)
   @ApiBearerAuth("access-token")
   @ApiOperation({ summary: "Xizmatni o'chirish" })
   remove(@Param("id") id: string) {
