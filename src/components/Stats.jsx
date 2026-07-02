@@ -10,35 +10,38 @@ const STATS = [
   { icon: Wrench, to: 15, suffix: "+", label: "xizmat turi" },
 ];
 
+// Full-bleed dark band — edge to edge, no side gutters.
 export default function Stats() {
   return (
-    <section className="relative -mt-8 px-4 sm:px-6 lg:px-8">
+    <section className="noise relative overflow-hidden bg-gradient-to-br from-ink via-[#14123a] to-brand-900">
+      {/* texture + colored glows */}
+      <div className="pointer-events-none absolute inset-0 bg-grid-light opacity-50" />
+      <div className="pointer-events-none absolute -left-20 -top-24 h-64 w-64 rounded-full bg-brand-600/40 blur-3xl" />
+      <div className="pointer-events-none absolute -right-16 -bottom-24 h-64 w-64 rounded-full bg-accent-cyan/25 blur-3xl" />
+      <div className="pointer-events-none absolute left-1/2 -bottom-28 h-56 w-56 -translate-x-1/2 rounded-full bg-accent-violet/25 blur-3xl" />
+
       <motion.div
         variants={stagger}
         {...inView}
-        className="relative mx-auto max-w-6xl overflow-hidden rounded-[var(--radius-xl2)] bg-gradient-to-r from-brand-700 via-brand-600 to-accent-violet p-8 shadow-lift sm:p-10"
+        className="relative mx-auto grid max-w-7xl grid-cols-2 gap-x-6 gap-y-10 px-4 py-14 sm:px-6 lg:grid-cols-4 lg:px-8 lg:py-16"
       >
-        {/* subtle texture */}
-        <div className="pointer-events-none absolute inset-0 opacity-20 bg-dots" />
-        <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-white/10 blur-2xl" />
-
-        <div className="relative grid grid-cols-2 gap-8 lg:grid-cols-4">
-          {STATS.map(({ icon: Icon, to, suffix, label }) => (
-            <motion.div
-              key={label}
-              variants={fadeUp}
-              className="flex flex-col items-center text-center lg:items-start lg:text-left"
-            >
-              <span className="mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-white/15 text-white backdrop-blur">
-                <Icon className="h-5 w-5" />
-              </span>
-              <div className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
-                <Counter to={to} suffix={suffix} />
-              </div>
-              <p className="mt-1 text-sm font-medium text-brand-100">{label}</p>
-            </motion.div>
-          ))}
-        </div>
+        {STATS.map(({ icon: Icon, to, suffix, label }, i) => (
+          <motion.div
+            key={label}
+            variants={fadeUp}
+            className={`flex flex-col items-center text-center ${
+              i > 0 ? "lg:border-l lg:border-white/10" : ""
+            }`}
+          >
+            <span className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 text-accent-cyan ring-1 ring-white/15 backdrop-blur">
+              <Icon className="h-5 w-5" />
+            </span>
+            <div className="bg-gradient-to-br from-white via-brand-100 to-brand-300 bg-clip-text text-4xl font-extrabold tracking-tight text-transparent sm:text-5xl">
+              <Counter to={to} suffix={suffix} />
+            </div>
+            <p className="mt-2 text-sm font-medium text-brand-200">{label}</p>
+          </motion.div>
+        ))}
       </motion.div>
     </section>
   );

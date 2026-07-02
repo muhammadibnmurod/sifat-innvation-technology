@@ -48,27 +48,30 @@
 /* ============================================================
    Base
    ============================================================ */
-html {
-  scroll-behavior: smooth;
-}
+/* Layered so Tailwind utilities (text-white etc.) can override them. */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
 
-body {
-  background-color: var(--color-surface);
-  color: var(--color-ink-soft);
-  font-family: var(--font-body);
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
+  body {
+    background-color: var(--color-surface);
+    color: var(--color-ink-soft);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-sans);
-  color: var(--color-ink);
-  letter-spacing: -0.02em;
-}
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-sans);
+    color: var(--color-ink);
+    letter-spacing: -0.02em;
+  }
 
-::selection {
-  background: var(--color-brand-600);
-  color: #fff;
+  ::selection {
+    background: var(--color-brand-600);
+    color: #fff;
+  }
 }
 
 /* ============================================================
@@ -212,8 +215,22 @@ h1, h2, h3, h4, h5, h6 {
   animation: marquee 40s linear infinite;
   will-change: transform;
 }
-.marquee-track:hover .animate-marquee {
+.animate-marquee-reverse {
+  animation: marquee 46s linear infinite reverse;
+  will-change: transform;
+}
+.marquee-track:hover .animate-marquee,
+.marquee-track:hover .animate-marquee-reverse {
   animation-play-state: paused;
+}
+
+/* Slow conic rotation — used behind the hero visual */
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+.animate-spin-slow {
+  animation: spin-slow 16s linear infinite;
+  will-change: transform;
 }
 
 @keyframes float-slow {
@@ -254,9 +271,11 @@ h1, h2, h3, h4, h5, h6 {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .animate-marquee,
+  .animate-marquee-reverse,
   .animate-float,
   .animate-drift,
   .animate-drift-slow,
+  .animate-spin-slow,
   .animate-pulse-ring {
     animation: none !important;
   }

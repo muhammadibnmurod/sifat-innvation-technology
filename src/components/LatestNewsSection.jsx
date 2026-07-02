@@ -52,6 +52,8 @@ export default function LatestNewsSection() {
             <motion.article
               key={title}
               variants={fadeUp}
+              whileHover={{ y: -6 }}
+              transition={{ type: "spring", stiffness: 320, damping: 26 }}
               className="group flex flex-col overflow-hidden rounded-[var(--radius-card)] bg-white shadow-soft ring-1 ring-black/5 transition-shadow duration-300 hover:shadow-lift"
             >
               {/* cover */}
@@ -72,7 +74,7 @@ export default function LatestNewsSection() {
                 <span className="text-xs font-semibold uppercase tracking-[0.16em] text-brand-600">
                   {category}
                 </span>
-                <h3 className="mt-2 text-lg font-bold leading-snug text-ink">
+                <h3 className="mt-2 text-lg font-bold leading-snug text-ink transition-colors duration-300 group-hover:text-brand-700">
                   {title}
                 </h3>
                 <p className="mt-3 flex-1 text-sm leading-relaxed text-ink-soft">
@@ -80,10 +82,12 @@ export default function LatestNewsSection() {
                 </p>
                 <a
                   href="#"
-                  className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-700"
+                  className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-brand-700"
                 >
                   Batafsil o'qish
-                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                  <span className="flex h-7 w-7 items-center justify-center rounded-full bg-brand-50 transition-all duration-300 group-hover:bg-gradient-to-r group-hover:from-brand-600 group-hover:to-accent-violet group-hover:text-white">
+                    <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
+                  </span>
                 </a>
               </div>
             </motion.article>

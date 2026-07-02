@@ -26,6 +26,8 @@ export default function AboutUs() {
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
         {/* Image with gradient frame + offset border */}
         <motion.div variants={scaleIn} {...inView} className="relative mx-auto w-full max-w-md lg:mx-0">
+          {/* soft glow behind the portrait */}
+          <div className="blob absolute -inset-10 -z-10 bg-gradient-to-br from-brand-300/70 to-accent-cyan/40" />
           {/* offset decorative border */}
           <div className="absolute -bottom-5 -left-5 h-full w-full rounded-[var(--radius-xl2)] border-2 border-brand-200" />
           {/* gradient frame */}
@@ -35,6 +37,13 @@ export default function AboutUs() {
               alt="Aripov Azamat Sharipovich — konstruktorlik ishlanmalari bo'limi boshlig'i"
               className="w-full rounded-[calc(var(--radius-xl2)-6px)] object-cover"
             />
+          </div>
+          {/* experience badge */}
+          <div className="animate-float absolute -right-4 -top-5 rounded-2xl bg-gradient-to-br from-brand-600 to-accent-violet px-4 py-3 text-center shadow-lift" style={{ animationDelay: "-2s" }}>
+            <p className="text-2xl font-extrabold leading-none text-white">10+</p>
+            <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-brand-100">
+              yil tajriba
+            </p>
           </div>
           {/* floating name badge */}
           <div className="animate-float absolute -bottom-6 right-4 flex items-center gap-3 rounded-2xl glass-strong p-4 shadow-lift">
