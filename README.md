@@ -4,7 +4,7 @@ Korporativ sayt + admin panel + backend API.
 
 ```
 ├── frontend/   # React 19 + Vite + Tailwind (sayt + /admin panel) → Netlify
-├── backend/    # Express + SQLite API                             → Render
+├── backend/    # NestJS + SQLite API (Swagger: /api/docs)         → Render
 ├── netlify.toml  # Netlify CI/CD sozlamasi (frontend)
 └── render.yaml   # Render blueprint (backend)
 ```
@@ -26,6 +26,7 @@ npm run dev
 - Sayt: http://localhost:5173
 - Admin panel: http://localhost:5173/admin
 - API: http://localhost:3000/api
+- Swagger hujjatlari: http://localhost:3000/api/docs
 
 ## Standart admin hisobi
 
@@ -41,8 +42,8 @@ Qiymatlar `backend/.env` dagi `ADMIN_EMAIL` / `ADMIN_PASSWORD` dan olinadi va bi
 ### 1. Backend → Render.com
 
 1. [render.com](https://render.com) da GitHub hisobingiz bilan kiring.
-2. **New → Blueprint** → shu repo'ni tanlang — `render.yaml` bo'yicha `sifat-api` servisi yaratiladi.
-   (Yoki **New → Web Service** → repo tanlab, *Root Directory* = `backend`, *Build* = `npm install`, *Start* = `npm start`.)
+2. **New → Web Service** → repo tanlab: *Root Directory* = `backend`,
+   *Build* = `npm install --include=dev && npm run build`, *Start* = `npm start`.
 3. Environment bo'limida `ADMIN_PASSWORD` ni kiriting.
 4. Deploy tugagach URL'ni oling, masalan: `https://sifat-api.onrender.com`.
 
