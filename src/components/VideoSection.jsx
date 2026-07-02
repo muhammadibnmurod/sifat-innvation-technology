@@ -73,14 +73,16 @@ export default function VideoSection() {
   const [featuredVideo, ...restVideos] = VIDEOS;
 
   return (
-    <section id="video" className="section scroll-mt-24 px-4 sm:px-6 lg:px-8">
-      {/* dark cinema container */}
-      <div className="noise relative mx-auto max-w-7xl overflow-hidden rounded-[var(--radius-xl2)] bg-gradient-to-br from-ink via-[#14123a] to-brand-900 p-8 shadow-lift ring-1 ring-white/10 sm:p-12">
-        <div className="pointer-events-none absolute inset-0 bg-grid-light opacity-40" />
-        <div className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full bg-brand-600/30 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-24 -right-20 h-72 w-72 rounded-full bg-accent-cyan/20 blur-3xl" />
+    <section
+      id="video"
+      className="noise section relative scroll-mt-24 overflow-hidden bg-gradient-to-br from-ink via-[#14123a] to-brand-900"
+    >
+      {/* full-bleed dark cinema band */}
+      <div className="pointer-events-none absolute inset-0 bg-grid-light opacity-40" />
+      <div className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full bg-brand-600/30 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-24 -right-20 h-72 w-72 rounded-full bg-accent-cyan/20 blur-3xl" />
 
-        <div className="relative">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div variants={stagger} {...inView} className="mx-auto flex max-w-2xl flex-col items-center gap-4 text-center">
             <motion.span
               variants={fadeUp}
@@ -112,7 +114,6 @@ export default function VideoSection() {
               <VideoCard key={video.id} {...video} />
             ))}
           </motion.div>
-        </div>
       </div>
     </section>
   );

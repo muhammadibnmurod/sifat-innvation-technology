@@ -6,11 +6,11 @@ import { fadeUp, stagger, inView } from "../lib/motion.js";
 // Full-width conversion band before the footer.
 export default function CtaBanner() {
   return (
-    <section className="px-4 pb-20 sm:px-6 lg:px-8">
+    <section className="noise relative overflow-hidden bg-gradient-to-br from-brand-700 via-brand-600 to-accent-violet">
       <motion.div
         variants={stagger}
         {...inView}
-        className="noise relative mx-auto max-w-7xl overflow-hidden rounded-[var(--radius-xl2)] bg-gradient-to-br from-brand-700 via-brand-600 to-accent-violet px-6 py-16 text-center shadow-lift ring-1 ring-white/15 sm:px-12 sm:py-20"
+        className="relative px-4 py-16 text-center sm:px-6 sm:py-24 lg:px-8"
       >
         <div className="pointer-events-none absolute inset-0 bg-grid-light opacity-40" />
         <div className="pointer-events-none absolute -left-24 -top-32 h-80 w-80 rounded-full bg-white/15 blur-3xl" />

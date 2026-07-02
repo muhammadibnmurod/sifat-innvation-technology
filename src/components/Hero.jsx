@@ -250,7 +250,7 @@ function Hero() {
 
               {/* Floating card — rating */}
               <motion.div
-                className="animate-float absolute -left-6 top-10 w-44 rounded-2xl glass-strong p-4 shadow-lift"
+                className="animate-float absolute -left-6 top-24 w-44 rounded-2xl glass-strong p-4 shadow-lift"
                 style={{ animationDelay: "-1.5s", transform: "translateZ(48px)" }}
               >
                 <div className="flex items-center gap-2">
@@ -266,7 +266,7 @@ function Hero() {
 
               {/* Floating card — safety */}
               <motion.div
-                className="animate-float absolute -right-5 bottom-12 w-52 rounded-2xl glass-strong p-4 shadow-lift"
+                className="animate-float absolute -right-5 -bottom-8 w-52 rounded-2xl glass-strong p-4 shadow-lift"
                 style={{ animationDelay: "-3s", transform: "translateZ(64px)" }}
               >
                 <div className="flex items-center gap-2">

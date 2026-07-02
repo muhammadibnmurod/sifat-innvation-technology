@@ -3,8 +3,13 @@ import { Building2 } from "lucide-react";
 import SectionHeading from "./ui/SectionHeading.jsx";
 import { inView } from "../lib/motion.js";
 
-const ROW_A = ["Uralmash", "Kranmash", "KAMAZ", "GAZprom", "NLMK", "Severstal"];
-const ROW_B = ["Transneft", "Nefaz", "TatSpets", "RGK", "Diakon", "Yamaha"];
+const PARTNERS = [
+  "Uralmash", "Kranmash", "KAMAZ", "GAZprom", "NLMK", "Severstal",
+  "Transneft", "Nefaz", "TatSpets", "RGK", "Diakon", "Yamaha",
+];
+// Both rows show every partner; the second scrolls the other way in reverse order.
+const ROW_A = PARTNERS;
+const ROW_B = [...PARTNERS].reverse();
 
 function LogoChip({ name }) {
   return (
@@ -25,12 +30,12 @@ function MarqueeRow({ names, reverse = false }) {
   const animation = reverse ? "animate-marquee-reverse" : "animate-marquee";
   return (
     <div className={`${animation} flex flex-none py-2`}>
-      <ul className="flex min-w-full flex-none items-center justify-around">
+      <ul className="flex flex-none items-center">
         {names.map((name, i) => (
           <LogoChip key={`a-${i}`} name={name} />
         ))}
       </ul>
-      <ul className="flex min-w-full flex-none items-center justify-around" aria-hidden="true">
+      <ul className="flex flex-none items-center" aria-hidden="true">
         {names.map((name, i) => (
           <LogoChip key={`b-${i}`} name={name} />
         ))}

@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import SectionHeading from "./ui/SectionHeading.jsx";
 import Card from "./ui/Card.jsx";
+import Button from "./ui/Button.jsx";
 import { fadeUp, stagger, inView } from "../lib/motion.js";
 
 // Featured service — gets the large dark bento panel.
@@ -143,6 +144,26 @@ export default function Remont() {
               </div>
             </Card>
           ))}
+
+          {/* Filler CTA card — completes the 3×3 bento on desktop */}
+          <motion.div
+            variants={fadeUp}
+            className="relative flex flex-col items-start justify-center overflow-hidden rounded-[var(--radius-card)] border-2 border-dashed border-brand-200 bg-brand-50/50 p-7 lg:col-span-2 lg:flex-row lg:items-center lg:justify-between lg:gap-8"
+          >
+            <div>
+              <h3 className="text-xl font-bold text-ink">
+                Qaysi xizmat kerakligini bilmayapsizmi?
+              </h3>
+              <p className="mt-2 max-w-md text-sm leading-relaxed text-ink-soft">
+                Obyektingizni tasvirlab bering — mutaxassislarimiz to'g'ri
+                yechimni bepul tavsiya qiladi.
+              </p>
+            </div>
+            <Button as="a" href="#faq" variant="gradient" className="mt-5 flex-none lg:mt-0">
+              Konsultatsiya olish
+              <ArrowUpRight className="h-4 w-4" />
+            </Button>
+          </motion.div>
         </motion.div>
       </div>
     </section>
