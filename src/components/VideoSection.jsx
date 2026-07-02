@@ -2,12 +2,22 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Play, Clapperboard } from "lucide-react";
 import { fadeUp, stagger, inView } from "../lib/motion.js";
+import { useSiteData } from "../lib/SiteDataContext.jsx";
 
 const VIDEOS = [
   { id: "dQw4w9WgXcQ", title: "Sifat Innovatsion Texnologiya taqdimoti" },
   { id: "M7lc1UVf-VE", title: "Kranlar va rels yo'llarini ta'mirlash" },
   { id: "jNQXAC9IVRw", title: "Kompaniya faoliyati bo'yicha videohisobot" },
 ];
+
+// Pull a YouTube video ID out of any common URL format.
+function youtubeId(url) {
+  if (!url) return null;
+  const m = String(url).match(
+    /(?:youtube\.com\/(?:watch\?.*v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/
+  );
+  return m ? m[1] : null;
+}
 
 function VideoCard({ id, title, featured = false }) {
   const [playing, setPlaying] = useState(false);
@@ -70,7 +80,13 @@ function VideoCard({ id, title, featured = false }) {
 }
 
 export default function VideoSection() {
-  const [featuredVideo, ...restVideos] = VIDEOS;
+  const { settings } = useSiteData();
+  const [defaultFeatured, ...restVideos] = VIDEOS;
+  // Admin-managed video URL overrides the featured slot.
+  const adminId = youtubeId(settings.video_url);
+  const featuredVideo = adminId
+    ? { id: adminId, title: defaultFeatured.title }
+    : defaultFeatured;
 
   return (
     <section

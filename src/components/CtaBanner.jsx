@@ -2,9 +2,14 @@ import { motion } from "framer-motion";
 import { Phone, ArrowRight } from "lucide-react";
 import Button from "./ui/Button.jsx";
 import { fadeUp, stagger, inView } from "../lib/motion.js";
+import { useSiteData } from "../lib/SiteDataContext.jsx";
 
 // Full-width conversion band before the footer.
 export default function CtaBanner() {
+  const { settings } = useSiteData();
+  const phone = settings.phone || "+998 99 866 02 71";
+  const phoneHref = `tel:${phone.replace(/[^+\d]/g, "")}`;
+
   return (
     <section className="noise relative overflow-hidden bg-gradient-to-br from-brand-700 via-brand-600 to-accent-violet">
       <motion.div
@@ -51,13 +56,13 @@ export default function CtaBanner() {
             </Button>
             <Button
               as="a"
-              href="tel:+998998660271"
+              href={phoneHref}
               variant="ghost"
               size="lg"
               className="!border-white/25 !bg-white/10 !text-white hover:!bg-white/20"
             >
               <Phone className="h-4 w-4" />
-              +998 99 866 02 71
+              {phone}
             </Button>
           </motion.div>
         </div>

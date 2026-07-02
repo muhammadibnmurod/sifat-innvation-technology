@@ -1,9 +1,10 @@
 import { motion } from "framer-motion";
 import { Check, Award } from "lucide-react";
-import Human from "../assets/human.png";
+import Human from "../assets/human2.png";
 import Button from "./ui/Button.jsx";
 import SectionHeading from "./ui/SectionHeading.jsx";
 import { fadeUp, stagger, scaleIn, inView } from "../lib/motion.js";
+import { useSiteData } from "../lib/SiteDataContext.jsx";
 
 const POINTS = [
   {
@@ -21,11 +22,17 @@ const POINTS = [
 ];
 
 export default function AboutUs() {
+  const { settings } = useSiteData();
+
   return (
     <section id="about" className="section scroll-mt-24 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
         {/* Image with gradient frame + offset border */}
-        <motion.div variants={scaleIn} {...inView} className="relative mx-auto w-full max-w-md lg:mx-0">
+        <motion.div
+          variants={scaleIn}
+          {...inView}
+          className="relative mx-auto w-full max-w-md lg:mx-0"
+        >
           {/* soft glow behind the portrait */}
           <div className="blob absolute -inset-10 -z-10 bg-gradient-to-br from-brand-300/70 to-accent-cyan/40" />
           {/* offset decorative border */}
@@ -39,8 +46,13 @@ export default function AboutUs() {
             />
           </div>
           {/* experience badge */}
-          <div className="animate-float absolute -right-4 -top-5 rounded-2xl bg-gradient-to-br from-brand-600 to-accent-violet px-4 py-3 text-center shadow-lift" style={{ animationDelay: "-2s" }}>
-            <p className="text-2xl font-extrabold leading-none text-white">10+</p>
+          <div
+            className="animate-float absolute -right-4 -top-5 rounded-2xl bg-gradient-to-br from-brand-600 to-accent-violet px-4 py-3 text-center shadow-lift"
+            style={{ animationDelay: "-2s" }}
+          >
+            <p className="text-2xl font-extrabold leading-none text-white">
+              10+
+            </p>
             <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-brand-100">
               yil tajriba
             </p>
@@ -67,12 +79,20 @@ export default function AboutUs() {
             align="left"
             eyebrow="Biz haqimizda"
             title="Yuk ko'taruvchi texnikada **ishonchli** hamkoringiz"
-            subtitle="Sifat Innovatsion Texnologiya xavfli ishlab chiqarish obyektlarida sanoat xavfsizligi ekspertizasi, yuk ko'taruvchi mashinalar va kran yo'llarini loyihalash hamda ta'mirlash bilan shug'ullanadi."
+            subtitle={settings.about_text}
           />
 
-          <motion.ul variants={stagger} {...inView} className="mt-8 flex flex-col gap-5">
+          <motion.ul
+            variants={stagger}
+            {...inView}
+            className="mt-8 flex flex-col gap-5"
+          >
             {POINTS.map((point) => (
-              <motion.li key={point.title} variants={fadeUp} className="flex gap-4">
+              <motion.li
+                key={point.title}
+                variants={fadeUp}
+                className="flex gap-4"
+              >
                 <span className="mt-0.5 flex h-7 w-7 flex-none items-center justify-center rounded-lg bg-gradient-to-br from-brand-600 to-accent-cyan text-white shadow-[0_6px_16px_rgba(79,70,229,0.3)]">
                   <Check className="h-4 w-4" strokeWidth={3} />
                 </span>

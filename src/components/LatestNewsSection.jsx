@@ -1,39 +1,29 @@
 import { motion } from "framer-motion";
-import { ArrowRight, FileText, Ruler, GraduationCap } from "lucide-react";
+import { ArrowRight, FileText, Ruler, GraduationCap, Newspaper } from "lucide-react";
 import SectionHeading from "./ui/SectionHeading.jsx";
 import { fadeUp, stagger, inView } from "../lib/motion.js";
+import { useSiteData } from "../lib/SiteDataContext.jsx";
 
-const NEWS = [
-  {
-    icon: FileText,
-    category: "Standartlar",
-    date: "07.08.2025",
-    title: "GOST 33715-2025 standarti qabul qilindi",
-    excerpt:
-      "Standartlashtirish, metrologiya va sertifikatlashtirish bo'yicha davlatlararo Kengash «Yuk ilg'ich moslamalar. Xavfsiz foydalanish» standartini qabul qildi.",
-    gradient: "from-brand-600 to-accent-violet",
-  },
-  {
-    icon: Ruler,
-    category: "Ishlanma",
-    date: "02.08.2025",
-    title: "Kran yo'llari uchun yangi GOST loyihasi",
-    excerpt:
-      "Sifat Innovatsion Texnologiya ishlab chiqqan «Yerusti rels kran yo'llari. Umumiy texnik talablar» standarti qabul qilish bosqichida.",
-    gradient: "from-accent-violet to-accent-cyan",
-  },
-  {
-    icon: GraduationCap,
-    category: "Tadbirlar",
-    date: "15.07.2025",
-    title: "Mutaxassislar uchun malaka oshirish seminari",
-    excerpt:
-      "Yuk ko'taruvchi mashinalarni ko'rikdan o'tkazish va ta'mirlash bo'yicha amaliy seminar bo'lib o'tdi.",
-    gradient: "from-secondary-500 to-secondary-600",
-  },
+// Cosmetic rotation for cards without an uploaded cover image.
+const GRADIENTS = [
+  "from-brand-600 to-accent-violet",
+  "from-accent-violet to-accent-cyan",
+  "from-secondary-500 to-secondary-600",
 ];
+const ICONS = [FileText, Ruler, GraduationCap];
+
+function formatDate(iso) {
+  if (!iso) return "";
+  const [y, m, d] = String(iso).split("-");
+  return d && m && y ? `${d}.${m}.${y}` : iso;
+}
 
 export default function LatestNewsSection() {
+  const { news } = useSiteData();
+  const latest = news.slice(0, 3);
+
+  if (latest.length === 0) return null;
+
   return (
     <section id="news" className="section scroll-mt-24 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
@@ -48,9 +38,12 @@ export default function LatestNewsSection() {
           {...inView}
           className="mt-14 grid grid-cols-1 gap-7 md:grid-cols-2 lg:grid-cols-3"
         >
-          {NEWS.map(({ icon: Icon, category, date, title, excerpt, gradient }) => (
+          {latest.map(({ id, category, date, title, excerpt, image }, i) => {
+            const Icon = ICONS[i % ICONS.length] || Newspaper;
+            const gradient = GRADIENTS[i % GRADIENTS.length];
+            return (
             <motion.article
-              key={title}
+              key={id}
               variants={fadeUp}
               whileHover={{ y: -6 }}
               transition={{ type: "spring", stiffness: 320, damping: 26 }}
@@ -58,14 +51,24 @@ export default function LatestNewsSection() {
             >
               {/* cover */}
               <div className="relative aspect-[16/10] overflow-hidden">
-                <div
-                  className={`absolute inset-0 scale-100 bg-gradient-to-br ${gradient} transition-transform duration-500 group-hover:scale-110`}
-                />
-                <div className="absolute inset-0 opacity-30 bg-dots" />
-                <Icon className="absolute left-1/2 top-1/2 h-14 w-14 -translate-x-1/2 -translate-y-1/2 text-white/90" />
+                {image ? (
+                  <img
+                    src={image}
+                    alt={title}
+                    className="absolute inset-0 h-full w-full scale-100 object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                ) : (
+                  <>
+                    <div
+                      className={`absolute inset-0 scale-100 bg-gradient-to-br ${gradient} transition-transform duration-500 group-hover:scale-110`}
+                    />
+                    <div className="absolute inset-0 opacity-30 bg-dots" />
+                    <Icon className="absolute left-1/2 top-1/2 h-14 w-14 -translate-x-1/2 -translate-y-1/2 text-white/90" />
+                  </>
+                )}
                 {/* date badge */}
                 <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-ink shadow-sm backdrop-blur">
-                  {date}
+                  {formatDate(date)}
                 </span>
               </div>
 
@@ -91,7 +94,8 @@ export default function LatestNewsSection() {
                 </a>
               </div>
             </motion.article>
-          ))}
+            );
+          })}
         </motion.div>
       </div>
     </section>

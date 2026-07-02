@@ -2,16 +2,20 @@ import { motion } from "framer-motion";
 import { CalendarClock, ClipboardCheck, Users, Wrench } from "lucide-react";
 import Counter from "./ui/Counter.jsx";
 import { fadeUp, stagger, inView } from "../lib/motion.js";
-
-const STATS = [
-  { icon: CalendarClock, to: 10, suffix: "+", label: "yillik tajriba" },
-  { icon: ClipboardCheck, to: 500, suffix: "+", label: "bajarilgan loyiha" },
-  { icon: Users, to: 120, suffix: "+", label: "doimiy mijozlar" },
-  { icon: Wrench, to: 15, suffix: "+", label: "xizmat turi" },
-];
+import { useSiteData } from "../lib/SiteDataContext.jsx";
 
 // Full-bleed dark band — edge to edge, no side gutters.
 export default function Stats() {
+  const { settings } = useSiteData();
+  const s = settings.stats || {};
+
+  const STATS = [
+    { icon: CalendarClock, to: s.experience ?? 10, suffix: "+", label: "yillik tajriba" },
+    { icon: ClipboardCheck, to: s.projects ?? 500, suffix: "+", label: "bajarilgan loyiha" },
+    { icon: Users, to: s.clients ?? 120, suffix: "+", label: "doimiy mijozlar" },
+    { icon: Wrench, to: s.services ?? 15, suffix: "+", label: "xizmat turi" },
+  ];
+
   return (
     <section className="noise relative overflow-hidden bg-gradient-to-br from-ink via-[#14123a] to-brand-900">
       {/* texture + colored glows */}

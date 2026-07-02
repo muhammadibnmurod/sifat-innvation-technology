@@ -19,15 +19,22 @@ import {
 } from "lucide-react";
 import Button from "./ui/Button.jsx";
 import { fadeUp, wordRise, stagger } from "../lib/motion.js";
+import { useSiteData } from "../lib/SiteDataContext.jsx";
 
-// Headline split into words; the gradient word is flagged.
-const HEADLINE = [
-  { text: "Yuk" },
-  { text: "ko'taruvchi" },
-  { text: "kranlarni" },
-  { text: "professional", gradient: true },
-  { text: "ta'mirlash" },
-];
+// Split "Yuk ko'taruvchi **professional** ta'mirlash" into words,
+// flagging **gradient** words.
+function parseHeadline(title) {
+  const words = [];
+  for (const chunk of String(title).split(/(\*\*[^*]+\*\*)/g)) {
+    if (!chunk) continue;
+    if (chunk.startsWith("**") && chunk.endsWith("**")) {
+      chunk.slice(2, -2).trim().split(/\s+/).forEach((w) => words.push({ text: w, gradient: true }));
+    } else {
+      chunk.trim().split(/\s+/).filter(Boolean).forEach((w) => words.push({ text: w }));
+    }
+  }
+  return words;
+}
 
 const TRUST = [
   { icon: ShieldCheck, label: "Sanoat xavfsizligi ekspertizasi" },
@@ -83,6 +90,11 @@ function TiltPanel({ children }) {
 }
 
 function Hero() {
+  const { settings } = useSiteData();
+  const headline = parseHeadline(
+    settings.hero_title || "Yuk ko'taruvchi kranlarni **professional** ta'mirlash"
+  );
+
   return (
     <section
       id="hero"
@@ -114,11 +126,11 @@ function Hero() {
               <span className="animate-pulse-ring absolute inline-flex h-full w-full rounded-full bg-brand-500" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-gradient-to-r from-brand-600 to-accent-cyan" />
             </span>
-            2014 yildan beri Toshkentda
+            {settings.hero_badge || "2014 yildan beri Toshkentda"}
           </motion.span>
 
           <h1 className="text-hero mt-6 font-extrabold text-ink">
-            {HEADLINE.map((word, i) => (
+            {headline.map((word, i) => (
               <span key={i} className="mr-[0.25em] inline-block overflow-hidden pb-[0.08em] align-bottom">
                 <motion.span
                   variants={wordRise}
@@ -134,9 +146,7 @@ function Hero() {
             variants={fadeUp}
             className="mt-6 max-w-xl text-lg leading-relaxed text-ink-soft"
           >
-            Malakali mutaxassislarimiz kran yo'llarini ko'zdan kechirish,
-            tekshirish va texnik ta'mirlash bo'yicha barcha ishlarni zamonaviy
-            uskunalar bilan bajaradi — ekspertizadan to kapital ta'mirgacha.
+            {settings.hero_subtitle}
           </motion.p>
 
           <motion.div variants={fadeUp} className="mt-9 flex flex-wrap items-center gap-4">
@@ -212,7 +222,7 @@ function Hero() {
                   {/* headline stat */}
                   <div className="text-center">
                     <p className="bg-gradient-to-br from-white via-brand-100 to-brand-300 bg-clip-text text-6xl font-extrabold text-transparent">
-                      10+
+                      {settings.stats?.experience ?? 10}+
                     </p>
                     <p className="mt-2 text-xs font-semibold uppercase tracking-[0.24em] text-brand-200">
                       yillik tajriba
@@ -258,7 +268,9 @@ function Hero() {
                     <Award className="h-5 w-5" />
                   </span>
                   <div>
-                    <p className="text-lg font-extrabold leading-none text-ink">500+</p>
+                    <p className="text-lg font-extrabold leading-none text-ink">
+                      {settings.stats?.projects ?? 500}+
+                    </p>
                     <p className="text-xs text-ink-soft">bajarilgan loyiha</p>
                   </div>
                 </div>

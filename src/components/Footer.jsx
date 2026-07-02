@@ -2,24 +2,20 @@ import { motion } from "framer-motion";
 import { Facebook, Youtube, Instagram, Send, Phone, Mail, MapPin, ArrowRight } from "lucide-react";
 import Logo from "../assets/Logo.png";
 import { fadeUp, stagger, inView } from "../lib/motion.js";
-
-const SERVICES = [
-  "Texnik ekspertiza",
-  "Ta'mirlash ishlari",
-  "O'rnatish va sozlash",
-  "Rekonstruksiya",
-  "Loyihalash ishlari",
-  "Malaka oshirish",
-];
-
-const SOCIALS = [
-  { Icon: Facebook, href: "#", label: "Facebook" },
-  { Icon: Youtube, href: "#", label: "YouTube" },
-  { Icon: Instagram, href: "#", label: "Instagram" },
-  { Icon: Send, href: "#", label: "Telegram" },
-];
+import { useSiteData } from "../lib/SiteDataContext.jsx";
 
 export default function Footer() {
+  const { services, settings } = useSiteData();
+  const footerServices = services.slice(0, 6);
+  const phone = settings.phone || "+998 99 866 02 71";
+  const phoneHref = `tel:${phone.replace(/[^+\d]/g, "")}`;
+  const socials = [
+    { Icon: Facebook, href: settings.socials?.facebook, label: "Facebook" },
+    { Icon: Youtube, href: settings.socials?.youtube, label: "YouTube" },
+    { Icon: Instagram, href: settings.socials?.instagram, label: "Instagram" },
+    { Icon: Send, href: settings.socials?.telegram, label: "Telegram" },
+  ];
+
   return (
     <footer className="relative bg-ink text-neutral-400">
       {/* gradient top border */}
@@ -75,18 +71,18 @@ export default function Footer() {
             <ul className="mt-5 flex flex-col gap-4 text-sm">
               <li className="flex gap-3">
                 <MapPin className="h-5 w-5 flex-none text-brand-400" />
-                Toshkent shahri, Mirobod tumani
+                {settings.address || "Toshkent shahri, Mirobod tumani"}
               </li>
               <li className="flex gap-3">
                 <Phone className="h-5 w-5 flex-none text-brand-400" />
-                <a href="tel:+998998660271" className="transition-colors hover:text-white">
-                  +998 99 866 02 71
+                <a href={phoneHref} className="transition-colors hover:text-white">
+                  {phone}
                 </a>
               </li>
               <li className="flex gap-3">
                 <Mail className="h-5 w-5 flex-none text-brand-400" />
-                <a href="mailto:sifat.saffatt@gmail.com" className="transition-colors hover:text-white">
-                  sifat.saffatt@gmail.com
+                <a href={`mailto:${settings.email}`} className="transition-colors hover:text-white">
+                  {settings.email}
                 </a>
               </li>
             </ul>
@@ -98,10 +94,10 @@ export default function Footer() {
               Xizmatlar
             </h4>
             <ul className="mt-5 flex flex-col gap-3 text-sm">
-              {SERVICES.map((s) => (
-                <li key={s}>
+              {footerServices.map((s) => (
+                <li key={s.id}>
                   <a href="#services" className="transition-colors hover:text-white">
-                    {s}
+                    {s.title}
                   </a>
                 </li>
               ))}
@@ -114,10 +110,12 @@ export default function Footer() {
               Ijtimoiy tarmoqlar
             </h4>
             <div className="mt-5 flex gap-3">
-              {SOCIALS.map(({ Icon, href, label }) => (
+              {socials.map(({ Icon, href, label }) => (
                 <a
                   key={label}
-                  href={href}
+                  href={href || "#"}
+                  target={href ? "_blank" : undefined}
+                  rel={href ? "noreferrer" : undefined}
                   aria-label={label}
                   className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-neutral-300 transition-all hover:border-brand-400 hover:bg-brand-600 hover:text-white"
                 >

@@ -3,6 +3,7 @@ import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
 import { Phone, Menu, X } from "lucide-react";
 import Logo from "../assets/Logo.png";
 import Button from "./ui/Button.jsx";
+import { useSiteData } from "../lib/SiteDataContext.jsx";
 
 const NAV_LINKS = [
   { label: "Bosh sahifa", href: "#hero" },
@@ -14,6 +15,9 @@ const NAV_LINKS = [
 ];
 
 export default function Header() {
+  const { settings } = useSiteData();
+  const phone = settings.phone || "+998 99 866 02 71";
+  const phoneHref = `tel:${phone.replace(/[^+\d]/g, "")}`;
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const { scrollYProgress } = useScroll();
@@ -86,11 +90,11 @@ export default function Header() {
         {/* Right side */}
         <div className="flex items-center gap-2">
           <a
-            href="tel:+998998660271"
+            href={phoneHref}
             className="hidden items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold text-ink/80 transition-colors hover:text-brand-700 xl:flex"
           >
             <Phone className="h-4 w-4 text-secondary-500" />
-            +998 99 866 02 71
+            {phone}
           </a>
           <Button as="a" href="#faq" size="sm" className="hidden sm:inline-flex">
             Bog'lanish
@@ -155,11 +159,11 @@ export default function Header() {
               </motion.ul>
               <div className="mt-3 flex flex-col gap-3 border-t border-black/10 pt-4">
                 <a
-                  href="tel:+998998660271"
+                  href={phoneHref}
                   className="flex items-center gap-2 px-4 text-sm font-semibold text-ink-soft"
                 >
                   <Phone className="h-4 w-4 text-secondary-500" />
-                  +998 99 866 02 71
+                  {phone}
                 </a>
                 <Button
                   as="a"

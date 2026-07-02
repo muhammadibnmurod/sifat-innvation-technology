@@ -4,25 +4,7 @@ import { ChevronDown, Send, CheckCircle2 } from "lucide-react";
 import SectionHeading from "./ui/SectionHeading.jsx";
 import Button from "./ui/Button.jsx";
 import { fadeUp, stagger, inView } from "../lib/motion.js";
-
-const FAQS = [
-  {
-    q: "Qanday kranlarni ta'mirlaysiz?",
-    a: "Ko'prikli, kozlovoy, minorali va boshqa yuk ko'taruvchi kranlarning deyarli barcha turlarini ta'mirlaymiz — joriy ta'mirdan kapital tiklashgacha.",
-  },
-  {
-    q: "Ekspertiza qancha vaqt oladi?",
-    a: "Obyekt hajmi va murakkabligiga qarab, sanoat xavfsizligi ekspertizasi odatda 3–10 ish kunini oladi.",
-  },
-  {
-    q: "Texnik hujjatlarni rasmiylashtirasizmi?",
-    a: "Ha. Pasport, texnik kartalar va boshqa barcha zarur hujjatlarni amaldagi standartlarga muvofiq tayyorlab beramiz.",
-  },
-  {
-    q: "Xizmat ko'rsatish hududi qayer?",
-    a: "Toshkent shahri va butun O'zbekiston bo'ylab xizmat ko'rsatamiz. Kerak bo'lsa mutaxassislarimiz obyektga chiqadi.",
-  },
-];
+import { useSiteData } from "../lib/SiteDataContext.jsx";
 
 function AccordionItem({ item, isOpen, onToggle, index }) {
   return (
@@ -37,7 +19,7 @@ function AccordionItem({ item, isOpen, onToggle, index }) {
         aria-controls={`faq-panel-${index}`}
         className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
       >
-        <span className="font-bold text-ink">{item.q}</span>
+        <span className="font-bold text-ink">{item.question}</span>
         <motion.span
           animate={{ rotate: isOpen ? 180 : 0 }}
           transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
@@ -57,7 +39,7 @@ function AccordionItem({ item, isOpen, onToggle, index }) {
             className="overflow-hidden"
           >
             <p className="px-6 pb-5 text-sm leading-relaxed text-ink-soft">
-              {item.a}
+              {item.answer}
             </p>
           </motion.div>
         )}
@@ -71,10 +53,13 @@ const inputBase =
   "placeholder:text-neutral-400 focus:ring-4";
 
 export default function AskQuestionSection() {
+  const { faqs } = useSiteData();
   const [openIndex, setOpenIndex] = useState(0);
   const [values, setValues] = useState({ name: "", phone: "", message: "" });
   const [errors, setErrors] = useState({});
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const update = (field) => (e) => {
     setValues((v) => ({ ...v, [field]: e.target.value }));
@@ -91,13 +76,29 @@ export default function AskQuestionSection() {
     return next;
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
+    setSubmitError("");
     const next = validate();
     setErrors(next);
-    if (Object.keys(next).length === 0) {
+    if (Object.keys(next).length !== 0) return;
+    setSending(true);
+    try {
+      const res = await fetch("/api/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        throw new Error(data?.error || "Xabar yuborilmadi. Qaytadan urinib ko'ring.");
+      }
       setSent(true);
       setValues({ name: "", phone: "", message: "" });
+    } catch (err) {
+      setSubmitError(err.message);
+    } finally {
+      setSending(false);
     }
   };
 
@@ -122,7 +123,7 @@ export default function AskQuestionSection() {
             {...inView}
             className="flex flex-col gap-4"
           >
-            {FAQS.map((item, i) => (
+            {faqs.map((item, i) => (
               <AccordionItem
                 key={i}
                 index={i}
@@ -229,13 +230,20 @@ export default function AskQuestionSection() {
                     )}
                   </div>
 
+                  {submitError && (
+                    <p className="rounded-xl bg-red-50 px-4 py-2.5 text-center text-xs font-semibold text-red-600 ring-1 ring-red-100">
+                      {submitError}
+                    </p>
+                  )}
+
                   <Button
                     type="submit"
                     variant="primary"
                     size="lg"
-                    className="w-full"
+                    disabled={sending}
+                    className={`w-full ${sending ? "pointer-events-none opacity-70" : ""}`}
                   >
-                    Savolni yuborish
+                    {sending ? "Yuborilmoqda..." : "Savolni yuborish"}
                     <Send className="h-4 w-4" />
                   </Button>
                 </form>

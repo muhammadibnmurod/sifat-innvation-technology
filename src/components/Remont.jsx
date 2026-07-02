@@ -1,67 +1,25 @@
 import { motion } from "framer-motion";
-import {
-  FileSearch,
-  Wrench,
-  RefreshCw,
-  Building2,
-  ShieldCheck,
-  Cpu,
-  ArrowUpRight,
-  Check,
-} from "lucide-react";
+import { ArrowUpRight, Check } from "lucide-react";
 import SectionHeading from "./ui/SectionHeading.jsx";
 import Card from "./ui/Card.jsx";
 import Button from "./ui/Button.jsx";
 import { fadeUp, stagger, inView } from "../lib/motion.js";
+import { useSiteData } from "../lib/SiteDataContext.jsx";
+import { getIcon } from "../lib/icons.js";
 
-// Featured service — gets the large dark bento panel.
-const FEATURED = {
-  icon: FileSearch,
-  title: "Ekspertiza va hujjatlashtirish",
-  description:
-    "Kranlarni diagnostika qilish, sanoat xavfsizligi ekspertizasi hamda pasport va texnik hujjatlarni rasmiylashtirish.",
-  points: [
-    "Sanoat xavfsizligi ekspertizasi",
-    "Pasport va texnik hujjatlar",
-    "Protokolli sinovlar va xulosalar",
-  ],
-};
-
-const SERVICES = [
-  {
-    icon: Wrench,
-    title: "Ta'mirlash ishlari",
-    description:
-      "Yuk ko'taruvchi mashinalar, ko'prikli va kozlovoy kranlar hamda kran yo'llarini joriy va kapital ta'mirlash.",
-  },
-  {
-    icon: RefreshCw,
-    title: "Rekonstruksiya va modernizatsiya",
-    description:
-      "Ko'prikli kranlarni qayta qurish, modernizatsiya qilish va tegishli loyiha hujjatlarini tayyorlash.",
-  },
-  {
-    icon: Building2,
-    title: "PS va infratuzilma",
-    description:
-      "Kranlar va ularning infratuzilmasi bo'yicha rejalashtirish, raqamli tahlil va uskunalarni sozlash.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Xavfsizlik asboblari",
-    description:
-      "Kranlarning xavfsizlik asboblarini o'rnatish, sozlash va davriy texnik tekshiruvdan o'tkazish.",
-  },
-  {
-    icon: Cpu,
-    title: "Maxsus xizmatlar",
-    description:
-      "Barcha rusumdagi kranlarni ko'rikdan o'tkazish, elektr yuritmalar ekspertizasi va protokolli sinovlar.",
-  },
+// Bullet points shown inside the featured (first) service panel.
+const FEATURED_POINTS = [
+  "Sanoat xavfsizligi ekspertizasi",
+  "Pasport va texnik hujjatlar",
+  "Protokolli sinovlar va xulosalar",
 ];
 
 export default function Remont() {
-  const FeaturedIcon = FEATURED.icon;
+  const { services } = useSiteData();
+  const [featured, ...rest] = services;
+  const FeaturedIcon = getIcon(featured?.icon);
+
+  if (!featured) return null;
 
   return (
     <section id="services" className="section scroll-mt-24 px-4 sm:px-6 lg:px-8">
@@ -95,12 +53,12 @@ export default function Remont() {
                 </span>
                 <span className="text-5xl font-extrabold tracking-tight text-white/10">01</span>
               </div>
-              <h3 className="mt-6 text-2xl font-bold text-white">{FEATURED.title}</h3>
+              <h3 className="mt-6 text-2xl font-bold text-white">{featured.title}</h3>
               <p className="mt-3 text-sm leading-relaxed text-brand-100/90">
-                {FEATURED.description}
+                {featured.description}
               </p>
               <ul className="mt-6 flex flex-col gap-2.5">
-                {FEATURED.points.map((point) => (
+                {FEATURED_POINTS.map((point) => (
                   <li key={point} className="flex items-center gap-2.5 text-sm font-medium text-brand-50">
                     <span className="flex h-5 w-5 flex-none items-center justify-center rounded-full bg-accent-cyan/20 text-accent-cyan">
                       <Check className="h-3 w-3" strokeWidth={3} />
@@ -119,8 +77,10 @@ export default function Remont() {
             </div>
           </motion.div>
 
-          {SERVICES.map(({ icon: Icon, title, description }, i) => (
-            <Card key={title} className="p-7">
+          {rest.map(({ id, icon, title, description }, i) => {
+            const Icon = getIcon(icon);
+            return (
+            <Card key={id} className="p-7">
               <div className="flex h-full flex-col">
                 <div className="flex items-center justify-between">
                   <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-600 to-accent-violet text-white shadow-[0_8px_20px_rgba(79,70,229,0.3)] transition-transform duration-300 group-hover:scale-110">
@@ -143,7 +103,8 @@ export default function Remont() {
                 </a>
               </div>
             </Card>
-          ))}
+            );
+          })}
 
           {/* Filler CTA card — completes the 3×3 bento on desktop */}
           <motion.div
