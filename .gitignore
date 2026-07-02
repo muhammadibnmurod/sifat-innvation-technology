@@ -32,3 +32,6 @@ backend/.env
 backend/data.sqlite
 backend/data.sqlite-*
 backend/uploads/
+
+# Maxfiy ma'lumotlar — hech qachon git'ga qo'shilmasin!
+MUHIM-MALUMOTLAR.md
