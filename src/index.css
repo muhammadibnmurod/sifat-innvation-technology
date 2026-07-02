@@ -66,6 +66,11 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: -0.02em;
 }
 
+::selection {
+  background: var(--color-brand-600);
+  color: #fff;
+}
+
 /* ============================================================
    Utilities
    ============================================================ */
@@ -127,6 +132,68 @@ h1, h2, h3, h4, h5, h6 {
   filter: blur(70px);
   opacity: 0.55;
   will-change: transform;
+}
+
+/* Film-grain overlay — kills the "flat vector template" feel */
+.noise::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Cursor spotlight — components set --mx / --my on mousemove */
+.spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  background: radial-gradient(
+    360px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(99, 102, 241, 0.14),
+    transparent 65%
+  );
+}
+.spotlight:hover::before {
+  opacity: 1;
+}
+
+/* 1px gradient border that fades in on hover (mask trick) */
+.border-glow::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    130deg,
+    rgba(79, 70, 229, 0.65),
+    rgba(124, 58, 237, 0.45),
+    rgba(6, 182, 212, 0.55)
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.border-glow:hover::after {
+  opacity: 1;
+}
+
+/* Fine grid lines for dark panels */
+.bg-grid-light {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 44px 44px;
 }
 
 /* Section rhythm */
