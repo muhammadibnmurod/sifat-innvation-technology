@@ -12,11 +12,13 @@ import ImageUpload from "../components/ui/ImageUpload.jsx";
 import Badge from "../components/ui/Badge.jsx";
 import { EmptyState, TableSkeleton } from "../components/ui/Table.jsx";
 import { useToast } from "../components/ui/Toast.jsx";
+import { useLanguage } from "../i18n.jsx";
 
 const EMPTY = { title: "", description: "", icon: "Wrench", image: "", active: 1 };
 
 function ServiceRow({ service, onEdit, onDelete, onToggle }) {
   const controls = useDragControls();
+  const { t } = useLanguage();
   const Icon = getIcon(service.icon);
   return (
     <Reorder.Item
@@ -28,7 +30,7 @@ function ServiceRow({ service, onEdit, onDelete, onToggle }) {
       <button
         type="button"
         onPointerDown={(e) => controls.start(e)}
-        aria-label="Tartibni o'zgartirish"
+        aria-label={t("Tartibni o'zgartirish")}
         className="cursor-grab touch-none text-neutral-300 hover:text-brand-500 active:cursor-grabbing"
       >
         <GripVertical className="h-4 w-4" />
@@ -43,7 +45,7 @@ function ServiceRow({ service, onEdit, onDelete, onToggle }) {
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
           <p className="truncate text-sm font-bold text-ink">{service.title}</p>
-          {!service.active && <Badge tone="gray">Faol emas</Badge>}
+          {!service.active && <Badge tone="gray">{t("Faol emas")}</Badge>}
         </div>
         <p className="mt-0.5 truncate text-xs text-neutral-500">{service.description}</p>
       </div>
@@ -52,7 +54,7 @@ function ServiceRow({ service, onEdit, onDelete, onToggle }) {
         <button
           type="button"
           onClick={() => onEdit(service)}
-          aria-label="Tahrirlash"
+          aria-label={t("Tahrirlash")}
           className="flex h-9 w-9 items-center justify-center rounded-lg text-neutral-400 transition-colors hover:bg-brand-50 hover:text-brand-600"
         >
           <Pencil className="h-4 w-4" />
@@ -60,7 +62,7 @@ function ServiceRow({ service, onEdit, onDelete, onToggle }) {
         <button
           type="button"
           onClick={() => onDelete(service)}
-          aria-label="O'chirish"
+          aria-label={t("O'chirish")}
           className="flex h-9 w-9 items-center justify-center rounded-lg text-neutral-400 transition-colors hover:bg-red-50 hover:text-red-500"
         >
           <Trash2 className="h-4 w-4" />
@@ -72,6 +74,7 @@ function ServiceRow({ service, onEdit, onDelete, onToggle }) {
 
 export default function Services() {
   const toast = useToast();
+  const { t } = useLanguage();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [drawer, setDrawer] = useState(false);
@@ -106,7 +109,7 @@ export default function Services() {
 
   const save = async () => {
     const errs = {};
-    if (!form.title.trim()) errs.title = "Sarlavha kiritilishi shart";
+    if (!form.title.trim()) errs.title = t("Sarlavha kiritilishi shart");
     setErrors(errs);
     if (Object.keys(errs).length) return;
     setSaving(true);
@@ -114,11 +117,11 @@ export default function Services() {
       if (editing) {
         const updated = await api.put(`/api/services/${editing.id}`, form);
         setItems((arr) => arr.map((x) => (x.id === updated.id ? updated : x)));
-        toast.success("Xizmat yangilandi");
+        toast.success(t("Xizmat yangilandi"));
       } else {
         const created = await api.post("/api/services", { ...form, sort_order: items.length + 1 });
         setItems((arr) => [...arr, created]);
-        toast.success("Xizmat qo'shildi");
+        toast.success(t("Xizmat qo'shildi"));
       }
       setDrawer(false);
     } catch (e) {
@@ -143,7 +146,7 @@ export default function Services() {
     try {
       await api.del(`/api/services/${deleting.id}`);
       setItems((arr) => arr.filter((x) => x.id !== deleting.id));
-      toast.success("Xizmat o'chirildi");
+      toast.success(t("Xizmat o'chirildi"));
       setDeleting(null);
     } catch (e) {
       toast.error(e.message);
@@ -161,11 +164,11 @@ export default function Services() {
     <div className="flex flex-col gap-5">
       <div className="flex items-center justify-between gap-3">
         <p className="text-sm text-neutral-500">
-          Jami: <span className="font-bold text-ink">{items.length}</span> ta xizmat
+          {t("Jami")}: <span className="font-bold text-ink">{items.length}</span> {t("ta xizmat")}
         </p>
         <Button onClick={openCreate}>
           <Plus className="h-4 w-4" />
-          Xizmat qo'shish
+          {t("Xizmat qo'shish")}
         </Button>
       </div>
 
@@ -173,7 +176,7 @@ export default function Services() {
         {loading ? (
           <TableSkeleton />
         ) : items.length === 0 ? (
-          <EmptyState message="Hozircha xizmatlar yo'q" icon={Wrench} />
+          <EmptyState message={t("Hozircha xizmatlar yo'q")} icon={Wrench} />
         ) : (
           <Reorder.Group axis="y" values={items} onReorder={onReorder}>
             {items.map((s) => (
@@ -187,30 +190,30 @@ export default function Services() {
       <Drawer
         open={drawer}
         onClose={() => setDrawer(false)}
-        title={editing ? "Xizmatni tahrirlash" : "Yangi xizmat"}
+        title={editing ? t("Xizmatni tahrirlash") : t("Yangi xizmat")}
         footer={
           <>
-            <Button variant="ghost" onClick={() => setDrawer(false)}>Bekor qilish</Button>
-            <Button loading={saving} onClick={save}>Saqlash</Button>
+            <Button variant="ghost" onClick={() => setDrawer(false)}>{t("Bekor qilish")}</Button>
+            <Button loading={saving} onClick={save}>{t("Saqlash")}</Button>
           </>
         }
       >
         <div className="flex flex-col gap-5">
           <Input
-            label="Sarlavha"
+            label={t("Sarlavha")}
             value={form.title}
             error={errors.title}
             onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
-            placeholder="Masalan: Ta'mirlash ishlari"
+            placeholder={t("Masalan: Ta'mirlash ishlari")}
           />
           <Textarea
-            label="Tavsif"
+            label={t("Tavsif")}
             value={form.description}
             onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
-            placeholder="Xizmat haqida qisqacha..."
+            placeholder={t("Xizmat haqida qisqacha...")}
           />
           <div>
-            <label className="mb-1.5 block text-sm font-semibold text-ink">Belgi (icon)</label>
+            <label className="mb-1.5 block text-sm font-semibold text-ink">{t("Belgi (icon)")}</label>
             <div className="grid max-h-40 grid-cols-6 gap-2 overflow-y-auto rounded-xl border border-neutral-200 p-3">
               {ICON_NAMES.map((name) => {
                 const Ic = ICONS[name];
@@ -234,14 +237,14 @@ export default function Services() {
             </div>
           </div>
           <ImageUpload
-            label="Rasm (ixtiyoriy)"
+            label={t("Rasm (ixtiyoriy)")}
             value={form.image}
             onChange={(url) => setForm((f) => ({ ...f, image: url }))}
           />
           <Toggle
             checked={!!form.active}
             onChange={(v) => setForm((f) => ({ ...f, active: v ? 1 : 0 }))}
-            label="Saytda ko'rsatish"
+            label={t("Saytda ko'rsatish")}
           />
         </div>
       </Drawer>
@@ -251,7 +254,7 @@ export default function Services() {
         onClose={() => setDeleting(null)}
         onConfirm={confirmDelete}
         loading={deleteLoading}
-        description={deleting ? `"${deleting.title}" xizmati butunlay o'chiriladi.` : ""}
+        description={deleting ? `"${deleting.title}" ${t("xizmati butunlay o'chiriladi.")}` : ""}
       />
     </div>
   );

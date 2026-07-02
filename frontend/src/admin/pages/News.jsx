@@ -10,6 +10,7 @@ import ImageUpload from "../components/ui/ImageUpload.jsx";
 import Badge from "../components/ui/Badge.jsx";
 import Table, { EmptyState } from "../components/ui/Table.jsx";
 import { useToast } from "../components/ui/Toast.jsx";
+import { useLanguage } from "../i18n.jsx";
 
 const EMPTY = {
   title: "",
@@ -23,6 +24,7 @@ const EMPTY = {
 
 export default function News() {
   const toast = useToast();
+  const { t } = useLanguage();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
@@ -76,8 +78,8 @@ export default function News() {
 
   const save = async () => {
     const errs = {};
-    if (!form.title.trim()) errs.title = "Sarlavha kiritilishi shart";
-    if (!form.date) errs.date = "Sanani tanlang";
+    if (!form.title.trim()) errs.title = t("Sarlavha kiritilishi shart");
+    if (!form.date) errs.date = t("Sanani tanlang");
     setErrors(errs);
     if (Object.keys(errs).length) return;
     setSaving(true);
@@ -85,11 +87,11 @@ export default function News() {
       if (editing) {
         const updated = await api.put(`/api/news/${editing.id}`, form);
         setItems((arr) => arr.map((x) => (x.id === updated.id ? updated : x)));
-        toast.success("Yangilik yangilandi");
+        toast.success(t("Yangilik yangilandi"));
       } else {
         const created = await api.post("/api/news", form);
         setItems((arr) => [created, ...arr]);
-        toast.success("Yangilik qo'shildi");
+        toast.success(t("Yangilik qo'shildi"));
       }
       setDrawer(false);
     } catch (e) {
@@ -118,7 +120,7 @@ export default function News() {
     try {
       await api.del(`/api/news/${deleting.id}`);
       setItems((arr) => arr.filter((x) => x.id !== deleting.id));
-      toast.success("Yangilik o'chirildi");
+      toast.success(t("Yangilik o'chirildi"));
       setDeleting(null);
     } catch (e) {
       toast.error(e.message);
@@ -130,7 +132,7 @@ export default function News() {
   const columns = [
     {
       key: "title",
-      label: "Sarlavha",
+      label: t("Sarlavha"),
       render: (n) => (
         <div className="flex items-center gap-3">
           {n.image ? (
@@ -153,7 +155,7 @@ export default function News() {
     },
     {
       key: "category",
-      label: "Turkum",
+      label: t("Turkum"),
       className: "w-32",
       render: (n) =>
         n.category ? (
@@ -162,16 +164,16 @@ export default function News() {
           <span className="text-neutral-300">—</span>
         ),
     },
-    { key: "date", label: "Sana", className: "w-38 text-neutral-500" },
+    { key: "date", label: t("Sana"), className: "w-38 text-neutral-500" },
     {
       key: "published",
-      label: "Holat",
+      label: t("Holat"),
       className: "w-36",
       render: (n) => (
         <Toggle
           checked={!!n.published}
           onChange={(v) => togglePublished(n, v)}
-          label={n.published ? "Chop etilgan" : "Qoralama"}
+          label={n.published ? t("Chop etilgan") : t("Qoralama")}
         />
       ),
     },
@@ -184,7 +186,7 @@ export default function News() {
           <button
             type="button"
             onClick={() => openEdit(n)}
-            aria-label="Tahrirlash"
+          aria-label={t("Tahrirlash")}
             className="flex h-8 w-8 items-center justify-center rounded-lg text-neutral-400 hover:bg-brand-50 hover:text-brand-600"
           >
             <Pencil className="h-4 w-4" />
@@ -192,7 +194,7 @@ export default function News() {
           <button
             type="button"
             onClick={() => setDeleting(n)}
-            aria-label="O'chirish"
+            aria-label={t("O'chirish")}
             className="flex h-8 w-8 items-center justify-center rounded-lg text-neutral-400 hover:bg-red-50 hover:text-red-500"
           >
             <Trash2 className="h-4 w-4" />
@@ -209,12 +211,12 @@ export default function News() {
           icon={Search}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Yangiliklarni qidirish..."
+          placeholder={t("Yangiliklarni qidirish...")}
           className="sm:w-72"
         />
         <Button onClick={openCreate}>
           <Plus className="h-4 w-4" />
-          Yangilik qo'shish
+          {t("Yangilik qo'shish")}
         </Button>
       </div>
 
@@ -226,8 +228,8 @@ export default function News() {
           <EmptyState
             message={
               query
-                ? "Qidiruv bo'yicha hech narsa topilmadi"
-                : "Hozircha yangiliklar yo'q"
+                ? t("Qidiruv bo'yicha hech narsa topilmadi")
+                : t("Hozircha yangiliklar yo'q")
             }
             icon={Newspaper}
           />
@@ -237,37 +239,37 @@ export default function News() {
       <Drawer
         open={drawer}
         onClose={() => setDrawer(false)}
-        title={editing ? "Yangilikni tahrirlash" : "Yangi yangilik"}
+        title={editing ? t("Yangilikni tahrirlash") : t("Yangi yangilik")}
         width="max-w-xl"
         footer={
           <>
             <Button variant="ghost" onClick={() => setDrawer(false)}>
-              Bekor qilish
+              {t("Bekor qilish")}
             </Button>
             <Button loading={saving} onClick={save}>
-              Saqlash
+              {t("Saqlash")}
             </Button>
           </>
         }
       >
         <div className="flex flex-col gap-5">
           <Input
-            label="Sarlavha"
+            label={t("Sarlavha")}
             value={form.title}
             error={errors.title}
             onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
           />
           <div className="grid grid-cols-2 gap-4">
             <Input
-              label="Turkum"
+              label={t("Turkum")}
               value={form.category}
               onChange={(e) =>
                 setForm((f) => ({ ...f, category: e.target.value }))
               }
-              placeholder="Masalan: Standartlar"
+              placeholder={t("Masalan: Standartlar")}
             />
             <Input
-              label="Sana"
+              label={t("Sana")}
               type="date"
               value={form.date}
               error={errors.date}
@@ -275,7 +277,7 @@ export default function News() {
             />
           </div>
           <Textarea
-            label="Qisqacha matn (excerpt)"
+            label={t("Qisqacha matn (excerpt)")}
             rows={3}
             value={form.excerpt}
             onChange={(e) =>
@@ -283,21 +285,21 @@ export default function News() {
             }
           />
           <Textarea
-            label="To'liq matn"
+            label={t("To'liq matn")}
             rows={8}
             value={form.body}
             onChange={(e) => setForm((f) => ({ ...f, body: e.target.value }))}
-            placeholder="Yangilikning to'liq matni. Abzatslar uchun bo'sh qator qoldiring."
+            placeholder={t("Yangilikning to'liq matni. Abzatslar uchun bo'sh qator qoldiring.")}
           />
           <ImageUpload
-            label="Muqova rasmi"
+            label={t("Muqova rasmi")}
             value={form.image}
             onChange={(url) => setForm((f) => ({ ...f, image: url }))}
           />
           <Toggle
             checked={!!form.published}
             onChange={(v) => setForm((f) => ({ ...f, published: v ? 1 : 0 }))}
-            label="Saytda chop etish"
+            label={t("Saytda chop etish")}
           />
         </div>
       </Drawer>
@@ -308,7 +310,7 @@ export default function News() {
         onConfirm={confirmDelete}
         loading={deleteLoading}
         description={
-          deleting ? `"${deleting.title}" yangiligi butunlay o'chiriladi.` : ""
+          deleting ? `"${deleting.title}" ${t("yangiligi butunlay o'chiriladi.")}` : ""
         }
       />
     </div>

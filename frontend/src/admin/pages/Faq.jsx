@@ -7,9 +7,11 @@ import Input, { Textarea } from "../components/ui/Input.jsx";
 import ConfirmDialog from "../components/ui/ConfirmDialog.jsx";
 import { EmptyState, TableSkeleton } from "../components/ui/Table.jsx";
 import { useToast } from "../components/ui/Toast.jsx";
+import { useLanguage } from "../i18n.jsx";
 
 function FaqItem({ item, isOpen, onToggle, editing, draft, setDraft, onStartEdit, onCancelEdit, onSave, onDelete, saving }) {
   const controls = useDragControls();
+  const { t } = useLanguage();
   return (
     <Reorder.Item
       value={item}
@@ -21,7 +23,7 @@ function FaqItem({ item, isOpen, onToggle, editing, draft, setDraft, onStartEdit
         <button
           type="button"
           onPointerDown={(e) => controls.start(e)}
-          aria-label="Tartibni o'zgartirish"
+          aria-label={t("Tartibni o'zgartirish")}
           className="cursor-grab touch-none text-neutral-300 hover:text-brand-500 active:cursor-grabbing"
         >
           <GripVertical className="h-4 w-4" />
@@ -33,11 +35,11 @@ function FaqItem({ item, isOpen, onToggle, editing, draft, setDraft, onStartEdit
           />
         </button>
         <div className="flex gap-1">
-          <button type="button" onClick={onStartEdit} aria-label="Tahrirlash"
+          <button type="button" onClick={onStartEdit} aria-label={t("Tahrirlash")}
             className="flex h-8 w-8 items-center justify-center rounded-lg text-neutral-400 hover:bg-brand-50 hover:text-brand-600">
             <Pencil className="h-4 w-4" />
           </button>
-          <button type="button" onClick={onDelete} aria-label="O'chirish"
+          <button type="button" onClick={onDelete} aria-label={t("O'chirish")}
             className="flex h-8 w-8 items-center justify-center rounded-lg text-neutral-400 hover:bg-red-50 hover:text-red-500">
             <Trash2 className="h-4 w-4" />
           </button>
@@ -56,19 +58,19 @@ function FaqItem({ item, isOpen, onToggle, editing, draft, setDraft, onStartEdit
             {editing ? (
               <div className="flex flex-col gap-3 px-11 pb-4">
                 <Input
-                  label="Savol"
+                  label={t("Savol")}
                   value={draft.question}
                   onChange={(e) => setDraft((d) => ({ ...d, question: e.target.value }))}
                 />
                 <Textarea
-                  label="Javob"
+                  label={t("Javob")}
                   rows={3}
                   value={draft.answer}
                   onChange={(e) => setDraft((d) => ({ ...d, answer: e.target.value }))}
                 />
                 <div className="flex justify-end gap-2">
-                  <Button variant="ghost" size="sm" onClick={onCancelEdit}>Bekor qilish</Button>
-                  <Button size="sm" loading={saving} onClick={onSave}>Saqlash</Button>
+                  <Button variant="ghost" size="sm" onClick={onCancelEdit}>{t("Bekor qilish")}</Button>
+                  <Button size="sm" loading={saving} onClick={onSave}>{t("Saqlash")}</Button>
                 </div>
               </div>
             ) : (
@@ -83,6 +85,7 @@ function FaqItem({ item, isOpen, onToggle, editing, draft, setDraft, onStartEdit
 
 export default function Faq() {
   const toast = useToast();
+  const { t } = useLanguage();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [openId, setOpenId] = useState(null);
@@ -110,7 +113,7 @@ export default function Faq() {
 
   const saveEdit = async () => {
     if (!draft.question.trim() || !draft.answer.trim()) {
-      toast.error("Savol va javob to'ldirilishi shart");
+      toast.error(t("Savol va javob to'ldirilishi shart"));
       return;
     }
     setSaving(true);
@@ -118,7 +121,7 @@ export default function Faq() {
       const updated = await api.put(`/api/faq/${editingId}`, draft);
       setItems((arr) => arr.map((x) => (x.id === updated.id ? updated : x)));
       setEditingId(null);
-      toast.success("FAQ yangilandi");
+      toast.success(t("FAQ yangilandi"));
     } catch (e) {
       toast.error(e.message);
     } finally {
@@ -128,7 +131,7 @@ export default function Faq() {
 
   const saveNew = async () => {
     if (!draft.question.trim() || !draft.answer.trim()) {
-      toast.error("Savol va javob to'ldirilishi shart");
+      toast.error(t("Savol va javob to'ldirilishi shart"));
       return;
     }
     setSaving(true);
@@ -137,7 +140,7 @@ export default function Faq() {
       setItems((arr) => [...arr, created]);
       setAdding(false);
       setDraft({ question: "", answer: "" });
-      toast.success("FAQ qo'shildi");
+      toast.success(t("FAQ qo'shildi"));
     } catch (e) {
       toast.error(e.message);
     } finally {
@@ -150,7 +153,7 @@ export default function Faq() {
     try {
       await api.del(`/api/faq/${deleting.id}`);
       setItems((arr) => arr.filter((x) => x.id !== deleting.id));
-      toast.success("FAQ o'chirildi");
+      toast.success(t("FAQ o'chirildi"));
       setDeleting(null);
     } catch (e) {
       toast.error(e.message);
@@ -168,7 +171,7 @@ export default function Faq() {
     <div className="flex flex-col gap-5">
       <div className="flex items-center justify-between gap-3">
         <p className="text-sm text-neutral-500">
-          Jami: <span className="font-bold text-ink">{items.length}</span> ta savol-javob
+          {t("Jami")}: <span className="font-bold text-ink">{items.length}</span> {t("ta savol-javob")}
         </p>
         <Button
           onClick={() => {
@@ -178,7 +181,7 @@ export default function Faq() {
           }}
         >
           <Plus className="h-4 w-4" />
-          Savol qo'shish
+          {t("Savol qo'shish")}
         </Button>
       </div>
 
@@ -189,21 +192,21 @@ export default function Faq() {
           className="flex flex-col gap-3 rounded-2xl bg-white p-5 shadow-soft ring-1 ring-brand-100"
         >
           <Input
-            label="Savol"
+            label={t("Savol")}
             value={draft.question}
             onChange={(e) => setDraft((d) => ({ ...d, question: e.target.value }))}
-            placeholder="Yangi savol..."
+            placeholder={t("Yangi savol...")}
           />
           <Textarea
-            label="Javob"
+            label={t("Javob")}
             rows={3}
             value={draft.answer}
             onChange={(e) => setDraft((d) => ({ ...d, answer: e.target.value }))}
-            placeholder="Javob matni..."
+            placeholder={t("Javob matni...")}
           />
           <div className="flex justify-end gap-2">
-            <Button variant="ghost" size="sm" onClick={() => setAdding(false)}>Bekor qilish</Button>
-            <Button size="sm" loading={saving} onClick={saveNew}>Qo'shish</Button>
+            <Button variant="ghost" size="sm" onClick={() => setAdding(false)}>{t("Bekor qilish")}</Button>
+            <Button size="sm" loading={saving} onClick={saveNew}>{t("Qo'shish")}</Button>
           </div>
         </motion.div>
       )}
@@ -212,7 +215,7 @@ export default function Faq() {
         {loading ? (
           <TableSkeleton />
         ) : items.length === 0 ? (
-          <EmptyState message="Hozircha savol-javoblar yo'q" icon={HelpCircle} />
+          <EmptyState message={t("Hozircha savol-javoblar yo'q")} icon={HelpCircle} />
         ) : (
           <Reorder.Group axis="y" values={items} onReorder={onReorder}>
             {items.map((item) => (
@@ -240,7 +243,7 @@ export default function Faq() {
         onClose={() => setDeleting(null)}
         onConfirm={confirmDelete}
         loading={deleteLoading}
-        description={deleting ? `"${deleting.question}" savoli o'chiriladi.` : ""}
+        description={deleting ? `"${deleting.question}" ${t("savoli o'chiriladi.")}` : ""}
       />
     </div>
   );

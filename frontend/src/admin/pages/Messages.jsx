@@ -7,6 +7,7 @@ import ConfirmDialog from "../components/ui/ConfirmDialog.jsx";
 import Badge from "../components/ui/Badge.jsx";
 import Table, { EmptyState } from "../components/ui/Table.jsx";
 import { useToast } from "../components/ui/Toast.jsx";
+import { useLanguage } from "../i18n.jsx";
 
 const STATUS_TONE = { new: "orange", read: "indigo", answered: "green" };
 const STATUS_LABEL = {
@@ -15,14 +16,15 @@ const STATUS_LABEL = {
   answered: "Javob berilgan",
 };
 const FILTERS = [
-  { value: "", label: "Barchasi" },
-  { value: "new", label: "Yangi" },
-  { value: "read", label: "O'qilgan" },
-  { value: "answered", label: "Javob berilgan" },
+  { value: "", labelKey: "Barchasi" },
+  { value: "new", labelKey: "Yangi" },
+  { value: "read", labelKey: "O'qilgan" },
+  { value: "answered", labelKey: "Javob berilgan" },
 ];
 
 export default function Messages() {
   const toast = useToast();
+  const { t } = useLanguage();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("");
@@ -66,7 +68,7 @@ export default function Messages() {
       await api.del(`/api/messages/${deleting.id}`);
       setItems((arr) => arr.filter((x) => x.id !== deleting.id));
       if (selected?.id === deleting.id) setSelected(null);
-      toast.success("Xabar o'chirildi");
+      toast.success(t("Xabar o'chirildi"));
       setDeleting(null);
     } catch (e) {
       toast.error(e.message);
@@ -78,7 +80,7 @@ export default function Messages() {
   const columns = [
     {
       key: "name",
-      label: "Yuboruvchi",
+      label: t("Yuboruvchi"),
       render: (m) => (
         <div>
           <p
@@ -94,7 +96,7 @@ export default function Messages() {
     },
     {
       key: "message",
-      label: "Xabar",
+      label: t("Xabar"),
       render: (m) => (
         <p className="max-w-md truncate text-sm text-neutral-500">
           {m.message}
@@ -103,15 +105,15 @@ export default function Messages() {
     },
     {
       key: "created_at",
-      label: "Sana",
+      label: t("Sana"),
       className: "w-44 text-xs text-neutral-400",
     },
     {
       key: "status",
-      label: "Holat",
+      label: t("Holat"),
       className: "w-46",
       render: (m) => (
-        <Badge tone={STATUS_TONE[m.status]}>{STATUS_LABEL[m.status]}</Badge>
+        <Badge tone={STATUS_TONE[m.status]}>{t(STATUS_LABEL[m.status])}</Badge>
       ),
     },
   ];
@@ -136,7 +138,7 @@ export default function Messages() {
                   : "bg-white text-ink-soft ring-1 ring-neutral-200 hover:ring-brand-300"
               }`}
             >
-              {f.label}
+              {t(f.labelKey)}
               <span
                 className={`rounded-full px-1.5 text-[10px] font-bold ${active ? "bg-white/20" : "bg-neutral-100"}`}
               >
@@ -152,25 +154,25 @@ export default function Messages() {
         rows={filtered}
         loading={loading}
         onRowClick={openMessage}
-        empty={<EmptyState message="Hozircha xabarlar yo'q" icon={Inbox} />}
+        empty={<EmptyState message={t("Hozircha xabarlar yo'q")} icon={Inbox} />}
       />
 
       {/* Detail drawer */}
       <Drawer
         open={!!selected}
         onClose={() => setSelected(null)}
-        title="Xabar tafsilotlari"
+        title={t("Xabar tafsilotlari")}
         footer={
           selected && (
             <>
               <Button variant="ghost" onClick={() => setDeleting(selected)}>
                 <Trash2 className="h-4 w-4" />
-                O'chirish
+                {t("O'chirish")}
               </Button>
               {selected.status !== "answered" && (
                 <Button onClick={() => setStatus(selected, "answered")}>
                   <CheckCheck className="h-4 w-4" />
-                  Javob berildi
+                  {t("Javob berildi")}
                 </Button>
               )}
             </>
@@ -187,7 +189,7 @@ export default function Messages() {
                 <div>
                   <p className="font-bold text-ink">{selected.name}</p>
                   <Badge tone={STATUS_TONE[selected.status]}>
-                    {STATUS_LABEL[selected.status]}
+                    {t(STATUS_LABEL[selected.status])}
                   </Badge>
                 </div>
               </div>
@@ -220,7 +222,7 @@ export default function Messages() {
 
             <div>
               <p className="mb-2 text-xs font-bold uppercase tracking-wider text-neutral-400">
-                Xabar matni
+                {t("Xabar matni")}
               </p>
               <p className="whitespace-pre-wrap rounded-xl border border-neutral-100 bg-white p-4 text-sm leading-relaxed text-ink-soft">
                 {selected.message}
@@ -237,7 +239,7 @@ export default function Messages() {
         loading={deleteLoading}
         description={
           deleting
-            ? `${deleting.name} yuborgan xabar butunlay o'chiriladi.`
+            ? `${deleting.name} ${t("yuborgan xabar butunlay o'chiriladi.")}`
             : ""
         }
       />

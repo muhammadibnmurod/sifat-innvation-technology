@@ -9,11 +9,13 @@ import ConfirmDialog from "../components/ui/ConfirmDialog.jsx";
 import ImageUpload from "../components/ui/ImageUpload.jsx";
 import { EmptyState } from "../components/ui/Table.jsx";
 import { useToast } from "../components/ui/Toast.jsx";
+import { useLanguage } from "../i18n.jsx";
 
 const EMPTY = { name: "", url: "", logo: "" };
 
 export default function Partners() {
   const toast = useToast();
+  const { t } = useLanguage();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modal, setModal] = useState(false);
@@ -48,7 +50,7 @@ export default function Partners() {
 
   const save = async () => {
     const errs = {};
-    if (!form.name.trim()) errs.name = "Nom kiritilishi shart";
+    if (!form.name.trim()) errs.name = t("Nom kiritilishi shart");
     setErrors(errs);
     if (Object.keys(errs).length) return;
     setSaving(true);
@@ -56,11 +58,11 @@ export default function Partners() {
       if (editing) {
         const updated = await api.put(`/api/partners/${editing.id}`, form);
         setItems((arr) => arr.map((x) => (x.id === updated.id ? updated : x)));
-        toast.success("Hamkor yangilandi");
+        toast.success(t("Hamkor yangilandi"));
       } else {
         const created = await api.post("/api/partners", { ...form, sort_order: items.length + 1 });
         setItems((arr) => [...arr, created]);
-        toast.success("Hamkor qo'shildi");
+        toast.success(t("Hamkor qo'shildi"));
       }
       setModal(false);
     } catch (e) {
@@ -75,7 +77,7 @@ export default function Partners() {
     try {
       await api.del(`/api/partners/${deleting.id}`);
       setItems((arr) => arr.filter((x) => x.id !== deleting.id));
-      toast.success("Hamkor o'chirildi");
+      toast.success(t("Hamkor o'chirildi"));
       setDeleting(null);
     } catch (e) {
       toast.error(e.message);
@@ -93,11 +95,11 @@ export default function Partners() {
     <div className="flex flex-col gap-5">
       <div className="flex items-center justify-between gap-3">
         <p className="text-sm text-neutral-500">
-          Jami: <span className="font-bold text-ink">{items.length}</span> ta hamkor — kartochkalarni sudrab tartibini o'zgartiring
+          {t("Jami")}: <span className="font-bold text-ink">{items.length}</span> {t("ta hamkor")} - {t("kartochkalarni sudrab tartibini o'zgartiring")}
         </p>
         <Button onClick={openCreate}>
           <Plus className="h-4 w-4" />
-          Hamkor qo'shish
+          {t("Hamkor qo'shish")}
         </Button>
       </div>
 
@@ -109,7 +111,7 @@ export default function Partners() {
         </div>
       ) : items.length === 0 ? (
         <div className="rounded-2xl bg-white shadow-soft ring-1 ring-black/5">
-          <EmptyState message="Hozircha hamkorlar yo'q" icon={Handshake} />
+          <EmptyState message={t("Hozircha hamkorlar yo'q")} icon={Handshake} />
         </div>
       ) : (
         <Reorder.Group
@@ -141,7 +143,7 @@ export default function Partners() {
                   className="flex items-center gap-1 text-[11px] font-medium text-brand-500 hover:text-brand-700"
                 >
                   <LinkIcon className="h-3 w-3" />
-                  Sayt
+                  {t("Sayt")}
                 </a>
               )}
               <div className="absolute right-2 top-2 flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
@@ -149,7 +151,7 @@ export default function Partners() {
                   type="button"
                   onClick={() => openEdit(p)}
                   onPointerDown={(e) => e.stopPropagation()}
-                  aria-label="Tahrirlash"
+                  aria-label={t("Tahrirlash")}
                   className="flex h-7 w-7 items-center justify-center rounded-lg bg-white text-neutral-400 shadow-soft hover:text-brand-600"
                 >
                   <Pencil className="h-3.5 w-3.5" />
@@ -158,7 +160,7 @@ export default function Partners() {
                   type="button"
                   onClick={() => setDeleting(p)}
                   onPointerDown={(e) => e.stopPropagation()}
-                  aria-label="O'chirish"
+                  aria-label={t("O'chirish")}
                   className="flex h-7 w-7 items-center justify-center rounded-lg bg-white text-neutral-400 shadow-soft hover:text-red-500"
                 >
                   <Trash2 className="h-3.5 w-3.5" />
@@ -172,30 +174,30 @@ export default function Partners() {
       <Modal
         open={modal}
         onClose={() => setModal(false)}
-        title={editing ? "Hamkorni tahrirlash" : "Yangi hamkor"}
+        title={editing ? t("Hamkorni tahrirlash") : t("Yangi hamkor")}
         footer={
           <>
-            <Button variant="ghost" onClick={() => setModal(false)}>Bekor qilish</Button>
-            <Button loading={saving} onClick={save}>Saqlash</Button>
+            <Button variant="ghost" onClick={() => setModal(false)}>{t("Bekor qilish")}</Button>
+            <Button loading={saving} onClick={save}>{t("Saqlash")}</Button>
           </>
         }
       >
         <div className="flex flex-col gap-5">
           <Input
-            label="Nomi"
+            label={t("Nomi")}
             value={form.name}
             error={errors.name}
             onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-            placeholder="Masalan: Kranmash"
+            placeholder="Kranmash"
           />
           <Input
-            label="Veb-sayt (ixtiyoriy)"
+            label={t("Veb-sayt (ixtiyoriy)")}
             value={form.url}
             onChange={(e) => setForm((f) => ({ ...f, url: e.target.value }))}
             placeholder="https://..."
           />
           <ImageUpload
-            label="Logotip (ixtiyoriy)"
+            label={t("Logotip (ixtiyoriy)")}
             value={form.logo}
             onChange={(url) => setForm((f) => ({ ...f, logo: url }))}
           />
@@ -207,7 +209,7 @@ export default function Partners() {
         onClose={() => setDeleting(null)}
         onConfirm={confirmDelete}
         loading={deleteLoading}
-        description={deleting ? `"${deleting.name}" hamkori ro'yxatdan o'chiriladi.` : ""}
+        description={deleting ? `"${deleting.name}" ${t("hamkori ro'yxatdan o'chiriladi.")}` : ""}
       />
     </div>
   );

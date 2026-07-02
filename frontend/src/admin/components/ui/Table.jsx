@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Inbox } from "lucide-react";
+import { useLanguage } from "../../i18n.jsx";
 
 export function TableSkeleton({ rows = 5, cols = 4 }) {
   return (
@@ -19,13 +20,14 @@ export function TableSkeleton({ rows = 5, cols = 4 }) {
   );
 }
 
-export function EmptyState({ message = "Hozircha ma'lumot yo'q", icon: Icon = Inbox, action }) {
+export function EmptyState({ message, icon: Icon = Inbox, action }) {
+  const { t } = useLanguage();
   return (
     <div className="flex flex-col items-center justify-center gap-3 px-6 py-16 text-center">
       <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-50 text-brand-400">
         <Icon className="h-7 w-7" />
       </span>
-      <p className="text-sm font-medium text-neutral-500">{message}</p>
+      <p className="text-sm font-medium text-neutral-500">{message || t("Hozircha ma'lumot yo'q")}</p>
       {action}
     </div>
   );

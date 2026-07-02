@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext.jsx";
+import { LanguageProvider } from "./i18n.jsx";
 import { ToastProvider } from "./components/ui/Toast.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import AdminLayout from "./components/layout/AdminLayout.jsx";
@@ -29,78 +30,80 @@ function AdminRoute({ children }) {
 
 export default function AdminApp() {
   return (
-    <AuthProvider>
-      <ToastProvider>
-        <Routes>
-          <Route path="login" element={<Login />} />
-          <Route
-            element={
-              <ProtectedRoute>
-                <AdminLayout />
-              </ProtectedRoute>
-            }
-          >
-            <Route index element={<Dashboard />} />
+    <LanguageProvider>
+      <AuthProvider>
+        <ToastProvider>
+          <Routes>
+            <Route path="login" element={<Login />} />
             <Route
-              path="services"
               element={
-                <PermissionRoute perm="services">
-                  <Services />
-                </PermissionRoute>
+                <ProtectedRoute>
+                  <AdminLayout />
+                </ProtectedRoute>
               }
-            />
-            <Route
-              path="users"
-              element={
-                <AdminRoute>
-                  <Users />
-                </AdminRoute>
-              }
-            />
-            <Route
-              path="news"
-              element={
-                <PermissionRoute perm="news">
-                  <News />
-                </PermissionRoute>
-              }
-            />
-            <Route
-              path="partners"
-              element={
-                <PermissionRoute perm="partners">
-                  <Partners />
-                </PermissionRoute>
-              }
-            />
-            <Route
-              path="faq"
-              element={
-                <PermissionRoute perm="faq">
-                  <Faq />
-                </PermissionRoute>
-              }
-            />
-            <Route
-              path="messages"
-              element={
-                <PermissionRoute perm="messages">
-                  <Messages />
-                </PermissionRoute>
-              }
-            />
-            <Route
-              path="settings"
-              element={
-                <PermissionRoute perm="settings">
-                  <Settings />
-                </PermissionRoute>
-              }
-            />
-          </Route>
-          <Route path="*" element={<Navigate to="/admin" replace />} />
-        </Routes>
-      </ToastProvider>
-    </AuthProvider>
+            >
+              <Route index element={<Dashboard />} />
+              <Route
+                path="services"
+                element={
+                  <PermissionRoute perm="services">
+                    <Services />
+                  </PermissionRoute>
+                }
+              />
+              <Route
+                path="users"
+                element={
+                  <AdminRoute>
+                    <Users />
+                  </AdminRoute>
+                }
+              />
+              <Route
+                path="news"
+                element={
+                  <PermissionRoute perm="news">
+                    <News />
+                  </PermissionRoute>
+                }
+              />
+              <Route
+                path="partners"
+                element={
+                  <PermissionRoute perm="partners">
+                    <Partners />
+                  </PermissionRoute>
+                }
+              />
+              <Route
+                path="faq"
+                element={
+                  <PermissionRoute perm="faq">
+                    <Faq />
+                  </PermissionRoute>
+                }
+              />
+              <Route
+                path="messages"
+                element={
+                  <PermissionRoute perm="messages">
+                    <Messages />
+                  </PermissionRoute>
+                }
+              />
+              <Route
+                path="settings"
+                element={
+                  <PermissionRoute perm="settings">
+                    <Settings />
+                  </PermissionRoute>
+                }
+              />
+            </Route>
+            <Route path="*" element={<Navigate to="/admin" replace />} />
+          </Routes>
+        </ToastProvider>
+      </AuthProvider>
+    </LanguageProvider>
   );
 }

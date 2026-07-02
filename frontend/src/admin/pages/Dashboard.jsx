@@ -5,6 +5,7 @@ import { Wrench, Newspaper, Handshake, Inbox, ArrowUpRight, Clock } from "lucide
 import api from "../lib/api.js";
 import Badge from "../components/ui/Badge.jsx";
 import { EmptyState } from "../components/ui/Table.jsx";
+import { useLanguage } from "../i18n.jsx";
 
 function AnimatedNumber({ value }) {
   const ref = useRef(null);
@@ -26,13 +27,14 @@ const STATUS_TONE = { new: "orange", read: "indigo", answered: "green" };
 const STATUS_LABEL = { new: "Yangi", read: "O'qilgan", answered: "Javob berilgan" };
 
 const CARDS = [
-  { key: "services", label: "Xizmatlar", icon: Wrench, to: "/admin/services", gradient: "from-brand-600 to-accent-violet" },
-  { key: "news", label: "Yangiliklar", icon: Newspaper, to: "/admin/news", gradient: "from-accent-violet to-accent-cyan" },
-  { key: "partners", label: "Hamkorlar", icon: Handshake, to: "/admin/partners", gradient: "from-secondary-500 to-secondary-600" },
-  { key: "newMessages", label: "Yangi xabarlar", icon: Inbox, to: "/admin/messages", gradient: "from-emerald-500 to-teal-500" },
+  { key: "services", labelKey: "Xizmatlar", icon: Wrench, to: "/admin/services", gradient: "from-brand-600 to-accent-violet" },
+  { key: "news", labelKey: "Yangiliklar", icon: Newspaper, to: "/admin/news", gradient: "from-accent-violet to-accent-cyan" },
+  { key: "partners", labelKey: "Hamkorlar", icon: Handshake, to: "/admin/partners", gradient: "from-secondary-500 to-secondary-600" },
+  { key: "newMessages", labelKey: "Yangi xabarlar", icon: Inbox, to: "/admin/messages", gradient: "from-emerald-500 to-teal-500" },
 ];
 
 export default function Dashboard() {
+  const { t } = useLanguage();
   const [stats, setStats] = useState(null);
   const [error, setError] = useState("");
 
@@ -57,7 +59,7 @@ export default function Dashboard() {
         variants={{ show: { transition: { staggerChildren: 0.07 } } }}
         className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4"
       >
-        {CARDS.map(({ key, label, icon: Icon, to, gradient }) => (
+        {CARDS.map(({ key, labelKey, icon: Icon, to, gradient }) => (
           <motion.div
             key={key}
             variants={{ hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } }}
@@ -75,7 +77,7 @@ export default function Dashboard() {
                 <p className="text-2xl font-extrabold text-ink">
                   {stats ? <AnimatedNumber value={stats[key]} /> : "—"}
                 </p>
-                <p className="text-xs font-semibold text-neutral-500">{label}</p>
+                <p className="text-xs font-semibold text-neutral-500">{t(labelKey)}</p>
               </div>
               <ArrowUpRight className="h-4 w-4 text-neutral-300 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-brand-500" />
             </Link>
@@ -87,9 +89,9 @@ export default function Dashboard() {
         {/* Latest messages */}
         <section className="overflow-hidden rounded-2xl bg-white shadow-soft ring-1 ring-black/5">
           <div className="flex items-center justify-between border-b border-neutral-100 px-5 py-4">
-            <h2 className="text-sm font-extrabold text-ink">So'nggi xabarlar</h2>
+            <h2 className="text-sm font-extrabold text-ink">{t("So'nggi xabarlar")}</h2>
             <Link to="/admin/messages" className="text-xs font-semibold text-brand-600 hover:text-brand-800">
-              Barchasi →
+              {t("Barchasi")} →
             </Link>
           </div>
           {!stats ? (
@@ -99,14 +101,14 @@ export default function Dashboard() {
               ))}
             </div>
           ) : stats.latestMessages.length === 0 ? (
-            <EmptyState message="Hozircha xabarlar yo'q" />
+            <EmptyState message={t("Hozircha xabarlar yo'q")} />
           ) : (
             <ul>
               {stats.latestMessages.map((m) => (
                 <li key={m.id} className="border-b border-neutral-50 px-5 py-3.5 last:border-0">
                   <div className="flex items-center justify-between gap-3">
                     <p className="truncate text-sm font-bold text-ink">{m.name}</p>
-                    <Badge tone={STATUS_TONE[m.status]}>{STATUS_LABEL[m.status]}</Badge>
+                    <Badge tone={STATUS_TONE[m.status]}>{t(STATUS_LABEL[m.status])}</Badge>
                   </div>
                   <p className="mt-1 truncate text-xs text-neutral-500">{m.message}</p>
                   <p className="mt-1 flex items-center gap-1 text-[11px] text-neutral-400">
@@ -122,9 +124,9 @@ export default function Dashboard() {
         {/* Latest news */}
         <section className="overflow-hidden rounded-2xl bg-white shadow-soft ring-1 ring-black/5">
           <div className="flex items-center justify-between border-b border-neutral-100 px-5 py-4">
-            <h2 className="text-sm font-extrabold text-ink">So'nggi yangiliklar</h2>
+            <h2 className="text-sm font-extrabold text-ink">{t("So'nggi yangiliklar")}</h2>
             <Link to="/admin/news" className="text-xs font-semibold text-brand-600 hover:text-brand-800">
-              Barchasi →
+              {t("Barchasi")} →
             </Link>
           </div>
           {!stats ? (
@@ -134,7 +136,7 @@ export default function Dashboard() {
               ))}
             </div>
           ) : stats.latestNews.length === 0 ? (
-            <EmptyState message="Hozircha yangiliklar yo'q" />
+            <EmptyState message={t("Hozircha yangiliklar yo'q")} />
           ) : (
             <ul>
               {stats.latestNews.map((n) => (
@@ -144,7 +146,7 @@ export default function Dashboard() {
                     <p className="mt-0.5 text-[11px] text-neutral-400">{n.date}</p>
                   </div>
                   <Badge tone={n.published ? "green" : "gray"}>
-                    {n.published ? "Chop etilgan" : "Qoralama"}
+                    {n.published ? t("Chop etilgan") : t("Qoralama")}
                   </Badge>
                 </li>
               ))}

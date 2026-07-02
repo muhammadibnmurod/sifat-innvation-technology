@@ -5,9 +5,11 @@ import { User, Lock, Eye, EyeOff, LogIn } from "lucide-react";
 import Logo from "../../assets/Logo.png";
 import { useAuth } from "../context/AuthContext.jsx";
 import Button from "../components/ui/Button.jsx";
+import { useLanguage } from "../i18n.jsx";
 
 export default function Login() {
   const { login } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const location = useLocation();
   const [username, setUsername] = useState("");
@@ -21,7 +23,7 @@ export default function Login() {
     e.preventDefault();
     setError("");
     if (!username.trim() || !password) {
-      setError("Username va parolni kiriting");
+      setError(t("Username va parolni kiriting"));
       setShake((s) => s + 1);
       return;
     }
@@ -67,9 +69,9 @@ export default function Login() {
       >
         <div className="flex flex-col items-center text-center">
           <img src={Logo} alt="Sifat Innovatsion Texnologiya" className="h-16 w-16 rounded-2xl object-contain" />
-          <h1 className="mt-4 text-2xl font-extrabold text-ink">Admin panel</h1>
+          <h1 className="mt-4 text-2xl font-extrabold text-ink">{t("Admin panel")}</h1>
           <p className="mt-1 text-sm text-ink-soft">
-            Sifat Innovatsion Texnologiya boshqaruv paneliga kirish
+            {t("Admin panel login subtitle")}
           </p>
         </div>
 
@@ -92,14 +94,14 @@ export default function Login() {
               type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Parol"
+              placeholder={t("Parol")}
               autoComplete="current-password"
               className={inputCls}
             />
             <button
               type="button"
               onClick={() => setShowPassword((v) => !v)}
-              aria-label={showPassword ? "Parolni yashirish" : "Parolni ko'rsatish"}
+              aria-label={showPassword ? t("Parolni yashirish") : t("Parolni ko'rsatish")}
               className="absolute right-3.5 top-1/2 -translate-y-1/2 text-neutral-400 transition-colors hover:text-ink"
             >
               {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -118,7 +120,7 @@ export default function Login() {
 
           <Button type="submit" size="lg" loading={loading} className="mt-1 w-full">
             {!loading && <LogIn className="h-4 w-4" />}
-            Kirish
+            {t("Kirish")}
           </Button>
         </form>
 

@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { ImagePlus, Loader2, Trash2 } from "lucide-react";
 import api from "../../lib/api.js";
 import { useToast } from "./Toast.jsx";
+import { useLanguage } from "../../i18n.jsx";
 
 // Drag-drop image upload with preview. `value` is the uploaded URL.
 export default function ImageUpload({ value, onChange, label, className = "" }) {
@@ -9,15 +10,16 @@ export default function ImageUpload({ value, onChange, label, className = "" }) 
   const [dragging, setDragging] = useState(false);
   const [uploading, setUploading] = useState(false);
   const toast = useToast();
+  const { t } = useLanguage();
 
   const handleFile = async (file) => {
     if (!file) return;
     if (!file.type.startsWith("image/")) {
-      toast.error("Faqat rasm fayllari qabul qilinadi");
+      toast.error(t("Faqat rasm fayllari qabul qilinadi"));
       return;
     }
     if (file.size > 5 * 1024 * 1024) {
-      toast.error("Rasm hajmi 5MB dan oshmasligi kerak");
+      toast.error(t("Rasm hajmi 5MB dan oshmasligi kerak"));
       return;
     }
     setUploading(true);
@@ -43,12 +45,12 @@ export default function ImageUpload({ value, onChange, label, className = "" }) 
               onClick={() => inputRef.current?.click()}
               className="rounded-lg bg-white px-3 py-1.5 text-xs font-semibold text-ink hover:bg-neutral-100"
             >
-              Almashtirish
+              {t("Almashtirish")}
             </button>
             <button
               type="button"
               onClick={() => onChange("")}
-              aria-label="Rasmni o'chirish"
+              aria-label={t("Rasmni o'chirish")}
               className="rounded-lg bg-red-500 p-1.5 text-white hover:bg-red-600"
             >
               <Trash2 className="h-4 w-4" />
@@ -83,9 +85,9 @@ export default function ImageUpload({ value, onChange, label, className = "" }) 
                 <ImagePlus className="h-5 w-5" />
               </span>
               <span className="text-xs font-medium text-neutral-500">
-                Rasmni tashlang yoki <span className="text-brand-600">tanlang</span>
+                {t("Rasmni tashlang yoki")} <span className="text-brand-600">{t("tanlang")}</span>
               </span>
-              <span className="text-[10px] text-neutral-400">PNG, JPG, WEBP — 5MB gacha</span>
+              <span className="text-[10px] text-neutral-400">{t("PNG, JPG, WEBP — 5MB gacha")}</span>
             </>
           )}
         </button>

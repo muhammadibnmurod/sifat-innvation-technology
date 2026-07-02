@@ -1,8 +1,11 @@
 import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
+import { useLanguage } from "../../i18n.jsx";
 
 export default function Drawer({ open, onClose, title, children, footer, width = "max-w-md" }) {
+  const { t } = useLanguage();
+
   useEffect(() => {
     if (!open) return;
     const onKey = (e) => e.key === "Escape" && onClose();
@@ -37,7 +40,7 @@ export default function Drawer({ open, onClose, title, children, footer, width =
               <button
                 type="button"
                 onClick={onClose}
-                aria-label="Yopish"
+                aria-label={t("Yopish")}
                 className="flex h-8 w-8 items-center justify-center rounded-lg text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-ink"
               >
                 <X className="h-4 w-4" />

@@ -9,20 +9,80 @@ import {
 } from "lucide-react";
 import Logo from "../../../assets/Logo.png";
 import { useAuth } from "../../context/AuthContext.jsx";
+import { useLanguage } from "../../i18n.jsx";
 import api from "../../lib/api.js";
 
 export const NAV_ITEMS = [
-  { to: "/admin", label: "Boshqaruv paneli", icon: LayoutDashboard, end: true },
-  { to: "/admin/services", label: "Xizmatlar", icon: Wrench, perm: "services" },
-  { to: "/admin/news", label: "Yangiliklar", icon: Newspaper, perm: "news" },
-  { to: "/admin/partners", label: "Hamkorlar", icon: Handshake, perm: "partners" },
-  { to: "/admin/faq", label: "FAQ", icon: HelpCircle, perm: "faq" },
-  { to: "/admin/messages", label: "Xabarlar", icon: Inbox, perm: "messages" },
-  { to: "/admin/settings", label: "Sozlamalar", icon: Settings, perm: "settings" },
-  { to: "/admin/users", label: "Foydalanuvchilar", icon: Users, adminOnly: true },
+  { to: "/admin", labelKey: "Boshqaruv paneli", icon: LayoutDashboard, end: true },
+  { to: "/admin/services", labelKey: "Xizmatlar", icon: Wrench, perm: "services" },
+  { to: "/admin/news", labelKey: "Yangiliklar", icon: Newspaper, perm: "news" },
+  { to: "/admin/partners", labelKey: "Hamkorlar", icon: Handshake, perm: "partners" },
+  { to: "/admin/faq", labelKey: "FAQ", icon: HelpCircle, perm: "faq" },
+  { to: "/admin/messages", labelKey: "Xabarlar", icon: Inbox, perm: "messages" },
+  { to: "/admin/settings", labelKey: "Sozlamalar", icon: Settings, perm: "settings" },
+  { to: "/admin/users", labelKey: "Foydalanuvchilar", icon: Users, adminOnly: true },
 ];
 
+function LanguageSwitcher() {
+  const { language, setLanguage, currentLanguage, languages, t } = useLanguage();
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const onClick = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+    };
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, []);
+
+  return (
+    <div className="relative" ref={ref}>
+      <button
+        type="button"
+        onClick={() => setOpen((value) => !value)}
+        aria-label={t("Til")}
+        title={t("Til")}
+        className="flex h-10 items-center gap-2 rounded-xl border border-neutral-200 bg-white px-2.5 text-xs font-bold text-ink-soft transition-colors hover:border-brand-300 hover:text-brand-700"
+      >
+        <img src={currentLanguage.flag} alt="" className="h-5 w-5 rounded-full object-cover ring-1 ring-black/10" />
+        <span className="hidden sm:inline">{currentLanguage.short}</span>
+        <ChevronDown className={`h-3.5 w-3.5 text-neutral-400 transition-transform ${open ? "rotate-180" : ""}`} />
+      </button>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: 6, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 6, scale: 0.97 }}
+            transition={{ duration: 0.18 }}
+            className="absolute right-0 top-full z-50 mt-2 w-40 overflow-hidden rounded-xl border border-neutral-100 bg-white p-1.5 shadow-lift"
+          >
+            {languages.map((item) => (
+              <button
+                key={item.code}
+                type="button"
+                onClick={() => {
+                  setLanguage(item.code);
+                  setOpen(false);
+                }}
+                className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-xs font-semibold transition-colors ${
+                  language === item.code ? "bg-brand-50 text-brand-700" : "text-ink-soft hover:bg-neutral-50"
+                }`}
+              >
+                <img src={item.flag} alt="" className="h-5 w-5 rounded-full object-cover ring-1 ring-black/10" />
+                {item.name}
+              </button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 function SidebarContent({ collapsed, unread, onNavigate, onLogout, navItems }) {
+  const { t } = useLanguage();
   return (
     <div className="flex h-full flex-col">
       {/* Logo */}
@@ -32,7 +92,7 @@ function SidebarContent({ collapsed, unread, onNavigate, onLogout, navItems }) {
           <span className="text-sm font-extrabold leading-tight text-ink">
             Sifat Innovatsion
             <span className="block text-[10px] font-semibold uppercase tracking-[0.18em] text-brand-600">
-              Admin panel
+              {t("Admin panel")}
             </span>
           </span>
         )}
@@ -41,49 +101,52 @@ function SidebarContent({ collapsed, unread, onNavigate, onLogout, navItems }) {
       {/* Nav */}
       <nav className="flex-1 overflow-y-auto px-3 py-2">
         <ul className="flex flex-col gap-1">
-          {navItems.map(({ to, label, icon: Icon, end }) => (
-            <li key={to}>
-              <NavLink to={to} end={end} onClick={onNavigate} title={collapsed ? label : undefined}>
-                {({ isActive }) => (
-                  <span
-                    className={`relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition-colors ${
-                      collapsed ? "justify-center" : ""
-                    } ${
-                      isActive
-                        ? "text-brand-700"
-                        : "text-ink-soft hover:bg-neutral-100 hover:text-ink"
-                    }`}
-                  >
-                    {isActive && (
-                      <motion.span
-                        layoutId="admin-nav-pill"
-                        transition={{ type: "spring", stiffness: 420, damping: 34 }}
-                        className="absolute inset-0 rounded-xl bg-brand-50 ring-1 ring-brand-100"
-                      />
-                    )}
-                    {isActive && (
-                      <motion.span
-                        layoutId="admin-nav-indicator"
-                        transition={{ type: "spring", stiffness: 420, damping: 34 }}
-                        className="absolute left-0 top-1/2 h-6 w-1 -translate-y-1/2 rounded-r-full bg-gradient-to-b from-brand-600 to-accent-violet"
-                      />
-                    )}
-                    <Icon className="relative z-10 h-[18px] w-[18px] flex-none" />
-                    {!collapsed && <span className="relative z-10 flex-1">{label}</span>}
-                    {to === "/admin/messages" && unread > 0 && (
-                      <span
-                        className={`relative z-10 flex h-5 min-w-5 items-center justify-center rounded-full bg-gradient-to-r from-secondary-500 to-secondary-600 px-1.5 text-[10px] font-bold text-white ${
-                          collapsed ? "absolute -right-1 -top-1" : ""
-                        }`}
-                      >
-                        {unread > 99 ? "99+" : unread}
-                      </span>
-                    )}
-                  </span>
-                )}
-              </NavLink>
-            </li>
-          ))}
+          {navItems.map(({ to, labelKey, icon: Icon, end }) => {
+            const label = t(labelKey);
+            return (
+              <li key={to}>
+                <NavLink to={to} end={end} onClick={onNavigate} title={collapsed ? label : undefined}>
+                  {({ isActive }) => (
+                    <span
+                      className={`relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition-colors ${
+                        collapsed ? "justify-center" : ""
+                      } ${
+                        isActive
+                          ? "text-brand-700"
+                          : "text-ink-soft hover:bg-neutral-100 hover:text-ink"
+                      }`}
+                    >
+                      {isActive && (
+                        <motion.span
+                          layoutId="admin-nav-pill"
+                          transition={{ type: "spring", stiffness: 420, damping: 34 }}
+                          className="absolute inset-0 rounded-xl bg-brand-50 ring-1 ring-brand-100"
+                        />
+                      )}
+                      {isActive && (
+                        <motion.span
+                          layoutId="admin-nav-indicator"
+                          transition={{ type: "spring", stiffness: 420, damping: 34 }}
+                          className="absolute left-0 top-1/2 h-6 w-1 -translate-y-1/2 rounded-r-full bg-gradient-to-b from-brand-600 to-accent-violet"
+                        />
+                      )}
+                      <Icon className="relative z-10 h-[18px] w-[18px] flex-none" />
+                      {!collapsed && <span className="relative z-10 flex-1">{label}</span>}
+                      {to === "/admin/messages" && unread > 0 && (
+                        <span
+                          className={`relative z-10 flex h-5 min-w-5 items-center justify-center rounded-full bg-gradient-to-r from-secondary-500 to-secondary-600 px-1.5 text-[10px] font-bold text-white ${
+                            collapsed ? "absolute -right-1 -top-1" : ""
+                          }`}
+                        >
+                          {unread > 99 ? "99+" : unread}
+                        </span>
+                      )}
+                    </span>
+                  )}
+                </NavLink>
+              </li>
+            );
+          })}
         </ul>
       </nav>
 
@@ -92,13 +155,13 @@ function SidebarContent({ collapsed, unread, onNavigate, onLogout, navItems }) {
         <button
           type="button"
           onClick={onLogout}
-          title={collapsed ? "Chiqish" : undefined}
+          title={collapsed ? t("Chiqish") : undefined}
           className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-ink-soft transition-colors hover:bg-red-50 hover:text-red-600 ${
             collapsed ? "justify-center" : ""
           }`}
         >
           <LogOut className="h-[18px] w-[18px] flex-none" />
-          {!collapsed && "Chiqish"}
+          {!collapsed && t("Chiqish")}
         </button>
       </div>
     </div>
@@ -107,6 +170,7 @@ function SidebarContent({ collapsed, unread, onNavigate, onLogout, navItems }) {
 
 export default function AdminLayout() {
   const { user, logout, isAdmin, can } = useAuth();
+  const { t } = useLanguage();
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -126,7 +190,7 @@ export default function AdminLayout() {
   const current = navItems.find((n) =>
     n.end ? location.pathname === n.to : location.pathname.startsWith(n.to)
   );
-  const pageTitle = current?.label || "Boshqaruv paneli";
+  const pageTitle = t(current?.labelKey || "Boshqaruv paneli");
 
   // Unread messages badge — refresh on route change + every 60s.
   useEffect(() => {
@@ -171,7 +235,7 @@ export default function AdminLayout() {
         <button
           type="button"
           onClick={() => setCollapsed((v) => !v)}
-          aria-label={collapsed ? "Panelni kengaytirish" : "Panelni yig'ish"}
+          aria-label={collapsed ? t("Panelni kengaytirish") : t("Panelni yig'ish")}
           className="absolute -right-3 top-16 flex h-6 w-6 items-center justify-center rounded-full border border-neutral-200 bg-white text-neutral-400 shadow-soft transition-colors hover:text-brand-600"
         >
           <ChevronsLeft
@@ -201,7 +265,7 @@ export default function AdminLayout() {
               <button
                 type="button"
                 onClick={() => setMobileOpen(false)}
-                aria-label="Yopish"
+                aria-label={t("Yopish")}
                 className="absolute right-3 top-4 flex h-9 w-9 items-center justify-center rounded-xl text-neutral-400 hover:bg-neutral-100"
               >
                 <X className="h-5 w-5" />
@@ -227,14 +291,14 @@ export default function AdminLayout() {
               <button
                 type="button"
                 onClick={() => setMobileOpen(true)}
-                aria-label="Menyu"
+                aria-label={t("Menyu")}
                 className="flex h-10 w-10 items-center justify-center rounded-xl border border-neutral-200 bg-white text-ink lg:hidden"
               >
                 <Menu className="h-5 w-5" />
               </button>
               <div>
                 <div className="flex items-center gap-1.5 text-[11px] font-medium text-neutral-400">
-                  <span>Admin</span>
+                  <span>{t("Admin")}</span>
                   <ChevronRight className="h-3 w-3" />
                   <span className="text-brand-600">{pageTitle}</span>
                 </div>
@@ -246,13 +310,15 @@ export default function AdminLayout() {
               <button
                 type="button"
                 onClick={() => setTheme((value) => (value === "dark" ? "light" : "dark"))}
-                aria-label={isDark ? "Light mode" : "Dark mode"}
+                aria-label={isDark ? t("Light mode") : t("Dark mode")}
                 aria-pressed={isDark}
-                title={isDark ? "Light mode" : "Dark mode"}
+                title={isDark ? t("Light mode") : t("Dark mode")}
                 className="flex h-10 w-10 items-center justify-center rounded-xl border border-neutral-200 bg-white text-ink-soft transition-colors hover:border-brand-300 hover:text-brand-700"
               >
                 {isDark ? <Sun className="h-4.5 w-4.5" /> : <Moon className="h-4.5 w-4.5" />}
               </button>
+
+              <LanguageSwitcher />
 
               <a
                 href="/"
@@ -261,7 +327,7 @@ export default function AdminLayout() {
                 className="hidden items-center gap-1.5 rounded-xl border border-neutral-200 bg-white px-3.5 py-2 text-xs font-semibold text-ink-soft transition-colors hover:border-brand-300 hover:text-brand-700 sm:flex"
               >
                 <ExternalLink className="h-3.5 w-3.5" />
-                Saytni ko'rish
+                {t("Saytni ko'rish")}
               </a>
 
               {/* Avatar dropdown */}
@@ -304,7 +370,7 @@ export default function AdminLayout() {
                         className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-semibold text-red-600 transition-colors hover:bg-red-50"
                       >
                         <LogOut className="h-4 w-4" />
-                        Chiqish
+                        {t("Chiqish")}
                       </button>
                     </motion.div>
                   )}
