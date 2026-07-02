@@ -1,156 +1,89 @@
-import React from "react";
+import { motion } from "framer-motion";
+import { Check, Award } from "lucide-react";
 import Human from "../assets/human.png";
-import Human2 from "../assets/human2.png";
+import Button from "./ui/Button.jsx";
+import SectionHeading from "./ui/SectionHeading.jsx";
+import { fadeUp, stagger, scaleIn, inView } from "../lib/motion.js";
 
-const people = [
+const POINTS = [
   {
-    image: Human2,
-    name: "Aripov Azamat Sharipovich",
-    role: "Начальник отдела конструкторских разработок Sifat Innovation Company",
-    alt: "Шакиров Рустем Раисович",
+    title: "Standartlashtirish",
+    text: "«Yuk ko'taruvchi kranlar va uzluksiz transport mashinalari» bo'yicha TK 288 texnik qo'mitasi tarkibiga kiramiz.",
   },
   {
-    image: Human,
-    name: "Revazishvili David Shotayevichning",
-    role: "Sanoat xavfsizligi bo'yicha ekspert Sifat Innovation Company",
-    alt: "Revazishvili David Shotayevich",
+    title: "Malakali mutaxassislar",
+    text: "Rahbariyat va mutaxassislar o'z kasbiy bilim va malakalarini doimiy oshirib boradi.",
+  },
+  {
+    title: "Boy tajriba",
+    text: "Jamoamiz yuk ko'taruvchi mashinalarni ko'rikdan o'tkazish, ta'mirlash, montaj va loyihalash bilan uzviy bog'liq.",
   },
 ];
 
-const AboutUs = () => {
+export default function AboutUs() {
   return (
-    <section className="bg-white py-12">
-      <div className="container mx-auto px-4">
-        {/* Main Title */}
-        <h1 className="text-4xl md:text-5xl font-sans font-normal text-gray-800 text-center mb-12">
-          O нас
-        </h1>
-
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start justify-center">
-          {/* Left Block */}
-          <div className="w-full lg:w-1/3 p-6 bg-gray-50 border border-gray-200 rounded-lg shadow-sm">
-            <p className="text-gray-700 leading-relaxed text-sm">
-               "Sifat Innovation Company" осуществляет
-              деятельность по проведению экспертизы промышленной безопасности
-              опасных производственных объектов, на которых используются
-              подъемные сооружения и объекты котлонадзора, а также деятельность
-              по проектированию грузоподъемных машин (грузоподъемных кранов,
-              кранов-трубоукладчиков, кранов-манипуляторов, подъемников (вышек),
-              строительных подъемников) приспособлений и оснастки в виде
-              грузозахватных приспособлений, тары, промежуточных креплений
-              башенных кранов, подвесных люлек, сооружений в виде крановых
-              путей.
-            </p>
-            <button className="mt-6 px-4 py-2 text-white bg-red-500 hover:bg-red-600 transition-colors duration-200 rounded-md text-xs font-semibold">
-              Подробнее
-            </button>
+    <section id="about" className="section scroll-mt-24 px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
+        {/* Image with gradient frame + offset border */}
+        <motion.div variants={scaleIn} {...inView} className="relative mx-auto w-full max-w-md lg:mx-0">
+          {/* offset decorative border */}
+          <div className="absolute -bottom-5 -left-5 h-full w-full rounded-[var(--radius-xl2)] border-2 border-brand-200" />
+          {/* gradient frame */}
+          <div className="relative rounded-[var(--radius-xl2)] bg-gradient-to-br from-brand-600 via-accent-violet to-accent-cyan p-1.5 shadow-lift">
+            <img
+              src={Human}
+              alt="Aripov Azamat Sharipovich — konstruktorlik ishlanmalari bo'limi boshlig'i"
+              className="w-full rounded-[calc(var(--radius-xl2)-6px)] object-cover"
+            />
           </div>
-
-          {/* Middle Block */}
-          <div className="w-full lg:w-1/3 flex flex-col gap-6">
-            <div className="flex items-start bg-gray-50 border border-gray-200 p-6 rounded-lg shadow-sm">
-              <div className="bg-red-500 w-8 h-8 rounded-full flex items-center justify-center p-1 mr-4">
-                <svg
-                  className="w-full h-full text-white"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                    clipRule="evenodd"
-                  ></path>
-                </svg>
-              </div>
-              <div className="flex-1">
-                <h3 className="text-lg font-semibold text-gray-800 mb-1">
-                  Стандартизация
-                </h3>
-                <p className="text-gray-600 text-sm">
-                  Sifat Innovation Company входит в состав технического комитета
-                  (ТК 288) по стандартизации «Краны грузоподъемные и машины
-                  непрерывного транспорта».
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start bg-gray-50 border border-gray-200 p-6 rounded-lg shadow-sm">
-              <div className="bg-red-500 w-8 h-8 rounded-full flex items-center justify-center p-1 mr-4">
-                <svg
-                  className="w-full h-full text-white"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zm-1.5 6a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
-                  <path
-                    fillRule="evenodd"
-                    d="M3.232 5.232A2.5 2.5 0 015 3h10a2.5 2.5 0 011.768 4.232L10 14l-6.768-6.768z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-              <div className="flex-1">
-                <h3 className="text-lg font-semibold text-gray-800 mb-1">
-                  Руководство и специалисты
-                </h3>
-                <p className="text-gray-600 text-sm">
-                  постоянно повышают свои профессиональные знания и
-                  квалификацию.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start bg-gray-50 border border-gray-200 p-6 rounded-lg shadow-sm">
-              <div className="bg-red-500 w-8 h-8 rounded-full flex items-center justify-center p-1 mr-4">
-                <svg
-                  className="w-full h-full text-white"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M10 2a8 8 0 100 16 8 8 0 000-16zM8 9a1 1 0 11-2 0 1 1 0 012 0zm5 0a1 1 0 11-2 0 1 1 0 012 0zm-5 4a1 1 0 11-2 0 1 1 0 012 0zm5 0a1 1 0 11-2 0 1 1 0 012 0z" />
-                </svg>
-              </div>
-              <div className="flex-1">
-                <h3 className="text-lg font-semibold text-gray-800 mb-1">
-                  Трудовая биография
-                </h3>
-                <p className="text-gray-600 text-sm">
-                  Большинства специалистов организации неразрывно связана с
-                  грузоподъемными машинами, их обследованием, ремонтом,
-                  монтажом, проектированием и изготовлением.
-                </p>
-              </div>
+          {/* floating name badge */}
+          <div className="animate-float absolute -bottom-6 right-4 flex items-center gap-3 rounded-2xl glass-strong p-4 shadow-lift">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-secondary-500 to-secondary-600 text-white">
+              <Award className="h-5 w-5" />
+            </span>
+            <div>
+              <p className="text-sm font-bold leading-tight text-ink">
+                Aripov Azamat Sharipovich
+              </p>
+              <p className="text-xs text-ink-soft">
+                Konstruktorlik bo'limi boshlig'i
+              </p>
             </div>
           </div>
+        </motion.div>
 
-          {/* Right Block (Image Cards) */}
-          <div className="w-full lg:w-1/3 flex justify-center lg:justify-end items-start">
-            <div className="w-full max-w-sm flex flex-col gap-6">
-              {people.map((person) => (
-                <div
-                  key={person.name}
-                  className="bg-white p-4 rounded-lg shadow-lg border border-gray-200 text-center flex flex-col items-center overflow-hidden"
-                >
-                  <img
-                    src={person.image}
-                    alt={person.alt}
-                    className="w-40 h-48 rounded-md object-cover mb-4"
-                  />
-                  <h4 className="text-lg font-bold text-gray-800">
-                    {person.name}
-                  </h4>
-                  <p className="text-gray-600 text-sm">{person.role}</p>
+        {/* Text */}
+        <div>
+          <SectionHeading
+            align="left"
+            eyebrow="Biz haqimizda"
+            title="Yuk ko'taruvchi texnikada **ishonchli** hamkoringiz"
+            subtitle="Sifat Innovatsion Texnologiya xavfli ishlab chiqarish obyektlarida sanoat xavfsizligi ekspertizasi, yuk ko'taruvchi mashinalar va kran yo'llarini loyihalash hamda ta'mirlash bilan shug'ullanadi."
+          />
+
+          <motion.ul variants={stagger} {...inView} className="mt-8 flex flex-col gap-5">
+            {POINTS.map((point) => (
+              <motion.li key={point.title} variants={fadeUp} className="flex gap-4">
+                <span className="mt-0.5 flex h-7 w-7 flex-none items-center justify-center rounded-lg bg-gradient-to-br from-brand-600 to-accent-cyan text-white shadow-[0_6px_16px_rgba(79,70,229,0.3)]">
+                  <Check className="h-4 w-4" strokeWidth={3} />
+                </span>
+                <div>
+                  <h4 className="font-bold text-ink">{point.title}</h4>
+                  <p className="mt-1 text-sm leading-relaxed text-ink-soft">
+                    {point.text}
+                  </p>
                 </div>
-              ))}
-            </div>
-          </div>
+              </motion.li>
+            ))}
+          </motion.ul>
+
+          <motion.div variants={fadeUp} {...inView} className="mt-9">
+            <Button as="a" href="#services" variant="gradient">
+              Batafsil ma'lumot
+            </Button>
+          </motion.div>
         </div>
       </div>
     </section>
   );
-};
-
-export default AboutUs;
+}

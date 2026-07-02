@@ -1,172 +1,172 @@
-import { Phone, Mail, MapPin, Clock, Search } from "lucide-react";
-import Logo from "../assets/Logo2.png";
-import LocationIcon from "../assets/location.svg";
-import MessageIcon from "../assets/message.svg";
-import PhoneIcon from "../assets/phone.svg";
-import TimeIcon from "../assets/time.svg";
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Phone, Menu, X } from "lucide-react";
+import Logo from "../assets/Logo.png";
+import Button from "./ui/Button.jsx";
+
+const NAV_LINKS = [
+  { label: "Bosh sahifa", href: "#hero" },
+  { label: "Biz haqimizda", href: "#about" },
+  { label: "Xizmatlar", href: "#services" },
+  { label: "Video", href: "#video" },
+  { label: "Yangiliklar", href: "#news" },
+  { label: "Savol berish", href: "#faq" },
+];
 
 export default function Header() {
+  const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 50);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Lock body scroll while the mobile drawer is open.
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
   return (
-    <header className="w-full bg-white font-sans">
-      {/* Top Bar */}
-      <div className="bg-gray-800 text-gray-400 text-xs md:text-sm">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center px-4 py-2 gap-2">
-          {/* Left side info */}
-          <div className="flex flex-wrap items-center gap-4">
-            {/*<div className="flex items-center gap-2">*/}
-            {/*  <Clock className="w-3 h-3 md:w-4 md:h-4 text-orange-400" />*/}
-            {/*  <span>Пн - Пт: 08.00 - 16.30</span>*/}
-            {/*</div>*/}
-            <div className="flex items-center gap-2">
-              <MapPin className="w-3 h-3 md:w-4 md:h-4 text-orange-400" />
-              <span className="hidden md:inline">
-                Uzbekiston Respublikasi, Toshkent shahar, Mirobod tuman
-              </span>
-              <span className="md:hidden">г. Набережные Челны</span>
-            </div>
-          </div>
-
-          {/* Right side info */}
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <Phone className="w-3 h-3 md:w-4 md:h-4 text-orange-400" />
-              <a
-                href="tel:998998660271"
-                className="font-medium text-white hover:text-orange-400 transition-colors"
-              >
-                +998-99-866-02-71
-              </a>
-            </div>
-            <div className="hidden md:flex items-center gap-2">
-              <Mail className="w-3 h-3 md:w-4 md:h-4 text-orange-400" />
-              <a
-                href="mailto:	sifat.saffatt@gmail.com"
-                className="hover:text-orange-400 transition-colors"
-              >
-                 
-              </a>
-            </div>
-            {/* Social Icons */}
-            <div className="flex items-center gap-3">
-              <a
-                href="#"
-                className="text-gray-500 hover:text-white transition-colors"
-              >
-                <i className="fab fa-facebook-f text-base"></i>
-              </a>
-              <a
-                href="#"
-                className="text-gray-500 hover:text-white transition-colors"
-              >
-                <i className="fab fa-youtube text-base"></i>
-              </a>
-              <a
-                href="#"
-                className="text-gray-500 hover:text-white transition-colors"
-              >
-                <i className="fab fa-vk text-base"></i>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Header */}
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center px-4 py-3 gap-6">
+    <motion.header
+      initial={{ y: -80, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? "glass-strong shadow-glass"
+          : "bg-transparent border-b border-transparent"
+      }`}
+    >
+      <nav className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
         {/* Logo */}
-        <div className="flex items-center gap-4">
+        <a href="#hero" className="flex items-center gap-3">
           <img
             src={Logo}
-            alt="Sifat Innovatsion Texnologiya"
-            className="w-38 rounded-full items-center pt-2-"
+            alt="Sifat Innovatsion Texnologiya logotipi"
+            className="h-11 w-11 rounded-xl object-contain"
           />
-          <div>
-            <h1 className="text-gray-900 text-2xl max-w-md md:text-3xl font-extrabold tracking-tight ">
-              Sifat Innovatsion Texnologiya
-            </h1>
-            {/* <p className="text-gray-600 text-sm">
+          <span className="hidden flex-col leading-tight sm:flex">
+            <span className="text-[15px] font-extrabold tracking-tight text-ink">
+              Sifat Innovatsion
+            </span>
+            <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-600">
               Texnologiya
-            </p> */}
-          </div>
-        </div>
+            </span>
+          </span>
+        </a>
 
-        {/* Certification Logos */}
-        <div className=" lg:flex flex-col items-end">
-          <div className="flex gap-4">
-            <a href="https://yandex.uz/maps/10335/tashkent/search/Uzbekiston%20Respublikasi%2C%20Toshkent%20shahar%2C%20Mirobod%20tuman/?ll=69.245719%2C41.312043&sll=69.279737%2C41.311151&sspn=0.299034%2C0.172920&z=13" target={"_blank"} className=" hover:cursor-pointer">
-              <img
-                src={LocationIcon}
-                alt="Location"
-                className="h-5 grayscale hover:grayscale-0 transition-all duration-300"
-              />
-            </a>
-            <a href="" className=" hover:cursor-pointer">
-              <img
-                src={MessageIcon}
-                alt="Message"
-                className="h-5 grayscale hover:grayscale-0 transition-all duration-300"
-              />
-            </a>
-            <a href="" className=" hover:cursor-pointer">
-              <img
-                src={PhoneIcon}
-                alt="Phone"
-                className="h-5 grayscale hover:grayscale-0 transition-all duration-300"
-              />
-            </a>
-            <a href="" className=" hover:cursor-pointer">
-              <img
-                src={TimeIcon}
-                alt="Time"
-                className="h-5 grayscale hover:grayscale-0 transition-all duration-300"
-              />
-            </a>
-          </div>
-          <p className="text-gray-500 text-sm mt-2 font-medium">
-            Работаем с <span className="text-orange-500 font-bold">2014</span>{" "}
-            года
-          </p>
-        </div>
-      </div>
+        {/* Center links */}
+        <ul className="hidden items-center gap-1 lg:flex">
+          {NAV_LINKS.map((link) => (
+            <li key={link.href}>
+              <a
+                href={link.href}
+                className="group relative rounded-full px-4 py-2 text-sm font-semibold text-ink/80 transition-colors hover:text-brand-700"
+              >
+                {link.label}
+                <span className="absolute inset-x-4 -bottom-0.5 h-0.5 origin-left scale-x-0 rounded-full bg-gradient-to-r from-brand-600 to-accent-cyan transition-transform duration-300 group-hover:scale-x-100" />
+              </a>
+            </li>
+          ))}
+        </ul>
 
-      {/* Navigation */}
-      <nav className="bg-gray-50 border-t border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row items-center justify-between gap-4">
-          <ul className="flex flex-wrap items-center justify-center md:justify-start gap-1 md:gap-4 text-sm font-medium">
-            <li className="px-3 py-2 text-gray-700 font-semibold hover:text-orange-500 transition-colors cursor-pointer">
-              ГЛАВНАЯ
-            </li>
-            <li className="px-3 py-2 text-gray-700 font-semibold hover:text-orange-500 transition-colors cursor-pointer">
-              О НАС
-            </li>
-            <li className="px-3 py-2 text-gray-700 font-semibold hover:text-orange-500 transition-colors cursor-pointer">
-              НАШИ УСЛУГИ
-            </li>
-            <li className="px-3 py-2 text-gray-700 font-semibold hover:text-orange-500 transition-colors cursor-pointer">
-              ВЫПОЛНЕННЫЕ РАБОТЫ
-            </li>
-            <li className="px-3 py-2 text-gray-700 font-semibold hover:text-orange-500 transition-colors cursor-pointer">
-              АКТУАЛЬНО
-            </li>
-            <li className="px-3 py-2 text-gray-700 font-semibold hover:text-orange-500 transition-colors cursor-pointer">
-              ЗАДАТЬ ВОПРОС
-            </li>
-            <li className="px-3 py-2 text-gray-700 font-semibold hover:text-orange-500 transition-colors cursor-pointer">
-              КОНТАКТЫ
-            </li>
-          </ul>
+        {/* Right side */}
+        <div className="flex items-center gap-2">
+          <a
+            href="tel:+998998660271"
+            className="hidden items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold text-ink/80 transition-colors hover:text-brand-700 xl:flex"
+          >
+            <Phone className="h-4 w-4 text-secondary-500" />
+            +998 99 866 02 71
+          </a>
+          <Button as="a" href="#faq" size="sm" className="hidden sm:inline-flex">
+            Bog'lanish
+          </Button>
 
-          {/* Search */}
-          <div className="relative w-full md:w-64">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-            <input
-              type="text"
-              placeholder="Поиск по сайту..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-200 text-sm transition-all"
-            />
-          </div>
+          {/* Mobile toggle */}
+          <button
+            type="button"
+            aria-label={open ? "Menyuni yopish" : "Menyuni ochish"}
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
+            className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-black/10 bg-white/70 text-ink backdrop-blur transition-colors hover:bg-white lg:hidden"
+          >
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
         </div>
       </nav>
-    </header>
+
+      {/* Mobile drawer */}
+      <AnimatePresence>
+        {open && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              onClick={() => setOpen(false)}
+              className="fixed inset-0 top-[68px] z-40 bg-ink/20 backdrop-blur-sm lg:hidden"
+            />
+            <motion.div
+              key="drawer"
+              initial={{ opacity: 0, y: -12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+              className="absolute inset-x-3 top-[68px] z-50 origin-top rounded-2xl glass-strong p-4 shadow-lift lg:hidden"
+            >
+              <motion.ul
+                initial="hidden"
+                animate="show"
+                variants={{ show: { transition: { staggerChildren: 0.05 } } }}
+                className="flex flex-col gap-1"
+              >
+                {NAV_LINKS.map((link) => (
+                  <motion.li
+                    key={link.href}
+                    variants={{
+                      hidden: { opacity: 0, x: -12 },
+                      show: { opacity: 1, x: 0 },
+                    }}
+                  >
+                    <a
+                      href={link.href}
+                      onClick={() => setOpen(false)}
+                      className="block rounded-xl px-4 py-3 text-base font-semibold text-ink transition-colors hover:bg-brand-50 hover:text-brand-700"
+                    >
+                      {link.label}
+                    </a>
+                  </motion.li>
+                ))}
+              </motion.ul>
+              <div className="mt-3 flex flex-col gap-3 border-t border-black/10 pt-4">
+                <a
+                  href="tel:+998998660271"
+                  className="flex items-center gap-2 px-4 text-sm font-semibold text-ink-soft"
+                >
+                  <Phone className="h-4 w-4 text-secondary-500" />
+                  +998 99 866 02 71
+                </a>
+                <Button
+                  as="a"
+                  href="#faq"
+                  onClick={() => setOpen(false)}
+                  className="w-full"
+                >
+                  Bog'lanish
+                </Button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </motion.header>
   );
 }

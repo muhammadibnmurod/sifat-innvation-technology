@@ -1,108 +1,95 @@
-import React from 'react';
+import { motion } from "framer-motion";
+import { ArrowRight, FileText, Ruler, GraduationCap } from "lucide-react";
+import SectionHeading from "./ui/SectionHeading.jsx";
+import { fadeUp, stagger, inView } from "../lib/motion.js";
 
-const LatestNewsSection = () => {
+const NEWS = [
+  {
+    icon: FileText,
+    category: "Standartlar",
+    date: "07.08.2025",
+    title: "GOST 33715-2025 standarti qabul qilindi",
+    excerpt:
+      "Standartlashtirish, metrologiya va sertifikatlashtirish bo'yicha davlatlararo Kengash «Yuk ilg'ich moslamalar. Xavfsiz foydalanish» standartini qabul qildi.",
+    gradient: "from-brand-600 to-accent-violet",
+  },
+  {
+    icon: Ruler,
+    category: "Ishlanma",
+    date: "02.08.2025",
+    title: "Kran yo'llari uchun yangi GOST loyihasi",
+    excerpt:
+      "Sifat Innovatsion Texnologiya ishlab chiqqan «Yerusti rels kran yo'llari. Umumiy texnik talablar» standarti qabul qilish bosqichida.",
+    gradient: "from-accent-violet to-accent-cyan",
+  },
+  {
+    icon: GraduationCap,
+    category: "Tadbirlar",
+    date: "15.07.2025",
+    title: "Mutaxassislar uchun malaka oshirish seminari",
+    excerpt:
+      "Yuk ko'taruvchi mashinalarni ko'rikdan o'tkazish va ta'mirlash bo'yicha amaliy seminar bo'lib o'tdi.",
+    gradient: "from-secondary-500 to-secondary-600",
+  },
+];
+
+export default function LatestNewsSection() {
   return (
-    <section className="bg-gray-100 py-12">
-      <div className="container mx-auto px-4">
-        {/* Section Title */}
-        <h2 className="text-4xl md:text-5xl font-sans font-normal text-gray-800 text-center mb-12">
-          ПОСЛЕДНИЕ НОВОСТИ И СОБЫТИЯ
-        </h2>
+    <section id="news" className="section scroll-mt-24 px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <SectionHeading
+          eyebrow="Yangiliklar"
+          title="So'nggi **yangiliklar** va tadbirlar"
+          subtitle="Soha standartlari, ishlanmalarimiz va kompaniya faoliyatidagi muhim voqealar."
+        />
 
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Main News Block */}
-          <div className="w-full lg:w-2/3 flex flex-col gap-8">
-            {/* News 1 */}
-            <div className="flex flex-col md:flex-row bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-              <div className="flex-1 pr-0 md:pr-6 mb-4 md:mb-0">
-                <h3 className="text-lg font-semibold text-red-500 mb-2">
-                  Второе рождение стандарта. ГОСТ 33715-2025 «Машины грузоподъемные. Грузозахватные приспособления. Безопасная эксплуатация. Общие требования»
+        <motion.div
+          variants={stagger}
+          {...inView}
+          className="mt-14 grid grid-cols-1 gap-7 md:grid-cols-2 lg:grid-cols-3"
+        >
+          {NEWS.map(({ icon: Icon, category, date, title, excerpt, gradient }) => (
+            <motion.article
+              key={title}
+              variants={fadeUp}
+              className="group flex flex-col overflow-hidden rounded-[var(--radius-card)] bg-white shadow-soft ring-1 ring-black/5 transition-shadow duration-300 hover:shadow-lift"
+            >
+              {/* cover */}
+              <div className="relative aspect-[16/10] overflow-hidden">
+                <div
+                  className={`absolute inset-0 scale-100 bg-gradient-to-br ${gradient} transition-transform duration-500 group-hover:scale-110`}
+                />
+                <div className="absolute inset-0 opacity-30 bg-dots" />
+                <Icon className="absolute left-1/2 top-1/2 h-14 w-14 -translate-x-1/2 -translate-y-1/2 text-white/90" />
+                {/* date badge */}
+                <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-ink shadow-sm backdrop-blur">
+                  {date}
+                </span>
+              </div>
+
+              {/* body */}
+              <div className="flex flex-1 flex-col p-6">
+                <span className="text-xs font-semibold uppercase tracking-[0.16em] text-brand-600">
+                  {category}
+                </span>
+                <h3 className="mt-2 text-lg font-bold leading-snug text-ink">
+                  {title}
                 </h3>
-                <p className="text-sm text-gray-500 mb-2">07.08.2025</p>
-                <p className="text-gray-700 text-sm leading-relaxed mb-4">
-                  Межгосударственным Советом по стандартизации, метрологии и сертификации принят межгосударственный стандарт ГОСТ 33715-2025.
+                <p className="mt-3 flex-1 text-sm leading-relaxed text-ink-soft">
+                  {excerpt}
                 </p>
-                <a href="#" className="text-red-500 text-sm font-semibold hover:underline">
-                  читать далее ›
+                <a
+                  href="#"
+                  className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-700"
+                >
+                  Batafsil o'qish
+                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                 </a>
               </div>
-              <div className="w-full md:w-auto md:min-w-[120px] flex items-center justify-center">
-                <div className="bg-red-500 rounded-full w-12 h-12 flex items-center justify-center text-white font-bold">
-                  !
-                </div>
-              </div>
-            </div>
-
-            {/* News 2 */}
-            <div className="flex flex-col md:flex-row bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-              <div className="flex-1 pr-0 md:pr-6 mb-4 md:mb-0">
-                <h3 className="text-lg font-semibold text-red-500 mb-2">
-                  Разработка Sifat Innovation Company - новый ГОСТ «Краны грузоподъемные. Пути надземные рельсовые крановые. Общие технические требования»
-                </h3>
-                <p className="text-sm text-gray-500 mb-2">02.08.2025</p>
-                <p className="text-gray-700 text-sm leading-relaxed mb-4">
-                  В стадии принятия Техническим комитетом по стандартизации, метрологии и сертификации находится межгосударственный стандарт «Краны грузоподъемные...»
-                </p>
-                <a href="#" className="text-red-500 text-sm font-semibold hover:underline">
-                  читать далее ›
-                </a>
-              </div>
-              <div className="w-full md:w-auto md:min-w-[120px] flex items-center justify-center">
-                <div className="bg-red-500 rounded-full w-12 h-12 flex items-center justify-center text-white font-bold">
-                  !
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Sidebar */}
-          <div className="w-full lg:w-1/3 flex flex-col gap-8">
-            {/* Useful Resources */}
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-              <h3 className="text-lg font-bold text-gray-800 mb-4">Полезные ресурсы</h3>
-              <ul className="list-none space-y-2">
-                <li><a href="#" className="text-blue-600 hover:underline text-sm">Безопасность опасных производственных объектов</a></li>
-                <li><a href="#" className="text-blue-600 hover:underline text-sm">Правила ПУБЭ для крановщиков</a></li>
-                <li><a href="#" className="text-blue-600 hover:underline text-sm">Разрешение Ростехнадзора</a></li>
-                <li><a href="#" className="text-blue-600 hover:underline text-sm">Учебники, основанные на опыте</a></li>
-                <li><a href="#" className="text-blue-600 hover:underline text-sm">Сертификация и испытания продукции</a></li>
-                <li><a href="#" className="text-blue-600 hover:underline text-sm">Качества</a></li>
-              </ul>
-            </div>
-
-            {/* Document Blocks */}
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="w-full md:w-1/2 bg-white rounded-lg shadow-sm border border-gray-200 p-2">
-                <img src="https://via.placeholder.com/150x200?text=Document+1" alt="Document 1" className="w-full h-auto object-cover rounded-md mb-2" />
-                <p className="text-xs text-gray-600">ЭКСПЕРТИЗА ПРОМЫШЛЕННОЙ БЕЗОПАСНОСТИ ПОДЪЕМНЫХ СООРУЖЕНИЙ</p>
-              </div>
-              <div className="w-full md:w-1/2 bg-white rounded-lg shadow-sm border border-gray-200 p-2">
-                <img src="https://via.placeholder.com/150x200?text=Document+2" alt="Document 2" className="w-full h-auto object-cover rounded-md mb-2" />
-                <p className="text-xs text-gray-600">...текст о книге...</p>
-              </div>
-              <div className="w-full md:w-1/2 bg-white rounded-lg shadow-sm border border-gray-200 p-2 hidden lg:block">
-                <img src="https://via.placeholder.com/150x200?text=Document+3" alt="Document 3" className="w-full h-auto object-cover rounded-md mb-2" />
-                <p className="text-xs text-gray-600">...текст о документе...</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom Pagination and Button */}
-        <div className="mt-8 flex flex-col md:flex-row items-center justify-between">
-          <div className="flex space-x-2 mb-4 md:mb-0">
-            <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-            <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
-            <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
-            <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
-          </div>
-          <button className="px-6 py-3 bg-red-500 hover:bg-red-600 transition-colors duration-200 text-white text-sm font-semibold rounded-md shadow-lg">
-            Подробнее о стандартах
-          </button>
-        </div>
+            </motion.article>
+          ))}
+        </motion.div>
       </div>
     </section>
   );
-};
-
-export default LatestNewsSection;
+}

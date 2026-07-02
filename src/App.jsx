@@ -1,33 +1,36 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Header from './components/Header.jsx'
-import Navbar from './components/Navbar.jsx'
-import Home from './pages/Home.jsx'
+import { MotionConfig } from "framer-motion";
+import Header from "./components/Header.jsx";
+import Hero from "./components/Navbar.jsx";
+import Stats from "./components/Stats.jsx";
 import Remont from "./components/Remont.jsx";
 import Partners from "./components/Partners.jsx";
 import AboutUs from "./components/AboutUs.jsx";
 import VideoSection from "./components/VideoSection.jsx";
 import AskQuestionSection from "./components/AskQuestionSection.jsx";
-import  LatestNewsSection from "./components/LatestNewsSection.jsx";
+import LatestNewsSection from "./components/LatestNewsSection.jsx";
 import Footer from "./components/Footer.jsx";
-import Products from "./components/Products.jsx";
+
 function App() {
+  // reducedMotion="user" makes Framer respect prefers-reduced-motion for all
+  // transform-based animations automatically.
   return (
-    <BrowserRouter>
+    <MotionConfig reducedMotion="user">
+      <div className="min-h-screen bg-surface font-body text-ink-soft">
         <Header />
-        <Navbar />
-        <Remont />
-        <Partners />
-        < AboutUs />
-        {/* < VideoSection /> */}
-        < AskQuestionSection />
-        < Products />
-        < LatestNewsSection />
-        < Footer />
-      <Routes>
-        <Route path="/home" element={<Home />} />
-      </Routes>
-    </BrowserRouter>
-  )
+        <main>
+          <Hero />
+          <Stats />
+          <Remont />
+          <AboutUs />
+          <VideoSection />
+          <Partners />
+          <LatestNewsSection />
+          <AskQuestionSection />
+        </main>
+        <Footer />
+      </div>
+    </MotionConfig>
+  );
 }
 
-export default App
+export default App;

@@ -1,102 +1,149 @@
-import React from 'react'
-import Logo from '../assets/Logo2.png'
+import { motion } from "framer-motion";
+import { Facebook, Youtube, Instagram, Send, Phone, Mail, MapPin, ArrowRight } from "lucide-react";
+import Logo from "../assets/Logo.png";
+import { fadeUp, stagger, inView } from "../lib/motion.js";
 
-const Footer = () => {
+const SERVICES = [
+  "Texnik ekspertiza",
+  "Ta'mirlash ishlari",
+  "O'rnatish va sozlash",
+  "Rekonstruksiya",
+  "Loyihalash ishlari",
+  "Malaka oshirish",
+];
+
+const SOCIALS = [
+  { Icon: Facebook, href: "#", label: "Facebook" },
+  { Icon: Youtube, href: "#", label: "YouTube" },
+  { Icon: Instagram, href: "#", label: "Instagram" },
+  { Icon: Send, href: "#", label: "Telegram" },
+];
+
+export default function Footer() {
   return (
-      <footer className="bg-gradient-to-br from-gray-100 to-gray-200 border-t border-gray-300">
-        <div className="container mx-auto px-4 py-14">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 text-gray-700">
+    <footer className="relative bg-ink text-neutral-400">
+      {/* gradient top border */}
+      <div className="h-1 w-full bg-gradient-to-r from-brand-600 via-accent-violet to-accent-cyan" />
 
-            <div className="flex flex-col gap-4">
-              <img
-                  src={Logo}
-                  alt="Sifat Innovatsiya Texnologiya"
-                  className="w-[140px] h-auto rounded-full"
+      <motion.div
+        variants={stagger}
+        {...inView}
+        className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8"
+      >
+        <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-4">
+          {/* Brand + newsletter */}
+          <motion.div variants={fadeUp} className="lg:col-span-1">
+            <div className="flex items-center gap-3">
+              <img src={Logo} alt="Sifat Innovatsion Texnologiya" className="h-11 w-11 rounded-xl bg-white/5 object-contain p-1" />
+              <span className="text-base font-extrabold leading-tight text-white">
+                Sifat Innovatsion<br />Texnologiya
+              </span>
+            </div>
+            <p className="mt-5 text-sm leading-relaxed">
+              Yuk ko'taruvchi kranlar va balandlikda bajariladigan ishlar
+              bo'yicha ta'mirlash hamda texnik ko'rik xizmatlarini ko'rsatuvchi
+              korxona.
+            </p>
+
+            {/* newsletter */}
+            <form
+              onSubmit={(e) => e.preventDefault()}
+              className="mt-6 flex items-center gap-2 rounded-full border border-white/10 bg-white/5 p-1.5 focus-within:border-brand-400"
+            >
+              <input
+                type="email"
+                required
+                placeholder="Email manzilingiz"
+                aria-label="Email manzilingiz"
+                className="min-w-0 flex-1 bg-transparent px-3 text-sm text-white outline-none placeholder:text-neutral-500"
               />
-              <p className="text-sm leading-relaxed max-w-[280px]">
-                “Sifat Innovatsiya Texnologiya” MCHJ — yuk ko‘taruvchi kranlar va balandlikda bajariladigan ishlar bo‘yicha
-                ta’mirlash hamda texnik ko‘rik xizmatlarini ko‘rsatuvchi korxona.
-              </p>
-              <button className="w-fit mt-2 px-5 py-2 bg-red-500 hover:bg-red-600 transition text-white text-xs font-semibold rounded-full shadow">
-                Bizga yozish
+              <button
+                type="submit"
+                aria-label="Obuna bo'lish"
+                className="flex h-9 w-9 flex-none items-center justify-center rounded-full bg-gradient-to-r from-secondary-500 to-secondary-600 text-white transition-transform hover:scale-105"
+              >
+                <ArrowRight className="h-4 w-4" />
               </button>
-              <a href="#" className="text-xs text-gray-500 hover:text-gray-700 mt-4">
-                Maxfiylik siyosati
-              </a>
+            </form>
+          </motion.div>
+
+          {/* Contact */}
+          <motion.div variants={fadeUp}>
+            <h4 className="text-sm font-bold uppercase tracking-[0.16em] text-white">
+              Aloqa ma'lumotlari
+            </h4>
+            <ul className="mt-5 flex flex-col gap-4 text-sm">
+              <li className="flex gap-3">
+                <MapPin className="h-5 w-5 flex-none text-brand-400" />
+                Toshkent shahri, Mirobod tumani
+              </li>
+              <li className="flex gap-3">
+                <Phone className="h-5 w-5 flex-none text-brand-400" />
+                <a href="tel:+998998660271" className="transition-colors hover:text-white">
+                  +998 99 866 02 71
+                </a>
+              </li>
+              <li className="flex gap-3">
+                <Mail className="h-5 w-5 flex-none text-brand-400" />
+                <a href="mailto:sifat.saffatt@gmail.com" className="transition-colors hover:text-white">
+                  sifat.saffatt@gmail.com
+                </a>
+              </li>
+            </ul>
+          </motion.div>
+
+          {/* Services */}
+          <motion.div variants={fadeUp}>
+            <h4 className="text-sm font-bold uppercase tracking-[0.16em] text-white">
+              Xizmatlar
+            </h4>
+            <ul className="mt-5 flex flex-col gap-3 text-sm">
+              {SERVICES.map((s) => (
+                <li key={s}>
+                  <a href="#services" className="transition-colors hover:text-white">
+                    {s}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+
+          {/* Nav + socials */}
+          <motion.div variants={fadeUp}>
+            <h4 className="text-sm font-bold uppercase tracking-[0.16em] text-white">
+              Ijtimoiy tarmoqlar
+            </h4>
+            <div className="mt-5 flex gap-3">
+              {SOCIALS.map(({ Icon, href, label }) => (
+                <a
+                  key={label}
+                  href={href}
+                  aria-label={label}
+                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-neutral-300 transition-all hover:border-brand-400 hover:bg-brand-600 hover:text-white"
+                >
+                  <Icon className="h-5 w-5" />
+                </a>
+              ))}
             </div>
-
-            <div className="flex flex-col gap-5">
-              <h4 className="text-sm font-bold uppercase tracking-wide">
-                Aloqa ma’lumotlari
-              </h4>
-              <div className="text-sm space-y-3">
-                <div>
-                  <p className="font-semibold">Manzil</p>
-                  <p className="text-gray-600">
-                    Toshkent shahri, Mirobod tumani
-                  </p>
-                </div>
-                <div>
-                  <p className="font-semibold">Telefon</p>
-                  <p className="text-gray-600">
-                    +998 99 866 02 71
-                  </p>
-                </div>
-                <div>
-                  <p className="font-semibold">Email</p>
-                  <p className="text-gray-600">
-                    sifat.saffatt@gmail.com
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-5">
-              <h4 className="text-sm font-bold uppercase tracking-wide">
-                Xizmatlar
-              </h4>
-              <ul className="text-sm space-y-3">
-                <li>
-                  <a href="#" className="hover:text-red-500 transition">
-                    Texnik ekspertiza
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-red-500 transition">
-                    Ta’mirlash ishlari
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-red-500 transition">
-                    O‘rnatish va sozlash
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-red-500 transition">
-                    Dasturlar yaratish
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-red-500 transition">
-                    Loyihalash ishlari
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-red-500 transition">
-                    Malakali mutaxassislar tayyorlash
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-          </div>
-
-          <div className="mt-12 border-t border-gray-300 pt-6 text-center text-xs text-gray-500">
-            © {new Date().getFullYear()} Sifat Innovatsiya Texnologiya MCHJ. Barcha huquqlar himoyalangan.
-          </div>
+            <a
+              href="#hero"
+              className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-400 transition-colors hover:text-brand-300"
+            >
+              Yuqoriga qaytish
+            </a>
+          </motion.div>
         </div>
-      </footer>
-  )
-}
 
-export default Footer
+        <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 text-xs text-neutral-500 sm:flex-row">
+          <p>
+            © {new Date().getFullYear()} Sifat Innovatsion Texnologiya MCHJ.
+            Barcha huquqlar himoyalangan.
+          </p>
+          <a href="#" className="transition-colors hover:text-neutral-300">
+            Maxfiylik siyosati
+          </a>
+        </div>
+      </motion.div>
+    </footer>
+  );
+}

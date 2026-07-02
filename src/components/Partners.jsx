@@ -1,60 +1,67 @@
-import React from "react";
+import { motion } from "framer-motion";
+import SectionHeading from "./ui/SectionHeading.jsx";
+import { inView } from "../lib/motion.js";
 
-// Partners data with image URLs. These are placeholder images for a dynamic component.
-// In a real application, you would host these images or use your own local assets.
-const partners = [
-  { src: "https://placehold.co/200x80/cccccc/333333?text=TRZ" },
-  { src: "https://placehold.co/200x80/cccccc/333333?text=TashVSRZ" },
-  { src: "https://placehold.co/200x80/cccccc/333333?text=O'zbekko'mir" },
-  // "https://placehold.co/200x80/cccccc/333333?text=Камаз",
-  { src: "https://placehold.co/200x80/cccccc/333333?text=GAJK" },
-  { src: "https://placehold.co/200x80/cccccc/333333?text=LMZ" },
-  { src: "https://placehold.co/200x80/cccccc/333333?text=NGMK" },
-  { src: "https://placehold.co/200x80/cccccc/333333?text=JDK" },
-  { src: "https://placehold.co/200x80/cccccc/333333?text=Yo'lreftrans" },
-  { src: "https://placehold.co/200x80/cccccc/333333?text=KARGO" },
-  { src: "https://placehold.co/200x80/cccccc/333333?text=Metropoliten" },
-  {
-    src: "https://placehold.co/260x80/cccccc/333333?text=Temiryo'linfratuzilma",
-    wide: true,
-  },
-  { src: "https://placehold.co/200x80/cccccc/333333?text=Trest Ko'prikqurilish" },
-  { src: "https://placehold.co/200x80/cccccc/333333?text=Angren himmash" },
-  { src: "https://placehold.co/200x80/cccccc/333333?text=Angren Logistics Center" },
-  // "https://placehold.co/200x80/cccccc/333333?text=Газпром",
+const PARTNERS = [
+  "Uralmash",
+  "Kranmash",
+  "KAMAZ",
+  "GAZprom",
+  "NLMK",
+  "Severstal",
+  "Transneft",
+  "Nefaz",
+  "TatSpets",
+  "RGK",
+  "Diakon",
+  "Yamaha",
 ];
 
-const Partners = () => {
+function LogoChip({ name }) {
   return (
-    <div className="bg-white py-16 px-4 sm:px-6 lg:px-8 font-sans">
-      <div className="max-w-7xl mx-auto text-center">
-        <h2 className="text-3xl font-semibold text-gray-800">Наши партнёры</h2>
-        <div className="w-24 h-1 bg-orange-500 mx-auto mt-2 rounded "></div>
-      </div>
-
-      <div className="mt-12 flex flex-wrap justify-center items-center gap-8">
-        {partners.map((logo, index) => (
-          <div
-            key={index}
-            className={`flex-shrink-0 h-auto ${
-              logo.wide ? "w-32 sm:w-48" : "w-24 sm:w-32"
-            }`}
-          >
-            <img
-              src={logo.src}
-              alt={`Partner Logo ${index + 1}`}
-              className="w-full h-auto object-contain transition-transform duration-300 hover:scale-110"
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src =
-                  "https://placehold.co/200x80/cccccc/333333?text=Error";
-              }}
-            />
-          </div>
-        ))}
-      </div>
-    </div>
+    <li className="flex-none px-8">
+      <span className="text-2xl font-extrabold tracking-tight text-neutral-400 transition-colors duration-300 hover:text-transparent hover:bg-gradient-to-r hover:from-brand-600 hover:to-accent-cyan hover:bg-clip-text">
+        {name}
+      </span>
+    </li>
   );
-};
+}
 
-export default Partners;
+export default function Partners() {
+  return (
+    <section id="partners" className="section scroll-mt-24 overflow-hidden">
+      <div className="px-4 sm:px-6 lg:px-8">
+        <SectionHeading
+          eyebrow="Hamkorlar"
+          title="Bizga **ishonch** bildirganlar"
+          subtitle="Yetakchi sanoat korxonalari bilan uzoq yillik hamkorlik."
+        />
+      </div>
+
+      {/* Marquee */}
+      <motion.div
+        {...inView}
+        variants={{ hidden: { opacity: 0 }, show: { opacity: 1, transition: { duration: 0.6 } } }}
+        className="marquee-track relative mt-12 flex overflow-hidden"
+      >
+        {/* fade edges */}
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-surface to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-surface to-transparent" />
+
+        {/* one track holding two identical copies; track translates -50% */}
+        <div className="animate-marquee flex flex-none">
+          <ul className="flex min-w-full flex-none items-center justify-around">
+            {PARTNERS.map((name, i) => (
+              <LogoChip key={`a-${i}`} name={name} />
+            ))}
+          </ul>
+          <ul className="flex min-w-full flex-none items-center justify-around" aria-hidden="true">
+            {PARTNERS.map((name, i) => (
+              <LogoChip key={`b-${i}`} name={name} />
+            ))}
+          </ul>
+        </div>
+      </motion.div>
+    </section>
+  );
+}
