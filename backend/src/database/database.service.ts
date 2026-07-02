@@ -30,7 +30,7 @@ export class DatabaseService implements OnModuleInit {
     this.db.exec(`
 CREATE TABLE IF NOT EXISTS users (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  email TEXT UNIQUE NOT NULL,
+  username TEXT UNIQUE NOT NULL,
   password_hash TEXT NOT NULL,
   name TEXT DEFAULT 'Admin',
   role TEXT DEFAULT 'user',
@@ -95,28 +95,68 @@ CREATE TABLE IF NOT EXISTS settings (
 `);
   }
 
-  // Eski bazalarga yangi ustunlarni qo'shish (role, permissions).
+  // Eski bazalarni yangi tuzilishga o'tkazish (role, permissions, email → username).
   private migrate() {
-    const cols = (this.db.prepare("PRAGMA table_info(users)").all() as any[]).map((c) => c.name);
+    let cols = (this.db.prepare("PRAGMA table_info(users)").all() as any[]).map((c) => c.name);
     if (!cols.includes("role"))
       this.db.exec("ALTER TABLE users ADD COLUMN role TEXT DEFAULT 'user'");
     if (!cols.includes("permissions"))
       this.db.exec("ALTER TABLE users ADD COLUMN permissions TEXT DEFAULT '[]'");
+
+    // email ustunli eski jadvalni username'ga o'tkazamiz:
+    // "admin@sifat.uz" → "admin" (to'qnashuv bo'lsa to'liq email saqlanadi).
+    cols = (this.db.prepare("PRAGMA table_info(users)").all() as any[]).map((c) => c.name);
+    if (cols.includes("email") && !cols.includes("username")) {
+      const tx = this.db.transaction(() => {
+        this.db.exec(`
+CREATE TABLE users_new (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  username TEXT UNIQUE NOT NULL,
+  password_hash TEXT NOT NULL,
+  name TEXT DEFAULT 'Admin',
+  role TEXT DEFAULT 'user',
+  permissions TEXT DEFAULT '[]',
+  created_at TEXT DEFAULT (datetime('now'))
+);`);
+        const rows = this.db.prepare("SELECT * FROM users ORDER BY id").all() as any[];
+        const taken = new Set<string>();
+        const ins = this.db.prepare(
+          "INSERT INTO users_new (id, username, password_hash, name, role, permissions, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)"
+        );
+        for (const r of rows) {
+          let username = String(r.email || "").split("@")[0].toLowerCase() || `user${r.id}`;
+          if (taken.has(username)) username = String(r.email).toLowerCase();
+          taken.add(username);
+          ins.run(
+            r.id,
+            username,
+            r.password_hash,
+            r.name,
+            r.role || "user",
+            r.permissions || "[]",
+            r.created_at
+          );
+        }
+        this.db.exec("DROP TABLE users; ALTER TABLE users_new RENAME TO users;");
+      });
+      tx();
+      console.log("[db] users jadvali username'ga o'tkazildi");
+    }
   }
 
   private seed() {
     const db = this.db;
-    const adminEmail = process.env.ADMIN_EMAIL || "admin@sifat.uz";
+    const adminUsername = (process.env.ADMIN_USERNAME || "admin").toLowerCase();
     const adminPassword = process.env.ADMIN_PASSWORD || "admin123";
 
-    if (!db.prepare("SELECT id FROM users WHERE email = ?").get(adminEmail)) {
+    if (!db.prepare("SELECT id FROM users WHERE username = ?").get(adminUsername)) {
       db.prepare(
-        "INSERT INTO users (email, password_hash, name, role, permissions) VALUES (?, ?, ?, 'admin', '[]')"
-      ).run(adminEmail, bcrypt.hashSync(adminPassword, 10), "Administrator");
-      console.log(`[db] admin user seeded: ${adminEmail}`);
+        "INSERT INTO users (username, password_hash, name, role, permissions) VALUES (?, ?, ?, 'admin', '[]')"
+      ).run(adminUsername, bcrypt.hashSync(adminPassword, 10), "Administrator");
+      console.log(`[db] admin user seeded: ${adminUsername}`);
     }
     // Asosiy admin doim 'admin' rolida qolsin (eski bazalar uchun ham).
-    db.prepare("UPDATE users SET role = 'admin' WHERE email = ?").run(adminEmail);
+    db.prepare("UPDATE users SET role = 'admin' WHERE username = ?").run(adminUsername);
 
     if ((db.prepare("SELECT COUNT(*) c FROM services").get() as any).c === 0) {
       const ins = db.prepare(

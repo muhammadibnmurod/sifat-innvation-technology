@@ -47,7 +47,9 @@ export default function News() {
     const q = query.trim().toLowerCase();
     if (!q) return items;
     return items.filter(
-      (n) => n.title.toLowerCase().includes(q) || n.excerpt.toLowerCase().includes(q)
+      (n) =>
+        n.title.toLowerCase().includes(q) ||
+        n.excerpt.toLowerCase().includes(q),
     );
   }, [items, query]);
 
@@ -60,8 +62,13 @@ export default function News() {
   const openEdit = (n) => {
     setEditing(n);
     setForm({
-      title: n.title, excerpt: n.excerpt, body: n.body, image: n.image,
-      category: n.category, date: n.date, published: n.published,
+      title: n.title,
+      excerpt: n.excerpt,
+      body: n.body,
+      image: n.image,
+      category: n.category,
+      date: n.date,
+      published: n.published,
     });
     setErrors({});
     setDrawer(true);
@@ -93,12 +100,16 @@ export default function News() {
   };
 
   const togglePublished = async (n, v) => {
-    setItems((arr) => arr.map((x) => (x.id === n.id ? { ...x, published: v ? 1 : 0 } : x)));
+    setItems((arr) =>
+      arr.map((x) => (x.id === n.id ? { ...x, published: v ? 1 : 0 } : x)),
+    );
     try {
       await api.put(`/api/news/${n.id}`, { published: v ? 1 : 0 });
     } catch (e) {
       toast.error(e.message);
-      setItems((arr) => arr.map((x) => (x.id === n.id ? { ...x, published: n.published } : x)));
+      setItems((arr) =>
+        arr.map((x) => (x.id === n.id ? { ...x, published: n.published } : x)),
+      );
     }
   };
 
@@ -123,7 +134,11 @@ export default function News() {
       render: (n) => (
         <div className="flex items-center gap-3">
           {n.image ? (
-            <img src={n.image} alt="" className="h-10 w-14 flex-none rounded-lg object-cover ring-1 ring-black/5" />
+            <img
+              src={n.image}
+              alt=""
+              className="h-10 w-14 flex-none rounded-lg object-cover ring-1 ring-black/5"
+            />
           ) : (
             <span className="flex h-10 w-14 flex-none items-center justify-center rounded-lg bg-brand-50 text-brand-400">
               <Newspaper className="h-4 w-4" />
@@ -136,14 +151,28 @@ export default function News() {
         </div>
       ),
     },
-    { key: "category", label: "Turkum", className: "w-32", render: (n) => n.category ? <Badge tone="indigo">{n.category}</Badge> : <span className="text-neutral-300">—</span> },
-    { key: "date", label: "Sana", className: "w-28 text-neutral-500" },
+    {
+      key: "category",
+      label: "Turkum",
+      className: "w-32",
+      render: (n) =>
+        n.category ? (
+          <Badge tone="indigo">{n.category}</Badge>
+        ) : (
+          <span className="text-neutral-300">—</span>
+        ),
+    },
+    { key: "date", label: "Sana", className: "w-38 text-neutral-500" },
     {
       key: "published",
       label: "Holat",
       className: "w-36",
       render: (n) => (
-        <Toggle checked={!!n.published} onChange={(v) => togglePublished(n, v)} label={n.published ? "Chop etilgan" : "Qoralama"} />
+        <Toggle
+          checked={!!n.published}
+          onChange={(v) => togglePublished(n, v)}
+          label={n.published ? "Chop etilgan" : "Qoralama"}
+        />
       ),
     },
     {
@@ -152,12 +181,20 @@ export default function News() {
       className: "w-24",
       render: (n) => (
         <div className="flex justify-end gap-1">
-          <button type="button" onClick={() => openEdit(n)} aria-label="Tahrirlash"
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-neutral-400 hover:bg-brand-50 hover:text-brand-600">
+          <button
+            type="button"
+            onClick={() => openEdit(n)}
+            aria-label="Tahrirlash"
+            className="flex h-8 w-8 items-center justify-center rounded-lg text-neutral-400 hover:bg-brand-50 hover:text-brand-600"
+          >
             <Pencil className="h-4 w-4" />
           </button>
-          <button type="button" onClick={() => setDeleting(n)} aria-label="O'chirish"
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-neutral-400 hover:bg-red-50 hover:text-red-500">
+          <button
+            type="button"
+            onClick={() => setDeleting(n)}
+            aria-label="O'chirish"
+            className="flex h-8 w-8 items-center justify-center rounded-lg text-neutral-400 hover:bg-red-50 hover:text-red-500"
+          >
             <Trash2 className="h-4 w-4" />
           </button>
         </div>
@@ -185,7 +222,16 @@ export default function News() {
         columns={columns}
         rows={filtered}
         loading={loading}
-        empty={<EmptyState message={query ? "Qidiruv bo'yicha hech narsa topilmadi" : "Hozircha yangiliklar yo'q"} icon={Newspaper} />}
+        empty={
+          <EmptyState
+            message={
+              query
+                ? "Qidiruv bo'yicha hech narsa topilmadi"
+                : "Hozircha yangiliklar yo'q"
+            }
+            icon={Newspaper}
+          />
+        }
       />
 
       <Drawer
@@ -195,8 +241,12 @@ export default function News() {
         width="max-w-xl"
         footer={
           <>
-            <Button variant="ghost" onClick={() => setDrawer(false)}>Bekor qilish</Button>
-            <Button loading={saving} onClick={save}>Saqlash</Button>
+            <Button variant="ghost" onClick={() => setDrawer(false)}>
+              Bekor qilish
+            </Button>
+            <Button loading={saving} onClick={save}>
+              Saqlash
+            </Button>
           </>
         }
       >
@@ -211,7 +261,9 @@ export default function News() {
             <Input
               label="Turkum"
               value={form.category}
-              onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, category: e.target.value }))
+              }
               placeholder="Masalan: Standartlar"
             />
             <Input
@@ -226,7 +278,9 @@ export default function News() {
             label="Qisqacha matn (excerpt)"
             rows={3}
             value={form.excerpt}
-            onChange={(e) => setForm((f) => ({ ...f, excerpt: e.target.value }))}
+            onChange={(e) =>
+              setForm((f) => ({ ...f, excerpt: e.target.value }))
+            }
           />
           <Textarea
             label="To'liq matn"
@@ -253,7 +307,9 @@ export default function News() {
         onClose={() => setDeleting(null)}
         onConfirm={confirmDelete}
         loading={deleteLoading}
-        description={deleting ? `"${deleting.title}" yangiligi butunlay o'chiriladi.` : ""}
+        description={
+          deleting ? `"${deleting.title}" yangiligi butunlay o'chiriladi.` : ""
+        }
       />
     </div>
   );

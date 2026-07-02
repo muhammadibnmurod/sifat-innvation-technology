@@ -1,14 +1,14 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEmail, IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsString } from "class-validator";
 
 export class LoginDto {
-  @ApiProperty({ example: "admin@sifat.uz", description: "Admin email manzili" })
-  @IsEmail({}, { message: "Email noto'g'ri formatda" })
-  @IsNotEmpty({ message: "Email va parol kiritilishi shart" })
-  email: string;
-
-  @ApiProperty({ example: "admin123", description: "Admin paroli" })
+  @ApiProperty({ example: "admin", description: "Foydalanuvchi nomi (username)" })
   @IsString()
-  @IsNotEmpty({ message: "Email va parol kiritilishi shart" })
+  @IsNotEmpty({ message: "Username va parol kiritilishi shart" })
+  username: string;
+
+  @ApiProperty({ example: "admin123", description: "Parol" })
+  @IsString()
+  @IsNotEmpty({ message: "Username va parol kiritilishi shart" })
   password: string;
 }

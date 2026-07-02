@@ -10,11 +10,11 @@ export class AuthController {
   constructor(private readonly auth: AuthService) {}
 
   @Post("login")
-  @ApiOperation({ summary: "Admin login — JWT token olish (8 soat amal qiladi)" })
+  @ApiOperation({ summary: "Login — JWT token olish (8 soat amal qiladi)" })
   @ApiOkResponse({ description: "{ token, user }" })
-  @ApiUnauthorizedResponse({ description: "Email yoki parol noto'g'ri" })
+  @ApiUnauthorizedResponse({ description: "Username yoki parol noto'g'ri" })
   login(@Body() dto: LoginDto) {
-    return this.auth.login(dto.email, dto.password);
+    return this.auth.login(dto.username, dto.password);
   }
 
   @Get("me")

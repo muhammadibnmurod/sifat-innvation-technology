@@ -19,7 +19,7 @@ const SECTIONS = [
   { key: "settings", label: "Sozlamalar" },
 ];
 
-const emptyDraft = { name: "", email: "", password: "", role: "user", permissions: [] };
+const emptyDraft = { name: "", username: "", password: "", role: "user", permissions: [] };
 
 function PermissionPicker({ value, onChange, disabled }) {
   const toggle = (key) =>
@@ -90,7 +90,7 @@ export default function Users() {
     setEditing(u);
     setDraft({
       name: u.name,
-      email: u.email,
+      username: u.username,
       password: "",
       role: u.role,
       permissions: u.permissions || [],
@@ -99,8 +99,8 @@ export default function Users() {
   };
 
   const save = async () => {
-    if (!draft.name.trim() || !draft.email.trim()) {
-      toast.error("Ism va email to'ldirilishi shart");
+    if (!draft.name.trim() || !draft.username.trim()) {
+      toast.error("Ism va username to'ldirilishi shart");
       return;
     }
     if (!editing && draft.password.length < 6) {
@@ -112,7 +112,7 @@ export default function Users() {
       if (editing) {
         const body = {
           name: draft.name,
-          email: draft.email,
+          username: draft.username,
           role: draft.role,
           permissions: draft.role === "admin" ? [] : draft.permissions,
         };
@@ -166,7 +166,7 @@ export default function Users() {
                 <span className="ml-1.5 text-[11px] font-semibold text-neutral-400">(siz)</span>
               )}
             </p>
-            <p className="truncate text-xs text-neutral-400">{u.email}</p>
+            <p className="truncate text-xs text-neutral-400">@{u.username}</p>
           </div>
         </div>
       ),
@@ -273,11 +273,10 @@ export default function Users() {
             placeholder="Foydalanuvchi ismi"
           />
           <Input
-            label="Email"
-            type="email"
-            value={draft.email}
-            onChange={(e) => setDraft((d) => ({ ...d, email: e.target.value }))}
-            placeholder="email@misol.uz"
+            label="Username (kirish uchun)"
+            value={draft.username}
+            onChange={(e) => setDraft((d) => ({ ...d, username: e.target.value }))}
+            placeholder="masalan: vali"
           />
           <Input
             label={editing ? "Yangi parol (bo'sh qoldirsangiz o'zgarmaydi)" : "Parol"}
@@ -325,7 +324,7 @@ export default function Users() {
         onClose={() => setDeleting(null)}
         onConfirm={confirmDelete}
         loading={deleteLoading}
-        description={deleting ? `"${deleting.name}" (${deleting.email}) o'chiriladi.` : ""}
+        description={deleting ? `"${deleting.name}" (@${deleting.username}) o'chiriladi.` : ""}
       />
     </div>
   );

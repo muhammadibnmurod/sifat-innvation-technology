@@ -9,7 +9,7 @@ import * as bcrypt from "bcryptjs";
 import { DatabaseService } from "../database/database.service";
 import { CreateUserDto, UpdateUserDto } from "./users.dto";
 
-const PUBLIC_COLS = "id, email, name, role, permissions, created_at";
+const PUBLIC_COLS = "id, username, name, role, permissions, created_at";
 
 @Injectable()
 export class UsersService {
@@ -39,16 +39,16 @@ export class UsersService {
   }
 
   create(dto: CreateUserDto) {
-    const email = dto.email.trim().toLowerCase();
-    if (this.dbs.prepare("SELECT id FROM users WHERE email = ?").get(email))
-      throw new ConflictException("Bu email allaqachon ro'yxatdan o'tgan");
+    const username = dto.username.trim().toLowerCase();
+    if (this.dbs.prepare("SELECT id FROM users WHERE username = ?").get(username))
+      throw new ConflictException("Bu username allaqachon band");
 
     const info = this.dbs
       .prepare(
-        "INSERT INTO users (email, password_hash, name, role, permissions) VALUES (?, ?, ?, ?, ?)"
+        "INSERT INTO users (username, password_hash, name, role, permissions) VALUES (?, ?, ?, ?, ?)"
       )
       .run(
-        email,
+        username,
         bcrypt.hashSync(dto.password, 10),
         dto.name.trim(),
         dto.role === "admin" ? "admin" : "user",
@@ -82,14 +82,14 @@ export class UsersService {
       sets.push("name = ?");
       values.push(dto.name.trim());
     }
-    if (dto.email !== undefined) {
-      const email = dto.email.trim().toLowerCase();
+    if (dto.username !== undefined) {
+      const username = dto.username.trim().toLowerCase();
       const dup: any = this.dbs
-        .prepare("SELECT id FROM users WHERE email = ? AND id != ?")
-        .get(email, id);
-      if (dup) throw new ConflictException("Bu email allaqachon ro'yxatdan o'tgan");
-      sets.push("email = ?");
-      values.push(email);
+        .prepare("SELECT id FROM users WHERE username = ? AND id != ?")
+        .get(username, id);
+      if (dup) throw new ConflictException("Bu username allaqachon band");
+      sets.push("username = ?");
+      values.push(username);
     }
     if (dto.password !== undefined && dto.password !== "") {
       if (dto.password.length < 6)

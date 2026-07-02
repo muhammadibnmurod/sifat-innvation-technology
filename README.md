@@ -32,10 +32,10 @@ npm run dev
 
 | Maydon | Qiymat |
 | --- | --- |
-| Email | `admin@sifat.uz` |
+| Username | `admin` |
 | Parol | `admin123` |
 
-Qiymatlar `backend/.env` dagi `ADMIN_EMAIL` / `ADMIN_PASSWORD` dan olinadi va birinchi ishga tushirishda bazaga yoziladi. Ishlab chiqarishda albatta o'zgartiring (`JWT_SECRET` ni ham).
+Qiymatlar `backend/.env` dagi `ADMIN_USERNAME` / `ADMIN_PASSWORD` dan olinadi va birinchi ishga tushirishda bazaga yoziladi. Ishlab chiqarishda albatta o'zgartiring (`JWT_SECRET` ni ham).
 
 ## Deploy
 

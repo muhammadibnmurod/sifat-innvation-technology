@@ -9,7 +9,11 @@ import Table, { EmptyState } from "../components/ui/Table.jsx";
 import { useToast } from "../components/ui/Toast.jsx";
 
 const STATUS_TONE = { new: "orange", read: "indigo", answered: "green" };
-const STATUS_LABEL = { new: "Yangi", read: "O'qilgan", answered: "Javob berilgan" };
+const STATUS_LABEL = {
+  new: "Yangi",
+  read: "O'qilgan",
+  answered: "Javob berilgan",
+};
 const FILTERS = [
   { value: "", label: "Barchasi" },
   { value: "new", label: "Yangi" },
@@ -37,7 +41,7 @@ export default function Messages() {
 
   const filtered = useMemo(
     () => (filter ? items.filter((m) => m.status === filter) : items),
-    [items, filter]
+    [items, filter],
   );
 
   const setStatus = async (m, status) => {
@@ -77,24 +81,38 @@ export default function Messages() {
       label: "Yuboruvchi",
       render: (m) => (
         <div>
-          <p className={`text-sm ${m.status === "new" ? "font-extrabold text-ink" : "font-semibold text-ink-soft"}`}>
+          <p
+            className={`text-sm ${m.status === "new" ? "font-extrabold text-ink" : "font-semibold text-ink-soft"}`}
+          >
             {m.name}
           </p>
-          <p className="text-xs text-neutral-400">{m.phone || m.email || "—"}</p>
+          <p className="text-xs text-neutral-400">
+            {m.phone || m.email || "—"}
+          </p>
         </div>
       ),
     },
     {
       key: "message",
       label: "Xabar",
-      render: (m) => <p className="max-w-md truncate text-sm text-neutral-500">{m.message}</p>,
+      render: (m) => (
+        <p className="max-w-md truncate text-sm text-neutral-500">
+          {m.message}
+        </p>
+      ),
     },
-    { key: "created_at", label: "Sana", className: "w-44 text-xs text-neutral-400" },
+    {
+      key: "created_at",
+      label: "Sana",
+      className: "w-44 text-xs text-neutral-400",
+    },
     {
       key: "status",
       label: "Holat",
-      className: "w-36",
-      render: (m) => <Badge tone={STATUS_TONE[m.status]}>{STATUS_LABEL[m.status]}</Badge>,
+      className: "w-46",
+      render: (m) => (
+        <Badge tone={STATUS_TONE[m.status]}>{STATUS_LABEL[m.status]}</Badge>
+      ),
     },
   ];
 
@@ -104,7 +122,9 @@ export default function Messages() {
       <div className="flex flex-wrap items-center gap-2">
         {FILTERS.map((f) => {
           const active = filter === f.value;
-          const count = f.value ? items.filter((m) => m.status === f.value).length : items.length;
+          const count = f.value
+            ? items.filter((m) => m.status === f.value).length
+            : items.length;
           return (
             <button
               key={f.value}
@@ -117,7 +137,9 @@ export default function Messages() {
               }`}
             >
               {f.label}
-              <span className={`rounded-full px-1.5 text-[10px] font-bold ${active ? "bg-white/20" : "bg-neutral-100"}`}>
+              <span
+                className={`rounded-full px-1.5 text-[10px] font-bold ${active ? "bg-white/20" : "bg-neutral-100"}`}
+              >
                 {count}
               </span>
             </button>
@@ -164,20 +186,28 @@ export default function Messages() {
                 </span>
                 <div>
                   <p className="font-bold text-ink">{selected.name}</p>
-                  <Badge tone={STATUS_TONE[selected.status]}>{STATUS_LABEL[selected.status]}</Badge>
+                  <Badge tone={STATUS_TONE[selected.status]}>
+                    {STATUS_LABEL[selected.status]}
+                  </Badge>
                 </div>
               </div>
             </div>
 
             <div className="flex flex-col gap-2.5 rounded-xl bg-neutral-50 p-4 text-sm">
               {selected.phone && (
-                <a href={`tel:${selected.phone}`} className="flex items-center gap-2.5 font-medium text-ink hover:text-brand-700">
+                <a
+                  href={`tel:${selected.phone}`}
+                  className="flex items-center gap-2.5 font-medium text-ink hover:text-brand-700"
+                >
                   <Phone className="h-4 w-4 text-brand-500" />
                   {selected.phone}
                 </a>
               )}
               {selected.email && (
-                <a href={`mailto:${selected.email}`} className="flex items-center gap-2.5 font-medium text-ink hover:text-brand-700">
+                <a
+                  href={`mailto:${selected.email}`}
+                  className="flex items-center gap-2.5 font-medium text-ink hover:text-brand-700"
+                >
                   <Mail className="h-4 w-4 text-brand-500" />
                   {selected.email}
                 </a>
@@ -189,7 +219,9 @@ export default function Messages() {
             </div>
 
             <div>
-              <p className="mb-2 text-xs font-bold uppercase tracking-wider text-neutral-400">Xabar matni</p>
+              <p className="mb-2 text-xs font-bold uppercase tracking-wider text-neutral-400">
+                Xabar matni
+              </p>
               <p className="whitespace-pre-wrap rounded-xl border border-neutral-100 bg-white p-4 text-sm leading-relaxed text-ink-soft">
                 {selected.message}
               </p>
@@ -203,7 +235,11 @@ export default function Messages() {
         onClose={() => setDeleting(null)}
         onConfirm={confirmDelete}
         loading={deleteLoading}
-        description={deleting ? `${deleting.name} yuborgan xabar butunlay o'chiriladi.` : ""}
+        description={
+          deleting
+            ? `${deleting.name} yuborgan xabar butunlay o'chiriladi.`
+            : ""
+        }
       />
     </div>
   );

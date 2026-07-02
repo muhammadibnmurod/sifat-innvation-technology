@@ -33,8 +33,8 @@ export function AuthProvider({ children }) {
       .finally(() => setChecking(false));
   }, []);
 
-  const login = useCallback(async (email, password) => {
-    const data = await api.post("/api/auth/login", { email, password });
+  const login = useCallback(async (username, password) => {
+    const data = await api.post("/api/auth/login", { username, password });
     storeSession(data.token, data.user);
     setUser(data.user);
     return data.user;

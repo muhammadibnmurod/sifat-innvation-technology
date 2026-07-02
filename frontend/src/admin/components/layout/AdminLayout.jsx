@@ -277,7 +277,7 @@ export default function AdminLayout() {
                         <User className="h-4 w-4 text-brand-600" />
                         <div className="min-w-0">
                           <p className="truncate text-xs font-bold text-ink">{user?.name}</p>
-                          <p className="truncate text-[11px] text-neutral-400">{user?.email}</p>
+                          <p className="truncate text-[11px] text-neutral-400">@{user?.username || user?.email}</p>
                         </div>
                       </div>
                       <div className="my-1 h-px bg-neutral-100" />

@@ -25,7 +25,7 @@ export class JwtAuthGuard implements CanActivate {
     // Rol va ruxsatlarni har doim bazadan yangilab olamiz —
     // eski tokenlar ham ishlaydi, ruxsat o'zgarishi darhol kuchga kiradi.
     const user: any = this.dbs
-      .prepare("SELECT id, email, name, role, permissions FROM users WHERE id = ?")
+      .prepare("SELECT id, username, name, role, permissions FROM users WHERE id = ?")
       .get(payload.id);
     if (!user) throw new UnauthorizedException("Foydalanuvchi topilmadi");
 

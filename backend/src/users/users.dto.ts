@@ -1,11 +1,11 @@
 import { ApiProperty, ApiPropertyOptional, PartialType } from "@nestjs/swagger";
 import {
   IsArray,
-  IsEmail,
   IsIn,
   IsNotEmpty,
   IsOptional,
   IsString,
+  Matches,
   MinLength,
 } from "class-validator";
 import { PERMISSIONS } from "../auth/permissions";
@@ -16,9 +16,13 @@ export class CreateUserDto {
   @IsNotEmpty({ message: "Ism kiritilishi shart" })
   name: string;
 
-  @ApiProperty({ example: "vali@sifat.uz" })
-  @IsEmail({}, { message: "Email noto'g'ri formatda" })
-  email: string;
+  @ApiProperty({ example: "vali", description: "Kirish uchun username (lotin harflar, raqam, . _ -)" })
+  @IsString()
+  @MinLength(3, { message: "Username kamida 3 ta belgidan iborat bo'lsin" })
+  @Matches(/^[a-zA-Z0-9._-]+$/, {
+    message: "Username faqat lotin harflar, raqam va . _ - belgilaridan iborat bo'lsin",
+  })
+  username: string;
 
   @ApiProperty({ example: "parol123", minLength: 6 })
   @IsString()

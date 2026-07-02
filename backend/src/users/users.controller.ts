@@ -49,7 +49,7 @@ export class UsersController {
   }
 
   @Put(":id")
-  @ApiOperation({ summary: "Foydalanuvchini yangilash (ism, email, parol, rol, ruxsatlar)" })
+  @ApiOperation({ summary: "Foydalanuvchini yangilash (ism, username, parol, rol, ruxsatlar)" })
   update(@Param("id") id: string, @Body() dto: UpdateUserDto, @Req() req: any) {
     return this.service.update(id, dto, req.user.id);
   }

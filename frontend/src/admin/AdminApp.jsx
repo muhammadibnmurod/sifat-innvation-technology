@@ -41,13 +41,62 @@ export default function AdminApp() {
             }
           >
             <Route index element={<Dashboard />} />
-            <Route path="services" element={<PermissionRoute perm="services"><Services /></PermissionRoute>} />
-            <Route path="news" element={<PermissionRoute perm="news"><News /></PermissionRoute>} />
-            <Route path="partners" element={<PermissionRoute perm="partners"><Partners /></PermissionRoute>} />
-            <Route path="faq" element={<PermissionRoute perm="faq"><Faq /></PermissionRoute>} />
-            <Route path="messages" element={<PermissionRoute perm="messages"><Messages /></PermissionRoute>} />
-            <Route path="settings" element={<PermissionRoute perm="settings"><Settings /></PermissionRoute>} />
-            <Route path="users" element={<AdminRoute><Users /></AdminRoute>} />
+            <Route
+              path="services"
+              element={
+                <PermissionRoute perm="services">
+                  <Services />
+                </PermissionRoute>
+              }
+            />
+            <Route
+              path="users"
+              element={
+                <AdminRoute>
+                  <Users />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path="news"
+              element={
+                <PermissionRoute perm="news">
+                  <News />
+                </PermissionRoute>
+              }
+            />
+            <Route
+              path="partners"
+              element={
+                <PermissionRoute perm="partners">
+                  <Partners />
+                </PermissionRoute>
+              }
+            />
+            <Route
+              path="faq"
+              element={
+                <PermissionRoute perm="faq">
+                  <Faq />
+                </PermissionRoute>
+              }
+            />
+            <Route
+              path="messages"
+              element={
+                <PermissionRoute perm="messages">
+                  <Messages />
+                </PermissionRoute>
+              }
+            />
+            <Route
+              path="settings"
+              element={
+                <PermissionRoute perm="settings">
+                  <Settings />
+                </PermissionRoute>
+              }
+            />
           </Route>
           <Route path="*" element={<Navigate to="/admin" replace />} />
         </Routes>

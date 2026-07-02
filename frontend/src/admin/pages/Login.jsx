@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Mail, Lock, Eye, EyeOff, LogIn } from "lucide-react";
+import { User, Lock, Eye, EyeOff, LogIn } from "lucide-react";
 import Logo from "../../assets/Logo.png";
 import { useAuth } from "../context/AuthContext.jsx";
 import Button from "../components/ui/Button.jsx";
@@ -10,7 +10,7 @@ export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
@@ -20,14 +20,14 @@ export default function Login() {
   const onSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    if (!email.trim() || !password) {
-      setError("Email va parolni kiriting");
+    if (!username.trim() || !password) {
+      setError("Username va parolni kiriting");
       setShake((s) => s + 1);
       return;
     }
     setLoading(true);
     try {
-      await login(email.trim(), password);
+      await login(username.trim(), password);
       navigate(location.state?.from || "/admin", { replace: true });
     } catch (err) {
       setError(err.message);
@@ -75,12 +75,12 @@ export default function Login() {
 
         <form onSubmit={onSubmit} noValidate className="mt-8 flex flex-col gap-4">
           <div className="relative">
-            <Mail className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />
+            <User className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />
             <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email manzil"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Username"
               autoComplete="username"
               className={inputCls}
             />
